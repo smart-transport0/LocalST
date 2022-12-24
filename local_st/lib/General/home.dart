@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:local_st/General/register.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -29,14 +30,14 @@ class _MyWidgetState extends State<Home> {
                     style: TextStyle(
                         shadows: <Shadow>[
                           Shadow(
-                            offset: const Offset(4.0, 3.0),
+                            offset: const Offset(3.0, 3.0),
                             blurRadius: 5.0,
                             color: Colors.grey,
                           )
                         ],
-                        fontSize: h * 0.045,
+                        fontSize: h * 0.037,
                         letterSpacing: 2,
-                        fontFamily: 'Handlee',
+                        fontFamily: 'NotoSans',
                         fontWeight: FontWeight.w900,
                         color: Colors.black87)))),
         Expanded(
@@ -45,7 +46,7 @@ class _MyWidgetState extends State<Home> {
               child: Container(
                   height: h * 0.73,
                   decoration: BoxDecoration(
-                      color: Colors.purple,
+                      color: Colors.blue.shade900,
                       borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(35),
                           topRight: Radius.circular(35))),
@@ -67,6 +68,10 @@ class _MyWidgetState extends State<Home> {
                                     prefixIcon: const Icon(Icons.person),
                                     labelText:
                                         "Phone Number / Organization Email",
+                                    labelStyle: TextStyle(
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: h * 0.020,
+                                    ),
                                     focusedBorder: OutlineInputBorder(
                                         // ignore: prefer_const_constructors
                                         borderSide: BorderSide(
@@ -90,17 +95,22 @@ class _MyWidgetState extends State<Home> {
                             child: TextField(
                                 obscureText: true,
                                 obscuringCharacter: "•",
-                                cursorColor: Colors.blue,
                                 style: const TextStyle(color: Colors.black),
                                 decoration: InputDecoration(
                                     filled: true,
                                     fillColor: Colors.white,
                                     prefixIcon: Icon(Icons.lock),
                                     labelText: "Password",
+                                    labelStyle: TextStyle(
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: h * 0.020,
+                                    ),
                                     focusedBorder: OutlineInputBorder(
                                         // ignore: prefer_const_constructors
                                         borderSide: BorderSide(
-                                            color: Colors.blue, width: 2.0),
+                                            color: Color.fromARGB(
+                                                255, 46, 141, 218),
+                                            width: 2.0),
                                         borderRadius:
                                             BorderRadius.circular(30)),
                                     enabledBorder: OutlineInputBorder(
@@ -129,7 +139,13 @@ class _MyWidgetState extends State<Home> {
                                                       .underline)))),
                                   Container(
                                       child: TextButton(
-                                          onPressed: null,
+                                          onPressed: () => {
+                                                Navigator.pushReplacement(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: ((context) =>
+                                                            Register())))
+                                              },
                                           child: Text("Register",
                                               style: TextStyle(
                                                   fontSize: h * 0.02,
@@ -143,21 +159,18 @@ class _MyWidgetState extends State<Home> {
                                 onPressed: null,
                                 style: ButtonStyle(
                                     elevation: MaterialStateProperty.all(15),
-                                    backgroundColor:
-                                        MaterialStateProperty.all(Colors.amber),
-                                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(18.0),
-                                        side:
-                                            BorderSide(color: Colors.amber)))),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Color.fromARGB(255, 62, 124, 217)),
+                                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(18.0),
+                                            side: BorderSide(
+                                                color: Colors.blue.shade900)))),
                                 child: Padding(
                                     padding: EdgeInsets.fromLTRB(w * 0.05,
                                         h * 0.005, w * 0.05, h * 0.005),
-                                    child: Text('Login',
-                                        style: TextStyle(
-                                            fontFamily: 'comic',
-                                            fontSize: w * 0.08,
-                                            color: Colors.blue.shade50)))))
+                                    child: Text('Login', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: Colors.blue.shade50)))))
                       ]))),
             ))
       ])))
