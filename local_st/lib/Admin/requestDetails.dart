@@ -79,7 +79,8 @@ class _RequestDetailsState extends State<RequestDetails> {
                                           userDetails[6],
                                           userDetails[7],
                                           userDetails[8]);
-                                      removeVerifiedUser(userDetails[4]);
+                                      removeVerifiedUser(
+                                          userDetails[4], userDetails[5]);
                                       Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
@@ -105,7 +106,8 @@ class _RequestDetailsState extends State<RequestDetails> {
                             Container(
                                 child: ElevatedButton(
                                     onPressed: (() {
-                                      removeVerifiedUser(userDetails[4]);
+                                      removeVerifiedUser(
+                                          userDetails[4], userDetails[5]);
                                       Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
@@ -179,12 +181,28 @@ class _RequestDetailsState extends State<RequestDetails> {
       'RollNumber': rollNumber,
       'Password': password
     });
+    await FirebaseFirestore.instance
+        .collection('Mapping/Permanent/PhonetoMail')
+        .doc(phoneNumber)
+        .set({'Email': organizationEmailID});
+    await FirebaseFirestore.instance
+        .collection('Mapping/Permanent/MailtoPhone')
+        .doc(organizationEmailID)
+        .set({'PhoneNumber': phoneNumber});
   }
 
-  void removeVerifiedUser(String phoneNumber) async {
+  void removeVerifiedUser(String phoneNumber, String Email) async {
     var verifyUserInformationRef = await FirebaseFirestore.instance
         .collection('VerifyUserInformation')
         .doc(phoneNumber)
+        .delete();
+    await FirebaseFirestore.instance
+        .collection('Mapping/Admin/PhonetoMail')
+        .doc(phoneNumber)
+        .delete();
+    await FirebaseFirestore.instance
+        .collection('Mapping/Admin/MailtoPhone')
+        .doc(Email)
         .delete();
   }
 }
