@@ -19,11 +19,14 @@ class _MyWidgetState extends State<Home> {
 
   //Receiver OTP
   String verificationIdReceived = '';
+  bool OTPVisibility = false;
   //TextEditingController
   TextEditingController userIDController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController OTPController = TextEditingController();
   ManageUsers manageUsers = ManageUsers();
   Utilities utilities = Utilities();
+
   Widget build(BuildContext context) {
     //height and width of screen
     double h = MediaQuery.of(context).size.height;
@@ -72,7 +75,7 @@ class _MyWidgetState extends State<Home> {
                                 w * 0.07, h * 0.08, w * 0.07, h * 0.05),
                             child: Column(children: <Widget>[
                               Visibility(
-                                visible: false,
+                                visible: !OTPVisibility,
                                 child: Column(children: <Widget>[
                                   Container(
                                       child: Material(
@@ -217,7 +220,7 @@ class _MyWidgetState extends State<Home> {
                                 ]),
                               ),
                               Visibility(
-                                visible: true,
+                                visible: OTPVisibility,
                                 child: Column(
                                   children: <Widget>[
                                     Container(
@@ -232,7 +235,7 @@ class _MyWidgetState extends State<Home> {
                                                     255, 8, 54, 88),
                                                 obscureText: true,
                                                 obscuringCharacter: "•",
-                                                controller: passwordController,
+                                                controller: OTPController,
                                                 style: const TextStyle(
                                                     color: Colors.black),
                                                 decoration: InputDecoration(
@@ -266,7 +269,7 @@ class _MyWidgetState extends State<Home> {
                                                         borderRadius: BorderRadius.circular(30)))))),
                                     Container(
                                         child: ElevatedButton(
-                                            onPressed: () => {login()},
+                                            onPressed: () => {verifyCode()},
                                             style: ButtonStyle(
                                                 elevation: MaterialStateProperty.all(
                                                     15),
@@ -296,12 +299,8 @@ class _MyWidgetState extends State<Home> {
     String password = passwordController.text;
     if (userID == "" || password == "") {
       String errorMessage = "";
-      if (userID == "") {
-        errorMessage += "UserID cannot be empty\n";
-      }
-      if (password == "") {
-        errorMessage += "Password cannot be empty";
-      }
+      if (userID == "") errorMessage += "UserID cannot be empty\n";
+      if (password == "") errorMessage += "Password cannot be empty";
       utilities.AlertMessage(context, 'Invalid Input', errorMessage);
     } else {
       if (userID.startsWith('\$')) {
@@ -335,25 +334,42 @@ class _MyWidgetState extends State<Home> {
                               context, 'Invalid input', 'Incorrect Password!')
                         }
                       else
-                        {verifyNumber()}
+                        {
+                          verifyNumber()
+                        }
                     }
                 });
-      } else {}
+      } else {
+        String OGpassword = ManageUsers.encrypt(password);
+        var user = await FirebaseFirestore.instance
+            .collection('UserInformation')
+            .doc(userID)
+            .get();
+        if (user.exists) {
+          var variablePassword = ManageUsers.decrypt(user['Password']);
+          print(variablePassword);
+          if (variablePassword.compareTo(password) == 0) {
+            print('Patyuuuuuu');
+          } else {
+            print('Invalid password.');
+          }
+        } else {
+          print('Invalid UserID');
+        }
+      }
     }
   }
 
   void verifyNumber() async {
-    String phoneNumber = userIDController.text.substring(1);
     auth.verifyPhoneNumber(
-        phoneNumber: phoneNumber,
+        phoneNumber: userIDController.text.substring(1),
         verificationCompleted: (PhoneAuthCredential credential) async {},
         verificationFailed: (FirebaseAuthException exception) {
-          // Navigator.of(context)
-          //     .push(MaterialPageRoute(builder: (context) => Register()));
-          print('aavi ja chal');
+          print('Verification failed');
         },
         codeSent: (String verificationID, int? resendToken) {
           verificationIdReceived = verificationID;
+          OTPVisibility = true;
           setState(() {});
         },
         codeAutoRetrievalTimeout: (String verificationID) {});
@@ -361,10 +377,10 @@ class _MyWidgetState extends State<Home> {
 
   void verifyCode() async {
     PhoneAuthCredential credential = PhoneAuthProvider.credential(
-        verificationId: verificationIdReceived, smsCode: userIDController.text);
+        verificationId: verificationIdReceived, smsCode: OTPController.text);
 
     await auth
         .signInWithCredential(credential)
-        .then((value) => {setState(() {})});
+        .then((value) => Text('Welcome Admin'));
   }
 }
