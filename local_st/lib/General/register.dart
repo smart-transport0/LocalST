@@ -1,12 +1,12 @@
 import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:local_st/Admin/manageUsers.dart';
 import 'package:local_st/Data-Services/utilities.dart';
 import 'package:local_st/Data-Services/validators.dart';
-import 'home.dart';
+import 'package:local_st/Reusable/colors.dart';
+import 'login.dart';
 import 'package:intl/intl.dart';
 
 class Register extends StatefulWidget {
@@ -52,6 +52,7 @@ class _MyWidgetState extends State<Register> {
   late User user;
   late Timer timer;
 
+  @override
   Widget build(BuildContext context) {
     //height and width of screen
     double h = MediaQuery.of(context).size.height;
@@ -62,12 +63,21 @@ class _MyWidgetState extends State<Register> {
           child: Scaffold(
               body: Stack(
         children: [
-          Container(
-            height: h * 0.315,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    fit: BoxFit.fill,
-                    image: AssetImage('assets/images/pikb29.jpg'))),
+          Container(height: h * 0.315, color: MyColorScheme.darkColor),
+          Padding(
+            padding: outerVisibility == 1
+                ? EdgeInsets.fromLTRB(0, 0.095 * h, 0.55 * w, 0)
+                : (outerVisibility == 2
+                    ? EdgeInsets.fromLTRB(0, 0.095 * h, 0.20 * w, 0)
+                    : ((outerVisibility == 3)
+                        ? EdgeInsets.fromLTRB(0.20 * w, 0.1 * h, 0, 0)
+                        : EdgeInsets.fromLTRB(0.55 * w, 0.095 * h, 0, 0))),
+            child: Container(
+              height: h * 0.17,
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('assets/images/bike1.png'))),
+            ),
           ),
           Column(children: <Widget>[
             Expanded(
@@ -75,21 +85,17 @@ class _MyWidgetState extends State<Register> {
                 child: Stack(
                   children: [
                     Container(
-                      child: Text('Smart Transportation',
-                          style: TextStyle(
-                              shadows: <Shadow>[
-                                Shadow(
-                                  offset: const Offset(3.0, 3.0),
-                                  blurRadius: 5.0,
-                                  color: Colors.grey,
-                                )
-                              ],
-                              fontSize: h * 0.037,
-                              letterSpacing: 2,
-                              fontFamily: 'NotoSans',
-                              fontWeight: FontWeight.w900,
-                              color: Colors.black87)),
-                    ),
+                        child: Padding(
+                            padding: EdgeInsets.fromLTRB(0, h * 0.03, 0, 0),
+                            child: Text('Smart Transportation',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: h * 0.045,
+                                  letterSpacing: 2,
+                                  fontFamily: 'NotoSans',
+                                  fontWeight: FontWeight.w900,
+                                  color: MyColorScheme.baseColor,
+                                )))),
                   ],
                 )),
             Expanded(
@@ -98,7 +104,7 @@ class _MyWidgetState extends State<Register> {
                   child: Container(
                       height: h * 0.73,
                       decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 82, 133, 177),
+                          color: MyColorScheme.baseColor,
                           borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(35),
                               topRight: Radius.circular(35))),
@@ -118,29 +124,27 @@ class _MyWidgetState extends State<Register> {
                                       elevation: 15,
                                       child: TextField(
                                           controller: firstNameController,
-                                          cursorColor:
-                                              Color.fromARGB(255, 8, 54, 88),
-                                          style: const TextStyle(
-                                              color: Colors.black),
+                                          cursorColor: MyColorScheme.darkColor,
+                                          style: TextStyle(
+                                              color: MyColorScheme.darkColor),
                                           decoration: InputDecoration(
                                               filled: true,
-                                              fillColor: Colors.white,
-                                              prefixIcon: const Icon(
-                                                  Icons.person,
-                                                  color: Color.fromARGB(
-                                                      255, 8, 54, 88)),
+                                              fillColor:
+                                                  MyColorScheme.baseColor,
+                                              prefixIcon: Icon(Icons.person,
+                                                  color:
+                                                      MyColorScheme.darkColor),
                                               labelText: "First Name",
                                               labelStyle: TextStyle(
-                                                color: Color.fromARGB(
-                                                    255, 8, 54, 88),
+                                                color: MyColorScheme.darkColor,
                                                 fontWeight: FontWeight.w600,
                                                 fontSize: h * 0.020,
                                               ),
                                               focusedBorder: OutlineInputBorder(
                                                   // ignore: prefer_const_constructors
                                                   borderSide: BorderSide(
-                                                      color: Color.fromARGB(
-                                                          255, 8, 54, 88),
+                                                      color: MyColorScheme
+                                                          .darkColor,
                                                       width: 2.0),
                                                   borderRadius:
                                                       BorderRadius.circular(
@@ -163,29 +167,27 @@ class _MyWidgetState extends State<Register> {
                                       elevation: 15,
                                       child: TextField(
                                           controller: middleNameController,
-                                          cursorColor:
-                                              Color.fromARGB(255, 8, 54, 88),
-                                          style: const TextStyle(
-                                              color: Colors.black),
+                                          cursorColor: MyColorScheme.darkColor,
+                                          style: TextStyle(
+                                              color: MyColorScheme.darkColor),
                                           decoration: InputDecoration(
                                               filled: true,
-                                              fillColor: Colors.white,
-                                              prefixIcon: const Icon(
-                                                  Icons.person,
-                                                  color: Color.fromARGB(
-                                                      255, 8, 54, 88)),
+                                              fillColor:
+                                                  MyColorScheme.baseColor,
+                                              prefixIcon: Icon(Icons.person,
+                                                  color:
+                                                      MyColorScheme.darkColor),
                                               labelText: "Middle Name",
                                               labelStyle: TextStyle(
-                                                color: Color.fromARGB(
-                                                    255, 8, 54, 88),
+                                                color: MyColorScheme.darkColor,
                                                 fontWeight: FontWeight.w600,
                                                 fontSize: h * 0.020,
                                               ),
                                               focusedBorder: OutlineInputBorder(
                                                   // ignore: prefer_const_constructors
                                                   borderSide: BorderSide(
-                                                      color: Color.fromARGB(
-                                                          255, 8, 54, 88),
+                                                      color: MyColorScheme
+                                                          .darkColor,
                                                       width: 2.0),
                                                   borderRadius:
                                                       BorderRadius.circular(
@@ -208,29 +210,27 @@ class _MyWidgetState extends State<Register> {
                                       elevation: 15,
                                       child: TextField(
                                           controller: lastNameController,
-                                          cursorColor:
-                                              Color.fromARGB(255, 8, 54, 88),
-                                          style: const TextStyle(
-                                              color: Colors.black),
+                                          cursorColor: MyColorScheme.darkColor,
+                                          style: TextStyle(
+                                              color: MyColorScheme.darkColor),
                                           decoration: InputDecoration(
                                               filled: true,
-                                              fillColor: Colors.white,
-                                              prefixIcon: const Icon(
-                                                  Icons.person,
-                                                  color: Color.fromARGB(
-                                                      255, 8, 54, 88)),
+                                              fillColor:
+                                                  MyColorScheme.baseColor,
+                                              prefixIcon: Icon(Icons.person,
+                                                  color:
+                                                      MyColorScheme.darkColor),
                                               labelText: "Last Name",
                                               labelStyle: TextStyle(
-                                                color: Color.fromARGB(
-                                                    255, 8, 54, 88),
+                                                color: MyColorScheme.darkColor,
                                                 fontWeight: FontWeight.w600,
                                                 fontSize: h * 0.020,
                                               ),
                                               focusedBorder: OutlineInputBorder(
                                                   // ignore: prefer_const_constructors
                                                   borderSide: BorderSide(
-                                                      color: Color.fromARGB(
-                                                          255, 8, 54, 88),
+                                                      color: MyColorScheme
+                                                          .darkColor,
                                                       width: 2.0),
                                                   borderRadius:
                                                       BorderRadius.circular(
@@ -334,16 +334,38 @@ class _MyWidgetState extends State<Register> {
                                                   MaterialStateProperty.all(15),
                                               backgroundColor:
                                                   MaterialStateProperty.all(
-                                                      Color.fromARGB(
-                                                          255, 8, 54, 88)),
-                                              shape: MaterialStateProperty.all<
-                                                      RoundedRectangleBorder>(
+                                                      MyColorScheme.darkColor),
+                                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                                   RoundedRectangleBorder(
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               18.0),
-                                                      side: BorderSide(color: Color.fromARGB(255, 8, 54, 88))))),
-                                          child: Padding(padding: EdgeInsets.fromLTRB(w * 0.05, h * 0.005, w * 0.05, h * 0.005), child: Text('Next', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: Colors.blue.shade50)))))
+                                                      side: BorderSide(
+                                                          color: MyColorScheme
+                                                              .darkColor)))),
+                                          child: Padding(
+                                              padding: EdgeInsets.fromLTRB(w * 0.05, h * 0.005, w * 0.05, h * 0.005),
+                                              child: Text('Next', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: MyColorScheme.baseColor))))),
+                                  TextButton(
+                                      onPressed: () => {
+                                            Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: ((context) =>
+                                                        Login())))
+                                          },
+                                      child: Padding(
+                                          padding: EdgeInsets.fromLTRB(
+                                              0, h * 0.01, 0, 0),
+                                          child: Text(
+                                              "Already have an account? Login",
+                                              style: TextStyle(
+                                                  fontSize: h * 0.02,
+                                                  color:
+                                                      MyColorScheme.darkColor,
+                                                  fontWeight: FontWeight.w700,
+                                                  decoration: TextDecoration
+                                                      .underline))))
                                 ])),
                             //Part 2 of visiblity
                             Visibility(
@@ -359,21 +381,19 @@ class _MyWidgetState extends State<Register> {
                                         controller:
                                             dateOfBirthController, //editing controller of this TextField
                                         decoration: InputDecoration(
-                                            fillColor: Colors.white,
+                                            fillColor: MyColorScheme.baseColor,
                                             prefixIcon: Icon(Icons.date_range,
-                                                color: Color.fromARGB(
-                                                    255, 8, 54, 88)),
+                                                color: MyColorScheme.darkColor),
                                             labelText: "Date of Birth",
                                             labelStyle: TextStyle(
-                                                color: Color.fromARGB(
-                                                    255, 8, 54, 88),
+                                                color: MyColorScheme.darkColor,
                                                 fontWeight: FontWeight.w600,
                                                 fontSize: h * 0.020),
                                             filled: true,
                                             focusedBorder: OutlineInputBorder(
                                                 borderSide: BorderSide(
-                                                    color: Color.fromARGB(
-                                                        255, 8, 54, 88),
+                                                    color:
+                                                        MyColorScheme.darkColor,
                                                     width: 2.0),
                                                 borderRadius:
                                                     BorderRadius.circular(30)),
@@ -395,6 +415,31 @@ class _MyWidgetState extends State<Register> {
                                             firstDate: DateTime(1800),
                                             lastDate: DateTime(
                                                 DateTime.now().year - 17),
+                                            builder: (context, child) {
+                                              return Theme(
+                                                  data: Theme.of(context)
+                                                      .copyWith(
+                                                          colorScheme:
+                                                              ColorScheme.light(
+                                                            primary:
+                                                                MyColorScheme
+                                                                    .darkColor,
+                                                            onPrimary:
+                                                                MyColorScheme
+                                                                    .baseColor,
+                                                            onSurface:
+                                                                MyColorScheme
+                                                                    .darkColor,
+                                                          ),
+                                                          textButtonTheme:
+                                                              TextButtonThemeData(
+                                                                  style: TextButton
+                                                                      .styleFrom(
+                                                            primary: Colors
+                                                                .blueAccent, // button text color
+                                                          ))),
+                                                  child: child!);
+                                            },
                                           );
 
                                           if (pickedDate != null) {
@@ -416,29 +461,28 @@ class _MyWidgetState extends State<Register> {
                                       elevation: 15,
                                       child: TextField(
                                           controller: rollNumberController,
-                                          cursorColor:
-                                              Color.fromARGB(255, 8, 54, 88),
-                                          style: const TextStyle(
-                                              color: Colors.black),
+                                          cursorColor: MyColorScheme.darkColor,
+                                          style: TextStyle(
+                                              color: MyColorScheme.darkColor),
                                           decoration: InputDecoration(
                                               filled: true,
-                                              fillColor: Colors.white,
-                                              prefixIcon: const Icon(
+                                              fillColor:
+                                                  MyColorScheme.baseColor,
+                                              prefixIcon: Icon(
                                                   Icons.perm_identity,
-                                                  color: Color.fromARGB(
-                                                      255, 8, 54, 88)),
+                                                  color:
+                                                      MyColorScheme.darkColor),
                                               labelText: "Roll Number",
                                               labelStyle: TextStyle(
-                                                color: Color.fromARGB(
-                                                    255, 8, 54, 88),
+                                                color: MyColorScheme.darkColor,
                                                 fontWeight: FontWeight.w600,
                                                 fontSize: h * 0.020,
                                               ),
                                               focusedBorder: OutlineInputBorder(
                                                   // ignore: prefer_const_constructors
                                                   borderSide: BorderSide(
-                                                      color: Color.fromARGB(
-                                                          255, 8, 54, 88),
+                                                      color: MyColorScheme
+                                                          .darkColor,
                                                       width: 2.0),
                                                   borderRadius:
                                                       BorderRadius.circular(
@@ -460,29 +504,28 @@ class _MyWidgetState extends State<Register> {
                                       borderRadius: BorderRadius.circular(30),
                                       elevation: 15,
                                       child: TextField(
-                                          cursorColor:
-                                              Color.fromARGB(255, 8, 54, 88),
-                                          style: const TextStyle(
-                                              color: Colors.black),
+                                          cursorColor: MyColorScheme.darkColor,
+                                          style: TextStyle(
+                                              color: MyColorScheme.darkColor),
                                           decoration: InputDecoration(
                                               filled: true,
-                                              fillColor: Colors.white,
-                                              prefixIcon: const Icon(
+                                              fillColor:
+                                                  MyColorScheme.baseColor,
+                                              prefixIcon: Icon(
                                                   Icons.credit_card,
-                                                  color: Color.fromARGB(
-                                                      255, 8, 54, 88)),
+                                                  color:
+                                                      MyColorScheme.darkColor),
                                               labelText: "I-Card",
                                               labelStyle: TextStyle(
-                                                color: Color.fromARGB(
-                                                    255, 8, 54, 88),
+                                                color: MyColorScheme.darkColor,
                                                 fontWeight: FontWeight.w600,
                                                 fontSize: h * 0.020,
                                               ),
                                               focusedBorder: OutlineInputBorder(
                                                   // ignore: prefer_const_constructors
                                                   borderSide: BorderSide(
-                                                      color: Color.fromARGB(
-                                                          255, 8, 54, 88),
+                                                      color: MyColorScheme
+                                                          .darkColor,
                                                       width: 2.0),
                                                   borderRadius:
                                                       BorderRadius.circular(
@@ -512,20 +555,21 @@ class _MyWidgetState extends State<Register> {
                                                           })
                                                         },
                                                     style: ButtonStyle(
-                                                        elevation:
-                                                            MaterialStateProperty.all(
-                                                                15),
+                                                        elevation: MaterialStateProperty.all(
+                                                            15),
                                                         backgroundColor:
                                                             MaterialStateProperty.all(
-                                                                Color.fromARGB(
-                                                                    255, 8, 54, 88)),
-                                                        shape: MaterialStateProperty.all<
-                                                                RoundedRectangleBorder>(
-                                                            RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius.circular(18.0),
-                                                                side: BorderSide(color: Color.fromARGB(255, 8, 54, 88))))),
-                                                    child: Padding(padding: EdgeInsets.fromLTRB(w * 0.05, h * 0.005, w * 0.05, h * 0.005), child: Text('Back', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: Colors.blue.shade50))))),
+                                                                MyColorScheme
+                                                                    .darkColor),
+                                                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                                                            borderRadius: BorderRadius.circular(
+                                                                18.0),
+                                                            side: BorderSide(
+                                                                color: MyColorScheme
+                                                                    .darkColor)))),
+                                                    child: Padding(
+                                                        padding: EdgeInsets.fromLTRB(w * 0.05, h * 0.005, w * 0.05, h * 0.005),
+                                                        child: Text('Back', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: MyColorScheme.baseColor))))),
                                             Container(
                                                 child: ElevatedButton(
                                                     onPressed: () => {
@@ -586,21 +630,16 @@ class _MyWidgetState extends State<Register> {
                                                         elevation: MaterialStateProperty.all(
                                                             15),
                                                         backgroundColor: MaterialStateProperty.all(
-                                                            Color.fromARGB(
-                                                                255, 8, 54, 88)),
+                                                            MyColorScheme
+                                                                .darkColor),
                                                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                                             RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius.circular(
-                                                                        18.0),
+                                                                borderRadius: BorderRadius.circular(
+                                                                    18.0),
                                                                 side:
                                                                     BorderSide(
-                                                                  color: Color
-                                                                      .fromARGB(
-                                                                          255,
-                                                                          8,
-                                                                          54,
-                                                                          88),
+                                                                  color: MyColorScheme
+                                                                      .darkColor,
                                                                 )))),
                                                     child: Padding(
                                                         padding: EdgeInsets.fromLTRB(
@@ -608,7 +647,11 @@ class _MyWidgetState extends State<Register> {
                                                             h * 0.005,
                                                             w * 0.05,
                                                             h * 0.005),
-                                                        child: Text('Next', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: Colors.blue.shade50)))))
+                                                        child: Text('Next',
+                                                            style: TextStyle(
+                                                                fontFamily: 'comic',
+                                                                fontSize: w * 0.08,
+                                                                color: MyColorScheme.baseColor)))))
                                           ]))
                                 ])),
                             //Part 3 of visiblity
@@ -629,50 +672,24 @@ class _MyWidgetState extends State<Register> {
                                           child: TextField(
                                               controller:
                                                   emergencyContactNumberController,
-                                              cursorColor: Color.fromARGB(
-                                                  255, 8, 54, 88),
+                                              cursorColor: MyColorScheme
+                                                  .darkColor,
                                               keyboardType: TextInputType.phone,
-                                              style: const TextStyle(
-                                                  color: Colors.black),
+                                              style: TextStyle(
+                                                  color: MyColorScheme
+                                                      .darkColor),
                                               decoration: InputDecoration(
                                                   filled: true,
-                                                  fillColor: Colors.white,
-                                                  prefixIcon: Padding(
-                                                      padding: EdgeInsets.fromLTRB(
-                                                          w * 0.035, 0, 0, 0),
-                                                      child: Row(
-                                                          mainAxisSize:
-                                                              MainAxisSize.min,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: <Widget>[
-                                                            Icon(Icons.phone,
-                                                                color: Color
-                                                                    .fromARGB(
-                                                                        255,
-                                                                        8,
-                                                                        54,
-                                                                        88)),
-                                                            Text(' +91 ',
-                                                                style: TextStyle(
-                                                                    color: Color
-                                                                        .fromARGB(
-                                                                            255,
-                                                                            8,
-                                                                            54,
-                                                                            88),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600,
-                                                                    fontSize: h *
-                                                                        0.02))
-                                                          ])),
+                                                  fillColor: MyColorScheme
+                                                      .baseColor,
+                                                  prefixIcon: Icon(Icons.phone,
+                                                      color: MyColorScheme
+                                                          .darkColor),
                                                   labelText:
                                                       "Emergency Contact Number",
                                                   labelStyle: TextStyle(
-                                                    color: Color.fromARGB(
-                                                        255, 8, 54, 88),
+                                                    color:
+                                                        MyColorScheme.darkColor,
                                                     fontWeight: FontWeight.w600,
                                                     fontSize: h * 0.020,
                                                   ),
@@ -680,15 +697,23 @@ class _MyWidgetState extends State<Register> {
                                                       OutlineInputBorder(
                                                           // ignore: prefer_const_constructors
                                                           borderSide: BorderSide(
-                                                              color: Color.fromARGB(
-                                                                  255, 8, 54, 88),
+                                                              color:
+                                                                  MyColorScheme
+                                                                      .darkColor,
                                                               width: 2.0),
                                                           borderRadius:
-                                                              BorderRadius.circular(
-                                                                  30)),
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      30)),
                                                   enabledBorder: OutlineInputBorder(
-                                                      borderSide: const BorderSide(width: 2.0, color: Colors.transparent),
-                                                      borderRadius: BorderRadius.circular(30)))),
+                                                      borderSide:
+                                                          const BorderSide(
+                                                              width: 2.0,
+                                                              color: Colors
+                                                                  .transparent),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              30)))),
                                         ),
                                       ),
                                       Container(
@@ -700,49 +725,23 @@ class _MyWidgetState extends State<Register> {
                                           elevation: 15,
                                           child: TextField(
                                               controller: phoneNumberController,
-                                              cursorColor: Color.fromARGB(
-                                                  255, 8, 54, 88),
+                                              cursorColor: MyColorScheme
+                                                  .darkColor,
                                               keyboardType: TextInputType.phone,
-                                              style: const TextStyle(
-                                                  color: Colors.black),
+                                              style: TextStyle(
+                                                  color: MyColorScheme
+                                                      .darkColor),
                                               decoration: InputDecoration(
                                                   filled: true,
-                                                  fillColor: Colors.white,
-                                                  prefixIcon: Padding(
-                                                      padding: EdgeInsets.fromLTRB(
-                                                          w * 0.035, 0, 0, 0),
-                                                      child: Row(
-                                                          mainAxisSize:
-                                                              MainAxisSize.min,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: <Widget>[
-                                                            Icon(Icons.phone,
-                                                                color: Color
-                                                                    .fromARGB(
-                                                                        255,
-                                                                        8,
-                                                                        54,
-                                                                        88)),
-                                                            Text(' +91 ',
-                                                                style: TextStyle(
-                                                                    color: Color
-                                                                        .fromARGB(
-                                                                            255,
-                                                                            8,
-                                                                            54,
-                                                                            88),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500,
-                                                                    fontSize: h *
-                                                                        0.02))
-                                                          ])),
+                                                  fillColor: MyColorScheme
+                                                      .baseColor,
+                                                  prefixIcon: Icon(Icons.phone,
+                                                      color: MyColorScheme
+                                                          .darkColor),
                                                   labelText: "Phone Number",
                                                   labelStyle: TextStyle(
-                                                    color: Color.fromARGB(
-                                                        255, 8, 54, 88),
+                                                    color:
+                                                        MyColorScheme.darkColor,
                                                     fontWeight: FontWeight.w800,
                                                     fontSize: h * 0.020,
                                                   ),
@@ -750,100 +749,137 @@ class _MyWidgetState extends State<Register> {
                                                       OutlineInputBorder(
                                                           // ignore: prefer_const_constructors
                                                           borderSide: BorderSide(
-                                                              color: Color.fromARGB(
-                                                                  255, 8, 54, 88),
+                                                              color:
+                                                                  MyColorScheme
+                                                                      .darkColor,
                                                               width: 2.0),
                                                           borderRadius:
-                                                              BorderRadius.circular(
-                                                                  30)),
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      30)),
                                                   enabledBorder: OutlineInputBorder(
-                                                      borderSide: const BorderSide(width: 2.0, color: Colors.transparent),
-                                                      borderRadius: BorderRadius.circular(30)))),
+                                                      borderSide:
+                                                          const BorderSide(
+                                                              width: 2.0,
+                                                              color: Colors
+                                                                  .transparent),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              30)))),
                                         ),
                                       ),
-                                      Container(
-                                          child: ElevatedButton(
-                                              onPressed: (() {
-                                                errorMessage = '';
-                                                if (validators
-                                                            .validatePhoneNumber(
-                                                                phoneNumberController
-                                                                    .text)
-                                                            .length >
-                                                        0 ||
-                                                    emergencyContactNumberController
-                                                            .text ==
-                                                        phoneNumberController
-                                                            .text ||
-                                                    validators
-                                                            .validatePhoneNumber(
-                                                                emergencyContactNumberController
-                                                                    .text)
-                                                            .length >
-                                                        0) {
-                                                  if (validators
-                                                          .validatePhoneNumber(
+                                      Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Container(
+                                                child: ElevatedButton(
+                                                    onPressed: () => {
+                                                          setState(() {
+                                                            outerVisibility = 2;
+                                                          })
+                                                        },
+                                                    style: ButtonStyle(
+                                                        elevation: MaterialStateProperty.all(
+                                                            15),
+                                                        backgroundColor:
+                                                            MaterialStateProperty.all(
+                                                                MyColorScheme
+                                                                    .darkColor),
+                                                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                                                            borderRadius: BorderRadius.circular(
+                                                                18.0),
+                                                            side: BorderSide(
+                                                                color: MyColorScheme
+                                                                    .darkColor)))),
+                                                    child: Padding(
+                                                        padding: EdgeInsets.fromLTRB(w * 0.02, h * 0.005, w * 0.02, h * 0.005),
+                                                        child: Text('Back', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: MyColorScheme.baseColor))))),
+                                            Container(
+                                                child: ElevatedButton(
+                                                    onPressed: (() {
+                                                      errorMessage = '';
+                                                      if (validators
+                                                                  .validatePhoneNumber(
+                                                                      phoneNumberController
+                                                                          .text)
+                                                                  .length >
+                                                              0 ||
+                                                          emergencyContactNumberController
+                                                                  .text ==
                                                               phoneNumberController
-                                                                  .text)
-                                                          .length >
-                                                      0) {
-                                                    errorMessage =
-                                                        'Invalid Phone Number\n';
-                                                  }
-                                                  if (validators
-                                                          .validatePhoneNumber(
-                                                              emergencyContactNumberController
-                                                                  .text)
-                                                          .length >
-                                                      0) {
-                                                    errorMessage +=
-                                                        'Invalid Emergency Contact Number\n';
-                                                  }
-                                                  if (phoneNumberController
-                                                          .text ==
-                                                      emergencyContactNumberController
-                                                          .text) {
-                                                    errorMessage +=
-                                                        'Phone Number and Emergency Contact Number cannot be same.\n';
-                                                  }
+                                                                  .text ||
+                                                          validators
+                                                                  .validatePhoneNumber(
+                                                                      emergencyContactNumberController
+                                                                          .text)
+                                                                  .length >
+                                                              0) {
+                                                        if (validators
+                                                                .validatePhoneNumber(
+                                                                    phoneNumberController
+                                                                        .text)
+                                                                .length >
+                                                            0) {
+                                                          errorMessage =
+                                                              'Invalid Phone Number\n';
+                                                        }
+                                                        if (validators
+                                                                .validatePhoneNumber(
+                                                                    emergencyContactNumberController
+                                                                        .text)
+                                                                .length >
+                                                            0) {
+                                                          errorMessage +=
+                                                              'Invalid Emergency Contact Number\n';
+                                                        }
+                                                        if (phoneNumberController
+                                                                .text ==
+                                                            emergencyContactNumberController
+                                                                .text) {
+                                                          errorMessage +=
+                                                              'Phone Number and Emergency Contact Number cannot be same.\n';
+                                                        }
 
-                                                  Navigator.of(context).push(
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              AlertDialog(
-                                                                  title: const Text(
-                                                                      'Invalid input'),
-                                                                  content: Text(
-                                                                      '${errorMessage}'),
-                                                                  actions: <
-                                                                      Widget>[
-                                                                    TextButton(
-                                                                      onPressed: () => Navigator.pop(
-                                                                          context,
-                                                                          'OK'),
-                                                                      child: const Text(
-                                                                          'OK'),
-                                                                    )
-                                                                  ])));
-                                                } else {
-                                                  verifyNumber();
-                                                }
-                                              }),
-                                              style: ButtonStyle(
-                                                  elevation:
-                                                      MaterialStateProperty.all(
-                                                          15),
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all(
-                                                          Color.fromARGB(
-                                                              255, 8, 54, 88)),
-                                                  shape: MaterialStateProperty.all<
-                                                          RoundedRectangleBorder>(
-                                                      RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius.circular(18.0),
-                                                          side: BorderSide(color: Color.fromARGB(255, 8, 54, 88))))),
-                                              child: Padding(padding: EdgeInsets.fromLTRB(w * 0.05, h * 0.005, w * 0.05, h * 0.005), child: Text('Send OTP', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: Colors.blue.shade50)))))
+                                                        Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    AlertDialog(
+                                                                        title: const Text(
+                                                                            'Invalid input'),
+                                                                        content:
+                                                                            Text(
+                                                                                '${errorMessage}'),
+                                                                        actions: <
+                                                                            Widget>[
+                                                                          TextButton(
+                                                                            onPressed: () =>
+                                                                                Navigator.pop(context, 'OK'),
+                                                                            child:
+                                                                                const Text('OK'),
+                                                                          )
+                                                                        ])));
+                                                      } else {
+                                                        verifyNumber();
+                                                      }
+                                                    }),
+                                                    style: ButtonStyle(
+                                                        elevation: MaterialStateProperty.all(
+                                                            15),
+                                                        backgroundColor:
+                                                            MaterialStateProperty.all(
+                                                                MyColorScheme
+                                                                    .darkColor),
+                                                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                                                            borderRadius: BorderRadius.circular(
+                                                                18.0),
+                                                            side: BorderSide(
+                                                                color: MyColorScheme
+                                                                    .darkColor)))),
+                                                    child: Padding(
+                                                        padding: EdgeInsets.fromLTRB(w * 0.02, h * 0.005, w * 0.02, h * 0.005),
+                                                        child: Text('Send OTP', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: MyColorScheme.baseColor)))))
+                                          ])
                                     ]),
                                   ),
                                   //Phone Visibility 3.2
@@ -860,23 +896,26 @@ class _MyWidgetState extends State<Register> {
                                           child: TextField(
                                               controller:
                                                   phoneNumberOTPController,
-                                              cursorColor: Color.fromARGB(
-                                                  255, 8, 54, 88),
-                                              keyboardType:
-                                                  TextInputType.number,
-                                              style: const TextStyle(
-                                                  color: Colors.black),
+                                              obscureText: true,
+                                              cursorColor: MyColorScheme
+                                                  .darkColor,
+                                              keyboardType: TextInputType
+                                                  .number,
+                                              style: TextStyle(
+                                                  color: MyColorScheme
+                                                      .darkColor),
                                               decoration: InputDecoration(
                                                   filled: true,
-                                                  fillColor: Colors.white,
-                                                  prefixIcon: const Icon(
+                                                  fillColor: MyColorScheme
+                                                      .baseColor,
+                                                  prefixIcon: Icon(
                                                       Icons.lock_rounded,
-                                                      color: Color.fromARGB(
-                                                          255, 8, 54, 88)),
+                                                      color: MyColorScheme
+                                                          .darkColor),
                                                   labelText: "OTP",
                                                   labelStyle: TextStyle(
-                                                    color: Color.fromARGB(
-                                                        255, 8, 54, 88),
+                                                    color:
+                                                        MyColorScheme.darkColor,
                                                     fontWeight: FontWeight.w600,
                                                     fontSize: h * 0.020,
                                                   ),
@@ -884,19 +923,23 @@ class _MyWidgetState extends State<Register> {
                                                       OutlineInputBorder(
                                                           // ignore: prefer_const_constructors
                                                           borderSide: BorderSide(
-                                                              color: Color.fromARGB(
-                                                                  255, 8, 54, 88),
+                                                              color:
+                                                                  MyColorScheme
+                                                                      .darkColor,
                                                               width: 2.0),
                                                           borderRadius:
-                                                              BorderRadius.circular(
-                                                                  30)),
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      30)),
                                                   enabledBorder: OutlineInputBorder(
                                                       borderSide:
                                                           const BorderSide(
                                                               width: 2.0,
                                                               color: Colors
                                                                   .transparent),
-                                                      borderRadius: BorderRadius.circular(30)))),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              30)))),
                                         ),
                                       ),
                                       Container(
@@ -908,17 +951,19 @@ class _MyWidgetState extends State<Register> {
                                                   elevation:
                                                       MaterialStateProperty.all(
                                                           15),
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all(
-                                                          Color.fromARGB(
-                                                              255, 8, 54, 88)),
-                                                  shape: MaterialStateProperty.all<
-                                                          RoundedRectangleBorder>(
+                                                  backgroundColor: MaterialStateProperty.all(
+                                                      MyColorScheme.darkColor),
+                                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                                       RoundedRectangleBorder(
                                                           borderRadius:
-                                                              BorderRadius.circular(18.0),
-                                                          side: BorderSide(color: Color.fromARGB(255, 8, 54, 88))))),
-                                              child: Padding(padding: EdgeInsets.fromLTRB(w * 0.05, h * 0.005, w * 0.05, h * 0.005), child: Text('Verify', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: Colors.blue.shade50)))))
+                                                              BorderRadius.circular(
+                                                                  18.0),
+                                                          side: BorderSide(
+                                                              color: MyColorScheme
+                                                                  .darkColor)))),
+                                              child: Padding(
+                                                  padding: EdgeInsets.fromLTRB(w * 0.05, h * 0.005, w * 0.05, h * 0.005),
+                                                  child: Text('Verify', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: MyColorScheme.baseColor)))))
                                     ]),
                                   )
                                 ])),
@@ -935,31 +980,29 @@ class _MyWidgetState extends State<Register> {
                                       child: TextField(
                                           controller:
                                               organizationEMailIDController,
-                                          cursorColor:
-                                              Color.fromARGB(255, 8, 54, 88),
+                                          cursorColor: MyColorScheme.darkColor,
                                           keyboardType:
                                               TextInputType.emailAddress,
-                                          style: const TextStyle(
-                                              color: Colors.black),
+                                          style: TextStyle(
+                                              color: MyColorScheme.darkColor),
                                           decoration: InputDecoration(
                                               filled: true,
-                                              fillColor: Colors.white,
-                                              prefixIcon: const Icon(
-                                                  Icons.email,
-                                                  color: Color.fromARGB(
-                                                      255, 8, 54, 88)),
+                                              fillColor:
+                                                  MyColorScheme.baseColor,
+                                              prefixIcon: Icon(Icons.email,
+                                                  color:
+                                                      MyColorScheme.darkColor),
                                               labelText: "Organization Email",
                                               labelStyle: TextStyle(
-                                                color: Color.fromARGB(
-                                                    255, 8, 54, 88),
+                                                color: MyColorScheme.darkColor,
                                                 fontWeight: FontWeight.w800,
                                                 fontSize: h * 0.020,
                                               ),
                                               focusedBorder: OutlineInputBorder(
                                                   // ignore: prefer_const_constructors
                                                   borderSide: BorderSide(
-                                                      color: Color.fromARGB(
-                                                          255, 8, 54, 88),
+                                                      color: MyColorScheme
+                                                          .darkColor,
                                                       width: 2.0),
                                                   borderRadius:
                                                       BorderRadius.circular(
@@ -983,29 +1026,28 @@ class _MyWidgetState extends State<Register> {
                                       child: TextField(
                                           obscureText: true,
                                           controller: passwordController,
-                                          cursorColor:
-                                              Color.fromARGB(255, 8, 54, 88),
-                                          style: const TextStyle(
-                                              color: Colors.black),
+                                          cursorColor: MyColorScheme.darkColor,
+                                          style: TextStyle(
+                                              color: MyColorScheme.darkColor),
                                           decoration: InputDecoration(
                                               filled: true,
-                                              fillColor: Colors.white,
-                                              prefixIcon: const Icon(
+                                              fillColor:
+                                                  MyColorScheme.baseColor,
+                                              prefixIcon: Icon(
                                                   Icons.fingerprint,
-                                                  color: Color.fromARGB(
-                                                      255, 8, 54, 88)),
+                                                  color:
+                                                      MyColorScheme.darkColor),
                                               labelText: "Password",
                                               labelStyle: TextStyle(
-                                                color: Color.fromARGB(
-                                                    255, 8, 54, 88),
+                                                color: MyColorScheme.darkColor,
                                                 fontWeight: FontWeight.w600,
                                                 fontSize: h * 0.020,
                                               ),
                                               focusedBorder: OutlineInputBorder(
                                                   // ignore: prefer_const_constructors
                                                   borderSide: BorderSide(
-                                                      color: Color.fromARGB(
-                                                          255, 8, 54, 88),
+                                                      color: MyColorScheme
+                                                          .darkColor,
                                                       width: 2.0),
                                                   borderRadius:
                                                       BorderRadius.circular(
@@ -1029,29 +1071,28 @@ class _MyWidgetState extends State<Register> {
                                       child: TextField(
                                           obscureText: true,
                                           controller: confirmPasswordController,
-                                          cursorColor:
-                                              Color.fromARGB(255, 8, 54, 88),
-                                          style: const TextStyle(
-                                              color: Colors.black),
+                                          cursorColor: MyColorScheme.darkColor,
+                                          style: TextStyle(
+                                              color: MyColorScheme.darkColor),
                                           decoration: InputDecoration(
                                               filled: true,
-                                              fillColor: Colors.white,
-                                              prefixIcon: const Icon(
+                                              fillColor:
+                                                  MyColorScheme.baseColor,
+                                              prefixIcon: Icon(
                                                   Icons.fingerprint,
-                                                  color: Color.fromARGB(
-                                                      255, 8, 54, 88)),
+                                                  color:
+                                                      MyColorScheme.darkColor),
                                               labelText: "Confirm Password",
                                               labelStyle: TextStyle(
-                                                color: Color.fromARGB(
-                                                    255, 8, 54, 88),
+                                                color: MyColorScheme.darkColor,
                                                 fontWeight: FontWeight.w600,
                                                 fontSize: h * 0.020,
                                               ),
                                               focusedBorder: OutlineInputBorder(
                                                   // ignore: prefer_const_constructors
                                                   borderSide: BorderSide(
-                                                      color: Color.fromARGB(
-                                                          255, 8, 54, 88),
+                                                      color: MyColorScheme
+                                                          .darkColor,
                                                       width: 2.0),
                                                   borderRadius:
                                                       BorderRadius.circular(
@@ -1217,16 +1258,18 @@ class _MyWidgetState extends State<Register> {
                                                   MaterialStateProperty.all(15),
                                               backgroundColor:
                                                   MaterialStateProperty.all(
-                                                      Color.fromARGB(
-                                                          255, 8, 54, 88)),
-                                              shape: MaterialStateProperty.all<
-                                                      RoundedRectangleBorder>(
+                                                      MyColorScheme.darkColor),
+                                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                                   RoundedRectangleBorder(
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               18.0),
-                                                      side: BorderSide(color: Color.fromARGB(255, 8, 54, 88))))),
-                                          child: Padding(padding: EdgeInsets.fromLTRB(w * 0.05, h * 0.005, w * 0.05, h * 0.005), child: Text('Verify', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: Colors.blue.shade50)))))
+                                                      side: BorderSide(
+                                                          color: MyColorScheme
+                                                              .darkColor)))),
+                                          child: Padding(
+                                              padding: EdgeInsets.fromLTRB(w * 0.05, h * 0.005, w * 0.05, h * 0.005),
+                                              child: Text('Verify', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: MyColorScheme.baseColor)))))
                                 ]))
                           ]))),
                 ))
@@ -1266,8 +1309,9 @@ class _MyWidgetState extends State<Register> {
                                     codeSent: (String verificationID,
                                         int? resendToken) {
                                       verificationIdReceived = verificationID;
-                                      phoneNumberVisibility = 2;
-                                      setState(() {});
+                                      setState(() {
+                                        phoneNumberVisibility = 2;
+                                      });
                                     },
                                     codeAutoRetrievalTimeout:
                                         (String verificationID) {})
@@ -1311,11 +1355,22 @@ class _MyWidgetState extends State<Register> {
         verificationId: verificationIdReceived,
         smsCode: phoneNumberOTPController.text);
 
-    await auth.signInWithCredential(credential).then((value) => {
-          setState(() {
-            outerVisibility = 4;
-          })
-        });
+    await auth
+        .signInWithCredential(credential)
+        .then((value) => {
+              setState(() {
+                outerVisibility = 4;
+              })
+            })
+        .onError((error, stackTrace) => {
+              utilities.AlertMessage(context, 'Incorrect OTP',
+                  'OTP incorrect or timed out! Try again.'),
+              setState(() {
+                outerVisibility = 3;
+                phoneNumberVisibility = 1;
+                phoneNumberOTPController.text = "";
+              })
+            });
   }
 
   @override
@@ -1349,7 +1404,7 @@ class _MyWidgetState extends State<Register> {
           .set({'PhoneNumber': utilities.add91(phoneNumberController.text)});
       Navigator.pop(context, 'OK');
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => Home()));
+          context, MaterialPageRoute(builder: (context) => Login()));
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => AlertDialog(
                   title: Text('Notice'),

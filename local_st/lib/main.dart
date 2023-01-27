@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:local_st/Admin/pendingRequest.dart';
-import 'package:local_st/General/home.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:local_st/General/test.dart';
+import 'package:local_st/General/login.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
-  runApp(MaterialApp(home: Home()));
+  runApp(MaterialApp(home: Login()));
 }

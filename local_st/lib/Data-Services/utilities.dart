@@ -23,4 +23,22 @@ class Utilities {
               ],
             )));
   }
+
+  void AlertMessageWithWidget(
+      context, String title, String content, Widget widget) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => AlertDialog(
+              title: Text(title),
+              content: Text(content),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => {Navigator.pop(context, 'OK'),
+                  Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: ((context) => widget)))
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            )));
+  }
 }

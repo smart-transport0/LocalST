@@ -43,6 +43,7 @@ class Validators {
     const pattern2 = r'^[a-zA-Z0-9.]+@sls.pdpu.ac.in$';
     const pattern3 = r'^[a-zA-Z0-9.]+@spm.pdpu.ac.in$';
     const pattern4 = r'^[a-zA-Z0-9.]+@spt.pdpu.ac.in$';
+    //Might need to add more patterns
     if (!RegExp(pattern1).hasMatch(email) &&
         !RegExp(pattern2).hasMatch(email) &&
         !RegExp(pattern3).hasMatch(email) &&
