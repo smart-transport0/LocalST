@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:local_st/Data-Services/utilities.dart';
 import 'package:local_st/Reusable/bottomNavigationBar.dart';
 import 'package:local_st/Reusable/navigationBar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,6 +24,7 @@ class _MyWidgetState extends State<Home> {
   @override
   String userName = "", greeting = "";
   late SharedPreferences sharedPreferences;
+  Utilities utilities = Utilities();
   Widget build(BuildContext context) {
     //height and width of screen
     double h = MediaQuery.of(context).size.height;
@@ -216,7 +218,6 @@ class _MyWidgetState extends State<Home> {
         }
       }
       int currentHour = new DateTime.now().hour;
-      print(currentHour);
       if (currentHour >= 4 && currentHour <= 12)
         greeting = "Good Morning";
       else if (currentHour >= 12 && currentHour <= 17)

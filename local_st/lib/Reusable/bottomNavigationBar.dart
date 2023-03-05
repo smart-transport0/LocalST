@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:local_st/General/startJourney.dart';
-
+import 'package:local_st/General/availableJourneys.dart';
+import 'package:local_st/General/startNewJourney.dart';
 import '../General/home.dart';
 
 class BottomNavBar extends StatefulWidget {
@@ -20,10 +20,13 @@ class _BottomNavBarState extends State<BottomNavBar> {
   }
   void onItemTapped(int index) {
     setState(() {
-      if (index == selectedIndex) return;
+      // if (index == selectedIndex) return;
       if (index == 0)
         Navigator.pushReplacement(context,
-            new MaterialPageRoute(builder: (context) => StartJourney()));
+            new MaterialPageRoute(builder: (context) => StartNewJourney()));
+      else if (index == 1)
+        Navigator.pushReplacement(context,
+            new MaterialPageRoute(builder: (context) => AvailableJourneys()));
       else if (index == 2)
         Navigator.pushReplacement(
             context, new MaterialPageRoute(builder: (context) => Home()));

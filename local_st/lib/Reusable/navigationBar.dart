@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:local_st/General/aboutUs.dart';
+import 'package:local_st/General/joinedJourneys.dart';
+import 'package:local_st/General/listedJourney.dart';
 import 'package:local_st/General/login.dart';
 import 'package:local_st/General/profile.dart';
-import 'package:local_st/General/startJourney.dart';
+import 'package:local_st/General/startNewJourney.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NavBar extends StatefulWidget {
@@ -33,7 +35,9 @@ class _NavBarState extends State<NavBar> {
               child: Text('Cancel')),
           TextButton(
               onPressed: () {
-                sharedPreferences.clear();
+                sharedPreferences.remove('phoneNumber');
+                sharedPreferences.remove('email');
+                sharedPreferences.remove('userName');
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute<void>(
@@ -58,9 +62,15 @@ class _NavBarState extends State<NavBar> {
                   .push(MaterialPageRoute(builder: (context) => Profile()))),
           ListTile(
             leading: FaIcon(FontAwesomeIcons.mapLocationDot),
-            title: Text('Joined Journeys', style: TextStyle(fontSize: 18)),
+            title: Text('Listed Journeys', style: TextStyle(fontSize: 18)),
             onTap: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => StartJourney())),
+                .push(MaterialPageRoute(builder: (context) => ListedJourney())),
+          ),
+          ListTile(
+            leading: FaIcon(FontAwesomeIcons.plus),
+            title: Text('Joined Journeys', style: TextStyle(fontSize: 18)),
+            onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => JoinedJourneys())),
           ),
           ListTile(
             leading: FaIcon(FontAwesomeIcons.clockRotateLeft),
@@ -88,10 +98,6 @@ class _NavBarState extends State<NavBar> {
 
   Future<String> initial() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString('phoneNumber', '+91 8160286054');
-    sharedPreferences.setString('email', 'nisargee.rce20@sot.pdpu.ac.in');
-    sharedPreferences.setString('userName', 'Nisargee Raval');
-
     phoneNumber = sharedPreferences.getString('phoneNumber')!;
     emailID = sharedPreferences.getString('email')!;
     userName = sharedPreferences.getString('userName')!;

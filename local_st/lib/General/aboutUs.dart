@@ -15,19 +15,16 @@ class _AboutState extends State<About> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Smart Transportation',
+          'About Us',
         ),
         centerTitle: true,
         backgroundColor: Colors.black,
         elevation: 0,
       ),
       body: Column(children: <Widget>[
-        Text('About Us',
-            style: TextStyle(
-                fontSize: h * 0.04, decoration: TextDecoration.underline)),
         Text(
             'Smart Transportation is a way of eco-friendly daily commute. \nWe believe in saving energy and resources for sustainable future.'),
-        Text(''),
+        Text('')
       ]),
     );
   }

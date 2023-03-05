@@ -61,4 +61,14 @@ class Validators {
     if (!regExp.hasMatch(phone)) return 'Invalid Phone Number\n';
     return '';
   }
+
+  bool validateNumberPlate(String numberPlate) {
+    int minLength = 6, maxLength = 14;
+    const pattern = r'^[A-Z][A-Z]( ?)\d\d( ?)[A-Z]{0,3}(\d{1,4})$';
+    final regExp = RegExp(pattern);
+    if (numberPlate.length < minLength ||
+        numberPlate.length > maxLength ||
+        !regExp.hasMatch(numberPlate)) return false;
+    return true;
+  }
 }

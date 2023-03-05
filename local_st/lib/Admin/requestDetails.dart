@@ -179,7 +179,12 @@ class _RequestDetailsState extends State<RequestDetails> {
       'OrganizationEmailID': organizationEmailID,
       'DateOfBirth': dateOfBirth,
       'RollNumber': rollNumber,
-      'Password': password
+      'Password': password,
+      'TotalJourneyCount': 0,
+      'TotalJourneysCompleted': 0,
+      'ListedJourneyCount': 0,
+      'JoinedJourneyCount': 0,
+      'TotalPoints': 0
     });
     await FirebaseFirestore.instance
         .collection('Mapping/Permanent/PhonetoMail')

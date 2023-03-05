@@ -398,7 +398,7 @@ class _MyWidgetState extends State<Login> {
                 .get();
             var variablePassword = ManageUsers.decrypt(user['Password']);
             if (variablePassword.compareTo(password) == 0) {
-              sharedPreferences.setString('phoneNumber', userID);
+              sharedPreferences.setString('phoneNumber', phoneNumber);
               sharedPreferences.setString('email', user['OrganizationEmailID']);
               sharedPreferences.setString(
                   'userName', user['FirstName'] + " " + user['LastName']);

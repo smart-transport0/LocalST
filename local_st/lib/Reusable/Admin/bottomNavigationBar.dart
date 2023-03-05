@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:local_st/Admin/pendingRequest.dart';
-import 'package:local_st/General/startJourney.dart';
+import 'package:local_st/General/startNewJourney.dart';
 
 class BottomNavBar extends StatefulWidget {
   @override
@@ -22,7 +22,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
       if (index == selectedIndex) return;
       if (index == 0)
         Navigator.pushReplacement(context,
-            new MaterialPageRoute(builder: (context) => StartJourney()));
+            new MaterialPageRoute(builder: (context) => StartNewJourney()));
       else if (index == 2)
         Navigator.pushReplacement(context,
             new MaterialPageRoute(builder: (context) => PendingRequest()));
