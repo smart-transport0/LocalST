@@ -361,6 +361,15 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
       "PhoneNumber": userID,
       "TimeStamp": requestInfo["TimeStamp"]
     });
+    var data = await FirebaseFirestore.instance
+        .collection('TransporterList')
+        .doc(widget.journeyID)
+        .get();
+    await FirebaseFirestore.instance
+        .collection('TransporterList')
+        .doc(widget.journeyID)
+        .update({'PendingRequestsCount' : data['PendingRequestsCount'] - 1, 
+                 'AcceptedRequestsCount': data['AcceptedRequestsCount'] + 1});
     await FirebaseFirestore.instance
         .collection('TransporterList')
         .doc(widget.journeyID)
@@ -379,6 +388,14 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
         .collection('ActiveRequests')
         .doc(userID)
         .delete();
+    var data = await FirebaseFirestore.instance
+        .collection('TransporterList')
+        .doc(widget.journeyID)
+        .get();
+    await FirebaseFirestore.instance
+        .collection('TransporterList')
+        .doc(widget.journeyID)
+        .update({'PendingRequestsCount': data['PendingRequestsCount'] - 1});
     setState(() {
       initial();
     });

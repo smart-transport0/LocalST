@@ -23,8 +23,7 @@ class _AboutState extends State<About> {
       ),
       body: Column(children: <Widget>[
         Text(
-            'Smart Transportation is a way of eco-friendly daily commute. \nWe believe in saving energy and resources for sustainable future.'),
-        Text('')
+            'Smart Transportation is a way of eco-friendly daily commute. \nWe believe in saving energy and resources for sustainable future.')
       ]),
     );
   }

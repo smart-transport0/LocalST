@@ -351,7 +351,7 @@ class _StartNewJourneyState extends State<StartNewJourney> {
                                           leaveTimeController.text != "" &&
                                           selectedVehicleType != "" &&
                                           checkAvailableSeatsValid(
-                                              availableSeatsController.text,
+                                              int.parse(availableSeatsController.text),
                                               selectedVehicleType)) {
                                         visibility = 2;
                                       } else {
@@ -364,7 +364,7 @@ class _StartNewJourneyState extends State<StartNewJourney> {
                                           selectedVehicleType != "")
                                           msg = "Please fill all the fields!";
                                         if (!checkAvailableSeatsValid(
-                                            availableSeatsController.text,
+                                            int.parse(availableSeatsController.text),
                                             selectedVehicleType))
                                           msg +=
                                               "Available seats invalid for this vehicle type!";
@@ -775,29 +775,31 @@ class _StartNewJourneyState extends State<StartNewJourney> {
       'JourneyDate': utilities.changeDateFormat(journeyDateController.text),
       'LeaveTime': leaveTimeController.text,
       'VehicleType': selectedVehicleType,
-      'AvailableSeats': availableSeatsController.text,
+      'AvailableSeats': int.parse(availableSeatsController.text),
       'SourcePlace': sourceController.text,
       'DestinationPlace': destinationController.text,
       'Route': routeController.text,
       'NumberPlate': numberPlateController.text,
       'PaidUnpaid': paidUnpaidValue,
-      'Description': descriptionController.text
+      'Description': descriptionController.text,
+      'PendingRequestsCount': 0,
+      'AcceptedRequestsCount': 0
     });
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => Home()));
   }
 
   bool checkAvailableSeatsValid(
-      String availableSeats, String selectedVehicleType) {
+      int availableSeats, String selectedVehicleType) {
     if (selectedVehicleType == "2-Wheeler") {
-      if (int.parse(availableSeats) != 2) {
+      if (availableSeats > 2) {
         return false;
       }
     } else if (selectedVehicleType == "3-Wheeler") {
-      if (int.parse(availableSeats) > 4) {
+      if (availableSeats > 4) {
         return false;
       }
     } else if (selectedVehicleType == "4-Wheeler") {
-      if (int.parse(availableSeats) > 8) {
+      if (availableSeats > 8) {
         return false;
       }
     }

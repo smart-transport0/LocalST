@@ -35,7 +35,7 @@ class _MyWidgetState extends State<Register> {
   TextEditingController organizationEMailIDController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
-
+  TextEditingController idCardController = TextEditingController();
   //Visiblity Switcher Variable
   int outerVisibility = 1;
   int phoneNumberVisibility = 1;
@@ -505,6 +505,7 @@ class _MyWidgetState extends State<Register> {
                                       elevation: 15,
                                       child: TextField(
                                           cursorColor: MyColorScheme.darkColor,
+                                          controller: idCardController,
                                           style: TextStyle(
                                               color: MyColorScheme.darkColor),
                                           decoration: InputDecoration(

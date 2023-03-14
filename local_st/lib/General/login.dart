@@ -340,9 +340,9 @@ class _MyWidgetState extends State<Login> {
       if (password == "") errorMessage += "Password cannot be empty";
       utilities.AlertMessage(context, 'Invalid Input', errorMessage);
     } else {
+      String OGpassword = ManageUsers.encrypt(password);
       if (userID.startsWith('\$')) {
         String phoneNumber = utilities.add91(userID.substring(1));
-        String OGpassword = ManageUsers.encrypt(password);
         await FirebaseFirestore.instance
             .collection('Admin')
             .doc(phoneNumber)
@@ -365,25 +365,37 @@ class _MyWidgetState extends State<Login> {
                     }
                 });
       } else {
-        String OGpassword = ManageUsers.encrypt(password);
         var user = await FirebaseFirestore.instance
             .collection('UserInformation')
             .doc(utilities.add91(userID))
             .get();
+        // Check if phone number matches
         if (user.exists) {
+          // Check password
           var variablePassword = ManageUsers.decrypt(user['Password']);
+          // If password matches, login
           if (variablePassword.compareTo(password) == 0) {
             sharedPreferences.setString('phoneNumber', utilities.add91(userID));
             sharedPreferences.setString('email', user['OrganizationEmailID']);
             sharedPreferences.setString(
                 'userName', user['FirstName'] + " " + user['LastName']);
-            Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => Home()));
+            try {
+              //Change status in firebaseauth
+              await auth.signInWithEmailAndPassword(
+                  email: user['OrganizationEmailID'], password: password);
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => Home()));
+            } on FirebaseAuthException catch (e) {
+              // Invalid credentials case
+              utilities.AlertMessage(
+                  context, 'Invalid input', 'Invalid login credentials!');
+            }
           } else {
             utilities.AlertMessage(
                 context, 'Incorrect Input', 'Incorrect password!');
           }
         } else {
+           // Check if Email matches
           var mapping = await FirebaseFirestore.instance
               .collection('Mapping/Permanent/MailtoPhone')
               .doc(userID)
@@ -391,17 +403,29 @@ class _MyWidgetState extends State<Login> {
           if (!mapping.exists) {
             utilities.AlertMessage(context, 'Invalid Input', 'Invalid UserID');
           } else {
+            // Check password
             var phoneNumber = mapping['PhoneNumber'];
             var user = await FirebaseFirestore.instance
                 .collection('UserInformation')
                 .doc(phoneNumber)
                 .get();
             var variablePassword = ManageUsers.decrypt(user['Password']);
+            // If password matches, login
             if (variablePassword.compareTo(password) == 0) {
               sharedPreferences.setString('phoneNumber', phoneNumber);
               sharedPreferences.setString('email', user['OrganizationEmailID']);
               sharedPreferences.setString(
                   'userName', user['FirstName'] + " " + user['LastName']);
+              try {
+                // Change status in firebaseauth
+                await auth.signInWithEmailAndPassword(
+                    email: user['OrganizationEmailID'], password: password);
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => Home()));
+              } on FirebaseAuthException catch (e) {
+                // Handle invalid credentials
+                utilities.AlertMessage(context, 'Invalid input', 'Invalid login credentials!');
+              }
               Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => Home()));
             } else {
@@ -417,7 +441,9 @@ class _MyWidgetState extends State<Login> {
   void verifyNumber() async {
     auth.verifyPhoneNumber(
         phoneNumber: utilities.add91(userIDController.text.substring(1)),
-        verificationCompleted: (PhoneAuthCredential credential) async {},
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          await auth.signInWithCredential(credential);
+        },
         verificationFailed: (FirebaseAuthException exception) {
           print('Verification failed');
         },

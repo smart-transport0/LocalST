@@ -1,11 +1,10 @@
-import 'dart:ui';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:local_st/Data-Services/utilities.dart';
 import 'package:local_st/Reusable/bottomNavigationBar.dart';
 import 'package:local_st/Reusable/navigationBar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:math';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -25,10 +24,33 @@ class _MyWidgetState extends State<Home> {
   String userName = "", greeting = "";
   late SharedPreferences sharedPreferences;
   Utilities utilities = Utilities();
+  List<String> facts = [
+    "There were an estimated 6.5 million deaths worldwide from air pollution-related diseases in 2012, WHO data shows.",
+    '91% of the world\'s population are breathing in polluted air every day.',
+    'At least 1 in 10 people die from Air Pollution-related diseases.',
+    'Air Pollution is a greater threat to Life Expectancy than smoking, HIV or war.',
+    'Air Pollution has nearly \$3 Trillion Economic Cost, equivalent to 3.3% of the world\'s GDP.',
+    'Death Rates from air pollution are highest in low-to-middle income countries.',
+    'Climate Change increases risks of wildfires and air pollution from it.',
+    '10 of the world\'s 15 most polluted cities are in India.',
+    'None of the World\'s 100 biggest cities are able to meet WHO\'s updated guidelines.',
+    'Air Pollution contributes to the spread of COVID-19.',
+    'More than nine out of 10 of the world\'s population - 92% - lives in places where air pollution exceeds safe limits, according to research from the World Health Organization (WHO).',
+    'Air pollution fourth-largest threat to human health, behind high blood pressure, dietary risks and smoking.',
+    'There were an estimated 6.5 million deaths worldwide from air pollution-related diseases in 2012, WHO data shows. That\'s 11.6% of all global deaths - more than the number of people killed by HIV/AIDS, tuberculosis and road injuries combined.',
+    'Almost all deaths (94%) linked to air pollution occur in low- and middle-income countries, the WHO says.',
+    'It found that air pollution led to one in 10 deaths in 2013, which cost the global economy about \$225 billion in lost labour income.',
+    'Another fact about air pollution is that the tiny particles, known as PM2.5, have a diameter of less than 2.5 micrometers and can penetrate deep into the lungs and cardiovascular system, increasing the risk of disease.',
+    'WHO guidelines state annual average concentrations of PM2.5 should be below 10 micrograms (mcg) per cubic meter, but the vast majority of the world\'s population is living in areas exceeding this limit.',
+    'Over the past four years, Mumbai, Delhi and Bengaluru have consistently featured on TomTom\'s top 10 most congested cities in the world for traffic.'
+  ];
+
   Widget build(BuildContext context) {
     //height and width of screen
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
+    Random random = new Random();
+    int randomNumber = random.nextInt(16);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -52,11 +74,11 @@ class _MyWidgetState extends State<Home> {
             child: Column(
               children: [
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  // crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Padding(
-                      padding: EdgeInsets.fromLTRB(
-                          w * 0.05, h * 0.05, w * 0.05, h * 0.02),
+                      padding: EdgeInsets.fromLTRB(0, h * 0.05, 0, h * 0.02),
                       child: Column(
                         children: [
                           ClipOval(
@@ -70,10 +92,8 @@ class _MyWidgetState extends State<Home> {
                       ),
                     ),
                     Padding(
-                      padding:
-                          EdgeInsets.fromLTRB(0, h * 0.06, w * 0.05, h * 0.02),
+                      padding: EdgeInsets.fromLTRB(0, h * 0.06, 0, h * 0.02),
                       child: Container(
-                        width: w * 0.5,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
@@ -91,8 +111,7 @@ class _MyWidgetState extends State<Home> {
                       ),
                     ),
                     Padding(
-                      padding:
-                          EdgeInsets.fromLTRB(w * 0.05, h * 0.07, 0, h * 0.02),
+                      padding: EdgeInsets.fromLTRB(0, h * 0.07, 0, h * 0.02),
                       child: Stack(
                         children: [
                           ClipOval(
@@ -141,6 +160,7 @@ class _MyWidgetState extends State<Home> {
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
+                                  //Dummy Data
                                   Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
@@ -192,7 +212,7 @@ class _MyWidgetState extends State<Home> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(w * 0.05, 0, w * 0.05, 0),
                   child: Text(
-                    "There were an estimated 6.5 million deaths worldwide from air pollution-related diseases in 2012, WHO data shows.",
+                    facts[randomNumber],
                     style: TextStyle(fontSize: h * 0.025),
                     textAlign: TextAlign.center,
                   ),

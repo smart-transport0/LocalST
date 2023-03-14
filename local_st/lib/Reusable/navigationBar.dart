@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:local_st/General/aboutUs.dart';
@@ -34,10 +35,11 @@ class _NavBarState extends State<NavBar> {
               },
               child: Text('Cancel')),
           TextButton(
-              onPressed: () {
+              onPressed: () async {
                 sharedPreferences.remove('phoneNumber');
                 sharedPreferences.remove('email');
                 sharedPreferences.remove('userName');
+                await FirebaseAuth.instance.signOut();
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute<void>(

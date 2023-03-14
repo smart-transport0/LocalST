@@ -311,7 +311,6 @@ class _ProfileState extends State<Profile> {
       userName = sharedPreferences.getString('userName').toString();
       phoneNumber = sharedPreferences.getString('phoneNumber').toString();
       email = sharedPreferences.getString('email').toString();
-      print(phoneNumber);
     });
   }
 }

@@ -1,8 +1,8 @@
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:local_st/Data-Services/utilities.dart';
 import 'package:local_st/General/availableJourneyDetails.dart';
-import 'package:local_st/General/listedJourneyDetails.dart';
 import 'package:local_st/Reusable/bottomNavigationBar.dart';
 import 'package:local_st/Reusable/navigationBar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,7 +16,14 @@ class AvailableJourneys extends StatefulWidget {
 
 class _AvailableJourneysState extends State<AvailableJourneys> {
   @override
+  void initState() {
+    super.initState();
+    initial();
+  }
+
   Utilities utilities = Utilities();
+  late SharedPreferences sharedPreferences;
+  String userID = "";
   List availableJourneys = [];
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
@@ -37,7 +44,7 @@ class _AvailableJourneysState extends State<AvailableJourneys> {
             future: fetchAvailableJourneys(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                if (availableJourneys.length == 0) {
+                if (availableJourneys.isEmpty) {
                   return Center(
                     child: Text('No available journeys yet :(',
                         style: TextStyle(fontSize: h * 0.04),
@@ -74,28 +81,56 @@ class _AvailableJourneysState extends State<AvailableJourneys> {
                                                 MainAxisAlignment.spaceAround,
                                             children: <Widget>[
                                               Text(
-                                                  'Date ' +
-                                                      '${availableJourneys[index][0]}',
+                                                  'Date ${availableJourneys[index][0]}',
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.w900,
                                                       color: Colors
                                                           .blue.shade900)),
-                                              Container(
-                                                  width: 25,
-                                                  height: 25,
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color: Colors.red,
+                                              Row(
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsets.fromLTRB(
+                                                            0, 0, w * 0.03, 0),
+                                                    child: Container(
+                                                        width: 25,
+                                                        height: 25,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          shape:
+                                                              BoxShape.circle,
+                                                          color: Colors.red,
+                                                        ),
+                                                        child: Center(
+                                                            child: Text(
+                                                          '${availableJourneys[index][5]}',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w900),
+                                                        ))),
                                                   ),
-                                                  child: Center(
-                                                      child: Text(
-                                                    '10',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.w900),
-                                                  ))),
+                                                  Container(
+                                                      width: 25,
+                                                      height: 25,
+                                                      decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        color: Colors.green,
+                                                      ),
+                                                      child: Center(
+                                                          child: Text(
+                                                        '${availableJourneys[index][4]}',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w900),
+                                                      ))),
+                                                ],
+                                              ),
                                             ]),
                                         SizedBox(height: h * 0.01),
                                         Column(
@@ -133,23 +168,31 @@ class _AvailableJourneysState extends State<AvailableJourneys> {
   }
 
   Future<List> fetchAvailableJourneys() async {
-    var sharedPreferences = await SharedPreferences.getInstance();
-    availableJourneys = [];
-    String userID = utilities
-        .remove91(sharedPreferences.getString('phoneNumber').toString());
+    if (availableJourneys.isNotEmpty) availableJourneys.clear();
     var result =
         await FirebaseFirestore.instance.collection('TransporterList').get();
-    result.docs.forEach((res) {
+    for (var res in result.docs) {
       String temp = res.id.substring(0, 10);
       if (temp != userID) {
-        availableJourneys.add([
-          res['JourneyDate'],
-          res['SourcePlace'],
-          res['DestinationPlace'],
-          res.id
-        ]);
+        if (res['AvailableSeats'] > res['AcceptedRequestsCount']) {
+          // Add a constraint to check time limit and if user is already a member
+          availableJourneys.add([
+            res['JourneyDate'],
+            res['SourcePlace'],
+            res['DestinationPlace'],
+            res.id,
+            res['AcceptedRequestsCount'],
+            res['PendingRequestsCount']
+          ]);
+        }
       }
-    });
+    }
     return availableJourneys;
+  }
+
+  Future<void> initial() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    userID = utilities
+        .remove91(sharedPreferences.getString('phoneNumber').toString());
   }
 }

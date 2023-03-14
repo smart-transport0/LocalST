@@ -23,15 +23,15 @@ class _AvailableJourneyDetailsState extends State<AvailableJourneyDetails> {
   late SharedPreferences sharedPreferences;
   Utilities utilities = Utilities();
   String userEmail = "";
-  List journeyDetails = [];
-  List acceptedRequests = [];
-  bool acceptedVisibility = true;
-  List pendingRequests = [];
-  bool pendingVisibility = true;
   String journeyDate = "";
   String journeyDay = "";
   String journeyLeaveTime = "";
   String buttonValue = "Join";
+  List journeyDetails = [];
+  List acceptedRequests = [];
+  List pendingRequests = [];
+  bool acceptedVisibility = true;
+  bool pendingVisibility = true;
 
   void initState() {
     super.initState();
@@ -360,7 +360,7 @@ class _AvailableJourneyDetailsState extends State<AvailableJourneyDetails> {
                     )
                   ]));
                 } else {
-                  return CircularProgressIndicator();
+                  return Text('No data');
                 }
               } else {
                 return CircularProgressIndicator();
@@ -372,6 +372,10 @@ class _AvailableJourneyDetailsState extends State<AvailableJourneyDetails> {
     var userID = sharedPreferences.getString("phoneNumber");
     var userName = sharedPreferences.getString("userName");
     DateTime datetime = DateTime.now();
+    var data = await FirebaseFirestore.instance
+        .collection('TransporterList')
+        .doc(widget.journeyID)
+        .get();
     if (buttonValue == 'Join') {
       await FirebaseFirestore.instance
           .collection('TransporterList')
@@ -388,6 +392,13 @@ class _AvailableJourneyDetailsState extends State<AvailableJourneyDetails> {
             utilities.padCharacters(datetime.minute.toString(), "0", 2) +
             utilities.padCharacters(datetime.second.toString(), "0", 2)
       });
+      await FirebaseFirestore.instance
+          .collection('TransporterList')
+          .doc(widget.journeyID)
+          .update({
+        'PendingRequestsCount': data['PendingRequestsCount'] + 1,
+        'AcceptedRequestsCount': data['AcceptedRequestsCount'] + 1
+      });
     } else if (buttonValue == 'Leave') {
       await FirebaseFirestore.instance
           .collection('TransporterList')
@@ -395,6 +406,12 @@ class _AvailableJourneyDetailsState extends State<AvailableJourneyDetails> {
           .collection('AcceptedRequests')
           .doc(userID)
           .delete();
+      await FirebaseFirestore.instance
+          .collection('TransporterList')
+          .doc(widget.journeyID)
+          .update({
+        'AcceptedRequestsCount': data['AcceptedRequestsCount'] - 1
+      });
     }
     Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (context) => AvailableJourneyDetails(widget.journeyID)));

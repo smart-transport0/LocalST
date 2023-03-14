@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:local_st/Data-Services/utilities.dart';
+import 'package:local_st/General/availableJourneyDetails.dart';
 import 'package:local_st/General/listedJourneyDetails.dart';
 import 'package:local_st/General/startNewJourney.dart';
 import 'package:local_st/Reusable/bottomNavigationBar.dart';
@@ -86,21 +87,44 @@ class _ListedJourneyState extends State<ListedJourney> {
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w900,
                                                   color: Colors.blue.shade900)),
-                                          Container(
-                                              width: 25,
-                                              height: 25,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: Colors.red,
+                                          Row(
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsets.fromLTRB(
+                                                    0, 0, w * 0.03, 0),
+                                                child: Container(
+                                                    width: 25,
+                                                    height: 25,
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      color: Colors.red,
+                                                    ),
+                                                    child: Center(
+                                                        child: Text(
+                                                      '${listedJourneys[index][5]}',
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.w900),
+                                                    ))),
                                               ),
-                                              child: Center(
-                                                  child: Text(
-                                                '10',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight:
-                                                        FontWeight.w900),
-                                              ))),
+                                              Container(
+                                                  width: 25,
+                                                  height: 25,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: Colors.green,
+                                                  ),
+                                                  child: Center(
+                                                      child: Text(
+                                                    '${listedJourneys[index][4]}',
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.w900),
+                                                  ))),
+                                            ],
+                                          ),
                                         ]),
                                     SizedBox(height: h * 0.01),
                                     Column(
@@ -144,17 +168,19 @@ class _ListedJourneyState extends State<ListedJourney> {
         .remove91(sharedPreferences.getString('phoneNumber').toString());
     var result =
         await FirebaseFirestore.instance.collection('TransporterList').get();
-    result.docs.forEach((res) {
+    for (var res in result.docs) {
       String temp = res.id.substring(0, 10);
       if (temp == userID) {
         listedJourneys.add([
           res['JourneyDate'],
           res['SourcePlace'],
           res['DestinationPlace'],
-          res.id
+          res.id,
+          res['AcceptedRequestsCount'],
+          res['PendingRequestsCount']
         ]);
       }
-    });
+    }
     return listedJourneys;
   }
 }

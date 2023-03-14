@@ -1,5 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:local_st/Data-Services/utilities.dart';
 import 'package:local_st/General/availableJourneyDetails.dart';
 import 'package:local_st/Reusable/bottomNavigationBar.dart';
@@ -15,6 +15,8 @@ class JoinedJourneys extends StatefulWidget {
 
 class _JoinedJourneysState extends State<JoinedJourneys> {
   @override
+  late SharedPreferences sharedPreferences;
+  String userID = "";
   Utilities utilities = Utilities();
   List joinedJourneys = [];
   Widget build(BuildContext context) {
@@ -33,10 +35,10 @@ class _JoinedJourneysState extends State<JoinedJourneys> {
         bottomNavigationBar: BottomNavBar(1),
         body: Container(
           child: FutureBuilder(
-            future: fetchAvailableJourneys(),
+            future: fetchJoinedJourneys(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                if (joinedJourneys.length == 0) {
+                if (joinedJourneys.isEmpty) {
                   return Center(
                     child: Text('No joined journeys yet :(',
                         style: TextStyle(fontSize: h * 0.04),
@@ -73,28 +75,56 @@ class _JoinedJourneysState extends State<JoinedJourneys> {
                                                 MainAxisAlignment.spaceAround,
                                             children: <Widget>[
                                               Text(
-                                                  'Date ' +
-                                                      '${joinedJourneys[index][0]}',
+                                                  'Date ${joinedJourneys[index][0]}',
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.w900,
                                                       color: Colors
                                                           .blue.shade900)),
-                                              Container(
-                                                  width: 25,
-                                                  height: 25,
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color: Colors.red,
+                                              Row(
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsets.fromLTRB(
+                                                            0, 0, w * 0.03, 0),
+                                                    child: Container(
+                                                        width: 25,
+                                                        height: 25,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          shape:
+                                                              BoxShape.circle,
+                                                          color: Colors.red,
+                                                        ),
+                                                        child: Center(
+                                                            child: Text(
+                                                          '${joinedJourneys[index][5]}',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w900),
+                                                        ))),
                                                   ),
-                                                  child: Center(
-                                                      child: Text(
-                                                    '10',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.w900),
-                                                  ))),
+                                                  Container(
+                                                      width: 25,
+                                                      height: 25,
+                                                      decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        color: Colors.green,
+                                                      ),
+                                                      child: Center(
+                                                          child: Text(
+                                                        '${joinedJourneys[index][4]}',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w900),
+                                                      ))),
+                                                ],
+                                              ),
                                             ]),
                                         SizedBox(height: h * 0.01),
                                         Column(
@@ -131,24 +161,30 @@ class _JoinedJourneysState extends State<JoinedJourneys> {
         ));
   }
 
-  Future<List> fetchAvailableJourneys() async {
-    var sharedPreferences = await SharedPreferences.getInstance();
-    joinedJourneys = [];
-    String userID = utilities
-        .remove91(sharedPreferences.getString('phoneNumber').toString());
-    var result =
-        await FirebaseFirestore.instance.collection('TransporterList').get();
-    result.docs.forEach((res) {
+  Future<List> fetchJoinedJourneys() async {
+    if (joinedJourneys.isNotEmpty) joinedJourneys.clear();
+    var collectionObject =
+        FirebaseFirestore.instance.collection('TransporterList');
+    var result = await collectionObject.get();
+    for (var res in result.docs) {
       String temp = res.id.substring(0, 10);
       if (temp != userID) {
         joinedJourneys.add([
           res['JourneyDate'],
           res['SourcePlace'],
           res['DestinationPlace'],
-          res.id
+          res.id,
+          res['AcceptedRequestsCount'],
+          res['PendingRequestsCount']
         ]);
       }
-    });
+    }
     return joinedJourneys;
+  }
+
+  Future<void> initial() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    userID = utilities
+        .remove91(sharedPreferences.getString('phoneNumber').toString());
   }
 }
