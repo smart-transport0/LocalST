@@ -153,6 +153,15 @@ class _AvailableJourneysState extends State<AvailableJourneys> {
                                                     fontWeight: FontWeight.w900,
                                                     color:
                                                         Colors.blue.shade900),
+                                              ),
+                                              SizedBox(height: h * 0.01),
+                                              Text('Transporter Name'),
+                                              Text(
+                                                '${availableJourneys[index][6]}',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w900,
+                                                    color:
+                                                        Colors.blue.shade900),
                                               )
                                             ])
                                       ]),
@@ -175,6 +184,12 @@ class _AvailableJourneysState extends State<AvailableJourneys> {
       String temp = res.id.substring(0, 10);
       if (temp != userID) {
         if (res['AvailableSeats'] > res['AcceptedRequestsCount']) {
+          var transporterInfo = await FirebaseFirestore.instance
+              .collection('UserInformation')
+              .doc(utilities.add91(temp))
+              .get();
+          String transporterName =
+              transporterInfo['FirstName'] + ' ' + transporterInfo['LastName'];
           // Add a constraint to check time limit and if user is already a member
           availableJourneys.add([
             res['JourneyDate'],
@@ -182,7 +197,8 @@ class _AvailableJourneysState extends State<AvailableJourneys> {
             res['DestinationPlace'],
             res.id,
             res['AcceptedRequestsCount'],
-            res['PendingRequestsCount']
+            res['PendingRequestsCount'],
+            transporterName
           ]);
         }
       }

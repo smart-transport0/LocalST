@@ -125,6 +125,21 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
                                         Padding(
                                             padding: EdgeInsets.fromLTRB(
                                                 0.0, 0.0, 0.0, h * 0.005),
+                                            child: Text('NUMBER PLATE',
+                                                style: TextStyle(
+                                                    color: Colors.grey[700],
+                                                    fontSize: h * 0.02,
+                                                    fontWeight:
+                                                        FontWeight.bold))),
+                                        Padding(
+                                            padding: EdgeInsets.fromLTRB(
+                                                0.0, 0.0, 0.0, h * 0.02),
+                                            child: Text('${journeyDetails[9]}',
+                                                style: TextStyle(
+                                                    fontSize: h * 0.034))),
+                                        Padding(
+                                            padding: EdgeInsets.fromLTRB(
+                                                0.0, 0.0, 0.0, h * 0.005),
                                             child: Text('VEHICLE TYPE',
                                                 style: TextStyle(
                                                     color: Colors.grey[700],
@@ -368,8 +383,10 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
     await FirebaseFirestore.instance
         .collection('TransporterList')
         .doc(widget.journeyID)
-        .update({'PendingRequestsCount' : data['PendingRequestsCount'] - 1, 
-                 'AcceptedRequestsCount': data['AcceptedRequestsCount'] + 1});
+        .update({
+      'PendingRequestsCount': data['PendingRequestsCount'] - 1,
+      'AcceptedRequestsCount': data['AcceptedRequestsCount'] + 1
+    });
     await FirebaseFirestore.instance
         .collection('TransporterList')
         .doc(widget.journeyID)
@@ -448,6 +465,7 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
     journeyDetails.add(journeyData['Route']);
     journeyDetails.add(journeyData['PaidUnpaid']);
     journeyDetails.add(journeyData['Description']);
+    journeyDetails.add(journeyData['NumberPlate']);
     var activeRequests = await FirebaseFirestore.instance
         .collection('TransporterList')
         .doc(widget.journeyID)

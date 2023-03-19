@@ -7,18 +7,17 @@ import 'package:local_st/Reusable/colors.dart';
 import 'package:local_st/Reusable/navigationBar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AvailableJourneyDetails extends StatefulWidget {
+class JoinedJourneyDetails extends StatefulWidget {
   String journeyID = "";
-  AvailableJourneyDetails(String journeyID) {
+  JoinedJourneyDetails(String journeyID) {
     this.journeyID = journeyID;
   }
 
   @override
-  State<AvailableJourneyDetails> createState() =>
-      _AvailableJourneyDetailsState();
+  State<JoinedJourneyDetails> createState() => _JoinedJourneyDetailsState();
 }
 
-class _AvailableJourneyDetailsState extends State<AvailableJourneyDetails> {
+class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
   @override
   late SharedPreferences sharedPreferences;
   Utilities utilities = Utilities();
@@ -428,7 +427,7 @@ class _AvailableJourneyDetailsState extends State<AvailableJourneyDetails> {
           .update({'AcceptedRequestsCount': data['AcceptedRequestsCount'] - 1});
     }
     Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) => AvailableJourneyDetails(widget.journeyID)));
+        builder: (context) => JoinedJourneyDetails(widget.journeyID)));
   }
 
   Future<List> fetchJourneyDetails() async {

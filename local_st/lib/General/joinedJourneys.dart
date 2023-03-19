@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:local_st/Data-Services/utilities.dart';
-import 'package:local_st/General/availableJourneyDetails.dart';
+import 'package:local_st/General/joinedJourneyDetails.dart';
 import 'package:local_st/Reusable/bottomNavigationBar.dart';
 import 'package:local_st/Reusable/navigationBar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,10 +15,15 @@ class JoinedJourneys extends StatefulWidget {
 
 class _JoinedJourneysState extends State<JoinedJourneys> {
   @override
+  void initState() {
+    super.initState();
+    initial();
+  }
+
   late SharedPreferences sharedPreferences;
   String userID = "";
   Utilities utilities = Utilities();
-  List joinedJourneys = [];
+  // List joinedJourneys = [];
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
@@ -34,22 +39,18 @@ class _JoinedJourneysState extends State<JoinedJourneys> {
         drawer: NavBar(),
         bottomNavigationBar: BottomNavBar(1),
         body: Container(
-          child: FutureBuilder(
+          child: FutureBuilder<List>(
             future: fetchJoinedJourneys(),
             builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                if (joinedJourneys.isEmpty) {
-                  return Center(
-                    child: Text('No joined journeys yet :(',
-                        style: TextStyle(fontSize: h * 0.04),
-                        textAlign: TextAlign.center),
-                  );
-                } else {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasData) {
                   return ListView.builder(
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
                       physics: ClampingScrollPhysics(),
-                      itemCount: joinedJourneys.length,
+                      itemCount: snapshot.data?.length,
                       itemBuilder: (context, index) {
                         return Container(
                             width: w * 0.85,
@@ -62,8 +63,8 @@ class _JoinedJourneysState extends State<JoinedJourneys> {
                                           Navigator.of(context).push(
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      AvailableJourneyDetails(
-                                                          joinedJourneys[index]
+                                                      JoinedJourneyDetails(
+                                                          snapshot.data?[index]
                                                               [3])))
                                         },
                                     title: Padding(
@@ -75,7 +76,7 @@ class _JoinedJourneysState extends State<JoinedJourneys> {
                                                 MainAxisAlignment.spaceAround,
                                             children: <Widget>[
                                               Text(
-                                                  'Date ${joinedJourneys[index][0]}',
+                                                  'Date ${snapshot.data?[index][0]}',
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.w900,
@@ -98,7 +99,7 @@ class _JoinedJourneysState extends State<JoinedJourneys> {
                                                         ),
                                                         child: Center(
                                                             child: Text(
-                                                          '${joinedJourneys[index][5]}',
+                                                          '${snapshot.data?[index][5]}',
                                                           style: TextStyle(
                                                               color:
                                                                   Colors.white,
@@ -116,7 +117,7 @@ class _JoinedJourneysState extends State<JoinedJourneys> {
                                                       ),
                                                       child: Center(
                                                           child: Text(
-                                                        '${joinedJourneys[index][4]}',
+                                                        '${snapshot.data?[index][4]}',
                                                         style: TextStyle(
                                                             color: Colors.white,
                                                             fontWeight:
@@ -133,7 +134,7 @@ class _JoinedJourneysState extends State<JoinedJourneys> {
                                             children: <Widget>[
                                               Text('Source Place'),
                                               Text(
-                                                '${joinedJourneys[index][1]}',
+                                                '${snapshot.data?[index][1]}',
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.w900,
                                                     color:
@@ -142,7 +143,16 @@ class _JoinedJourneysState extends State<JoinedJourneys> {
                                               SizedBox(height: h * 0.01),
                                               Text('Destination Place'),
                                               Text(
-                                                '${joinedJourneys[index][2]}',
+                                                '${snapshot.data?[index][2]}',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w900,
+                                                    color:
+                                                        Colors.blue.shade900),
+                                              ),
+                                              SizedBox(height: h * 0.01),
+                                              Text('Transporter Name'),
+                                              Text(
+                                                '${snapshot.data?[index][6]}',
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.w900,
                                                     color:
@@ -152,9 +162,25 @@ class _JoinedJourneysState extends State<JoinedJourneys> {
                                       ]),
                                     ))));
                       });
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Error! Fetching Data',
+                        style: TextStyle(fontSize: h * 0.04),
+                        textAlign: TextAlign.center),
+                  );
+                } else {
+                  return Center(
+                    child: Text('No joined journeys yet :(',
+                        style: TextStyle(fontSize: h * 0.04),
+                        textAlign: TextAlign.center),
+                  );
                 }
               } else {
-                return CircularProgressIndicator();
+                return Center(
+                  child: Text('No joined journeys yet :(',
+                      style: TextStyle(fontSize: h * 0.04),
+                      textAlign: TextAlign.center),
+                );
               }
             },
           ),
@@ -162,21 +188,36 @@ class _JoinedJourneysState extends State<JoinedJourneys> {
   }
 
   Future<List> fetchJoinedJourneys() async {
-    if (joinedJourneys.isNotEmpty) joinedJourneys.clear();
+    List joinedJourneys = [];
     var collectionObject =
         FirebaseFirestore.instance.collection('TransporterList');
     var result = await collectionObject.get();
     for (var res in result.docs) {
       String temp = res.id.substring(0, 10);
       if (temp != userID) {
-        joinedJourneys.add([
-          res['JourneyDate'],
-          res['SourcePlace'],
-          res['DestinationPlace'],
-          res.id,
-          res['AcceptedRequestsCount'],
-          res['PendingRequestsCount']
-        ]);
+        var acceptedReqs = await collectionObject
+            .doc(res.id)
+            .collection('AcceptedRequests')
+            .doc(utilities.add91(userID))
+            .get();
+
+        if (acceptedReqs.exists) {
+          var transporterInfo = await FirebaseFirestore.instance
+              .collection('UserInformation')
+              .doc(utilities.add91(temp))
+              .get();
+          String transporterName =
+              transporterInfo['FirstName'] + ' ' + transporterInfo['LastName'];
+          joinedJourneys.add([
+            res['JourneyDate'],
+            res['SourcePlace'],
+            res['DestinationPlace'],
+            res.id,
+            res['AcceptedRequestsCount'],
+            res['PendingRequestsCount'],
+            transporterName
+          ]);
+        }
       }
     }
     return joinedJourneys;
