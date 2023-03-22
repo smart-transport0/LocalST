@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:local_st/Data-Services/utilities.dart';
 import 'package:local_st/Reusable/bottomNavigationBar.dart';
 import 'package:local_st/Reusable/colors.dart';
+import 'package:local_st/Reusable/loading.dart';
 import 'package:local_st/Reusable/navigationBar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -379,7 +380,7 @@ class _AvailableJourneyDetailsState extends State<AvailableJourneyDetails> {
                   return Text('No data');
                 }
               } else {
-                return CircularProgressIndicator();
+                return Loading();
               }
             }));
   }
@@ -411,10 +412,7 @@ class _AvailableJourneyDetailsState extends State<AvailableJourneyDetails> {
       await FirebaseFirestore.instance
           .collection('TransporterList')
           .doc(widget.journeyID)
-          .update({
-        'PendingRequestsCount': data['PendingRequestsCount'] + 1,
-        'AcceptedRequestsCount': data['AcceptedRequestsCount'] + 1
-      });
+          .update({'PendingRequestsCount': data['PendingRequestsCount'] + 1});
     } else if (buttonValue == 'Leave') {
       await FirebaseFirestore.instance
           .collection('TransporterList')

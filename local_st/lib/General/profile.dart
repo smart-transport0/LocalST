@@ -1,13 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:local_st/Reusable/bottomNavigationBar.dart';
 import 'package:local_st/Reusable/colors.dart';
 import 'package:local_st/Reusable/navigationBar.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 class Profile extends StatefulWidget {
-  const Profile({Key? key}) : super(key: key);
-
+  String userID = "";
+  Profile(String userID) {
+    this.userID = userID;
+  }
   @override
   State<Profile> createState() => _ProfileState();
 }
@@ -21,7 +23,6 @@ class _ProfileState extends State<Profile> {
     [20, 12],
     [22, 6]
   ];
-  late SharedPreferences sharedPreferences;
   String userName = "", phoneNumber = "", email = "";
   void initState() {
     super.initState();
@@ -306,11 +307,14 @@ class _ProfileState extends State<Profile> {
   }
 
   Future<void> initial() async {
-    sharedPreferences = await SharedPreferences.getInstance();
+    var userData = await FirebaseFirestore.instance
+        .collection('UserInformation')
+        .doc(widget.userID)
+        .get();
     setState(() {
-      userName = sharedPreferences.getString('userName').toString();
-      phoneNumber = sharedPreferences.getString('phoneNumber').toString();
-      email = sharedPreferences.getString('email').toString();
+      userName = userData['FirstName'] + ' ' + userData['LastName'];
+      phoneNumber = widget.userID;
+      email = userData['OrganizationEmailID'];
     });
   }
 }

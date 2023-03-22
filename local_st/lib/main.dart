@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:local_st/General/home.dart';
 import 'package:local_st/General/login.dart';
+import 'package:local_st/test.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

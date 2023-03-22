@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:local_st/Data-Services/utilities.dart';
 import 'package:local_st/General/joinedJourneyDetails.dart';
 import 'package:local_st/Reusable/bottomNavigationBar.dart';
+import 'package:local_st/Reusable/loading.dart';
 import 'package:local_st/Reusable/navigationBar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -43,9 +44,16 @@ class _JoinedJourneysState extends State<JoinedJourneys> {
             future: fetchJoinedJourneys(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
+                return const Loading();
               } else if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasData) {
+                  if (snapshot.data?.length == 0) {
+                    return Center(
+                      child: Text('No joined journeys yet',
+                          style: TextStyle(fontSize: h * 0.04),
+                          textAlign: TextAlign.center),
+                    );
+                  }
                   return ListView.builder(
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,

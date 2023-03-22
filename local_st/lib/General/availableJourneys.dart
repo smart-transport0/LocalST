@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:local_st/Data-Services/utilities.dart';
 import 'package:local_st/General/availableJourneyDetails.dart';
 import 'package:local_st/Reusable/bottomNavigationBar.dart';
+import 'package:local_st/Reusable/loading.dart';
 import 'package:local_st/Reusable/navigationBar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -169,7 +170,7 @@ class _AvailableJourneysState extends State<AvailableJourneys> {
                       });
                 }
               } else {
-                return CircularProgressIndicator();
+                return Loading();
               }
             },
           ),
