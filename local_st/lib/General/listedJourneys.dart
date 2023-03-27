@@ -10,20 +10,15 @@ import 'package:local_st/Reusable/navigationBar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ListedJourney extends StatefulWidget {
-  const ListedJourney({Key? key}) : super(key: key);
-
+  String userID;
+  ListedJourney({Key? key, required this.userID}) : super(key: key);
   @override
   State<ListedJourney> createState() => _ListedJourneyState();
 }
 
 class _ListedJourneyState extends State<ListedJourney> {
   late SharedPreferences sharedPreferences;
-  String userID = '';
   Utilities utilities = Utilities();
-  void initState() {
-    initialize();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +145,7 @@ class _ListedJourneyState extends State<ListedJourney> {
                     );
                   });
             } else {
-              return Loading();
+              return const Loading();
             }
           },
         ),
@@ -158,15 +153,10 @@ class _ListedJourneyState extends State<ListedJourney> {
     );
   }
 
-  void initialize() async {
-    sharedPreferences = await SharedPreferences.getInstance();
-    userID = utilities.remove91(sharedPreferences.getString('phoneNumber')!)!;
-  }
-
   Stream<QuerySnapshot> getStream() {
     return FirebaseFirestore.instance
         .collection('TransporterList')
-        .where("TransporterID", isEqualTo: userID)
+        .where("TransporterID", isEqualTo: widget.userID)
         .snapshots();
   }
 }

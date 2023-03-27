@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:local_st/Data-Services/utilities.dart';
 import 'package:local_st/General/aboutUs.dart';
 import 'package:local_st/General/joinedJourneys.dart';
 import 'package:local_st/General/listedJourneys.dart';
@@ -17,7 +18,7 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
   late SharedPreferences sharedPreferences;
   String userName = '', phoneNumber = '', emailID = '';
-
+  Utilities utilities = Utilities();
   @override
   void initState() {
     super.initState();
@@ -65,8 +66,9 @@ class _NavBarState extends State<NavBar> {
           ListTile(
             leading: FaIcon(FontAwesomeIcons.mapLocationDot),
             title: Text('Listed Journeys', style: TextStyle(fontSize: 18)),
-            onTap: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => ListedJourney())),
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) =>
+                    ListedJourney(userID: utilities.remove91(phoneNumber)))),
           ),
           ListTile(
             leading: FaIcon(FontAwesomeIcons.plus),

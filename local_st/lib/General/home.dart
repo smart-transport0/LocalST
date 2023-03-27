@@ -21,6 +21,7 @@ class _MyWidgetState extends State<Home> {
 
   @override
   String userName = "", greeting = "";
+  String userID = '';
   late SharedPreferences sharedPreferences;
   Utilities utilities = Utilities();
   List<String> facts = [
