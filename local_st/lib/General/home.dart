@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:local_st/Data-Services/utilities.dart';
 import 'package:local_st/Reusable/bottomNavigationBar.dart';
@@ -22,6 +21,7 @@ class _MyWidgetState extends State<Home> {
 
   @override
   String userName = "", greeting = "";
+  String userID = '';
   late SharedPreferences sharedPreferences;
   Utilities utilities = Utilities();
   List<String> facts = [

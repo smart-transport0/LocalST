@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:local_st/Reusable/bottomNavigationBar.dart';
 import 'package:local_st/Reusable/colors.dart';
+import 'package:local_st/Reusable/loading.dart';
 import 'package:local_st/Reusable/navigationBar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -351,10 +352,10 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
                     )
                   ]));
                 } else {
-                  return CircularProgressIndicator();
+                  return Loading();
                 }
               } else {
-                return CircularProgressIndicator();
+                return Loading();
               }
             }));
   }

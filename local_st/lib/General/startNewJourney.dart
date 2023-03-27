@@ -182,7 +182,7 @@ class _StartNewJourneyState extends State<StartNewJourney> {
                                               textButtonTheme:
                                                   TextButtonThemeData(
                                                       style: TextButton.styleFrom(
-                                                          primary: MyColorScheme
+                                                          foregroundColor: MyColorScheme
                                                               .darkColor // button text color
                                                           ))),
                                           child: child!);
@@ -783,7 +783,8 @@ class _StartNewJourneyState extends State<StartNewJourney> {
       'PaidUnpaid': paidUnpaidValue,
       'Description': descriptionController.text,
       'PendingRequestsCount': 0,
-      'AcceptedRequestsCount': 0
+      'AcceptedRequestsCount': 0,
+      'TransporterID': utilities.remove91(phoneNumber!)
     });
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => Home()));
   }

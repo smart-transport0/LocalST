@@ -9,9 +9,9 @@ Future<void> main() async {
   await Firebase.initializeApp();
   FirebaseAuth.instance.authStateChanges().listen((User? user) {
     if (user == null) {
-      runApp(MaterialApp(home: const Login()));
+      runApp(const MaterialApp(home: Login()));
     } else {
-      runApp(MaterialApp(home: const Home()));
+      runApp(const MaterialApp(home: Home()));
     }
   });
 }
