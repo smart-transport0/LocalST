@@ -381,12 +381,14 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
         .collection('TransporterList')
         .doc(widget.journeyID)
         .get();
-    await FirebaseFirestore.instance
+    if (data['IsJourneyAvailable']){
+      await FirebaseFirestore.instance
         .collection('TransporterList')
         .doc(widget.journeyID)
         .update({
       'PendingRequestsCount': data['PendingRequestsCount'] - 1,
-      'AcceptedRequestsCount': data['AcceptedRequestsCount'] + 1
+      'AcceptedRequestsCount': data['AcceptedRequestsCount'] + 1,
+      'IsJourneyAvailable': data['AcceptedRequestsCount'] + 1 < data['AvailableSeats']
     });
     await FirebaseFirestore.instance
         .collection('TransporterList')
@@ -397,6 +399,7 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
     setState(() {
       initial();
     });
+    }  
   }
 
   Future<void> rejectRequest(String userID, String fullName) async {

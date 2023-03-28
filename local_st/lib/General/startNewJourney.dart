@@ -784,7 +784,8 @@ class _StartNewJourneyState extends State<StartNewJourney> {
       'Description': descriptionController.text,
       'PendingRequestsCount': 0,
       'AcceptedRequestsCount': 0,
-      'TransporterID': utilities.remove91(phoneNumber!)
+      'TransporterID': utilities.remove91(phoneNumber),
+      'IsJourneyAvailable': true
     });
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => Home()));
   }
