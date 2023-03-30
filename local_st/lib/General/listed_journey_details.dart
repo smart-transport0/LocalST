@@ -1,28 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:local_st/Reusable/bottomNavigationBar.dart';
+import 'package:local_st/Reusable/bottom_navigation_bar.dart';
 import 'package:local_st/Reusable/colors.dart';
 import 'package:local_st/Reusable/loading.dart';
-import 'package:local_st/Reusable/navigationBar.dart';
+import 'package:local_st/Reusable/navigation_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ListedJourneyDetails extends StatefulWidget {
-  String journeyID = "";
-  ListedJourneyDetails(String journeyID) {
-    this.journeyID = journeyID;
-  }
+  final String journeyID;
+  const ListedJourneyDetails({Key? key, required this.journeyID}) : super(key: key);
   @override
   State<ListedJourneyDetails> createState() => _ListedJourneyDetailsState();
 }
 
 class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
+  @override
   void initState() {
     super.initState();
     initial();
   }
 
-  @override
   late SharedPreferences sharedPreferences;
   bool pendingVisibility = false;
   bool acceptedVisibility = false;
@@ -32,40 +30,179 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
   String journeyDate = "";
   String journeyDay = "";
   String journeyLeaveTime = "";
+  @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
         appBar: AppBar(
-            title: Text('${journeyDate} ${journeyLeaveTime}'),
+            title: Text('$journeyDate $journeyLeaveTime'),
             centerTitle: true,
             backgroundColor: Colors.black,
             elevation: 0),
-        drawer: NavBar(),
+        drawer: const NavBar(),
         bottomNavigationBar: BottomNavBar(2),
         body: FutureBuilder(
             future: fetchJourneyDetails(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                if (journeyDetails.length > 0) {
+                if (journeyDetails.isNotEmpty) {
                   return SingleChildScrollView(
                       child: Column(children: <Widget>[
                     Container(
-                        child: Container(
-                            padding: EdgeInsets.fromLTRB(
-                                w * 0.03, h * 0.04, 0, h * 0.04),
-                            color: MyColorScheme.bgColor,
-                            child: Row(children: <Widget>[
-                              Expanded(
-                                  flex: 4,
-                                  child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
+                        padding: EdgeInsets.fromLTRB(
+                            w * 0.03, h * 0.04, 0, h * 0.04),
+                        color: MyColorScheme.bgColor,
+                        child: Row(children: <Widget>[
+                          Expanded(
+                              flex: 4,
+                              child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            0.0, 0.0, 0.0, h * 0.005),
+                                        child: Text('SCHEDULED ON',
+                                            style: TextStyle(
+                                                color: Colors.grey[700],
+                                                fontSize: h * 0.02,
+                                                fontWeight:
+                                                    FontWeight.bold))),
+                                    Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            0.0, 0.0, 0.0, h * 0.02),
+                                        child: Text(
+                                            '${journeyDetails[0]} $journeyDay',
+                                            style: TextStyle(
+                                                fontSize: h * 0.034))),
+                                    Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            0.0, 0.0, 0.0, h * 0.005),
+                                        child: Text('LEAVE TIME',
+                                            style: TextStyle(
+                                                color: Colors.grey[700],
+                                                fontSize: h * 0.02,
+                                                fontWeight:
+                                                    FontWeight.bold))),
+                                    Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            0.0, 0.0, 0.0, h * 0.02),
+                                        child: Text('${journeyDetails[1]}',
+                                            style: TextStyle(
+                                                fontSize: h * 0.034))),
+                                    Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            0.0, 0.0, 0.0, h * 0.005),
+                                        child: Text('SOURCE',
+                                            style: TextStyle(
+                                                color: Colors.grey[700],
+                                                fontSize: h * 0.02,
+                                                fontWeight:
+                                                    FontWeight.bold))),
+                                    Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            0.0, 0.0, 0.0, h * 0.02),
+                                        child: Text('${journeyDetails[2]}',
+                                            style: TextStyle(
+                                                fontSize: h * 0.034))),
+                                    Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            0.0, 0.0, 0.0, h * 0.005),
+                                        child: Text('DESTINATION',
+                                            style: TextStyle(
+                                                color: Colors.grey[700],
+                                                fontSize: h * 0.02,
+                                                fontWeight:
+                                                    FontWeight.bold))),
+                                    Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            0.0, 0.0, 0.0, h * 0.02),
+                                        child: Text('${journeyDetails[3]}',
+                                            style: TextStyle(
+                                                fontSize: h * 0.034))),
+                                    Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            0.0, 0.0, 0.0, h * 0.005),
+                                        child: Text('NUMBER PLATE',
+                                            style: TextStyle(
+                                                color: Colors.grey[700],
+                                                fontSize: h * 0.02,
+                                                fontWeight:
+                                                    FontWeight.bold))),
+                                    Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            0.0, 0.0, 0.0, h * 0.02),
+                                        child: Text('${journeyDetails[9]}',
+                                            style: TextStyle(
+                                                fontSize: h * 0.034))),
+                                    Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            0.0, 0.0, 0.0, h * 0.005),
+                                        child: Text('VEHICLE TYPE',
+                                            style: TextStyle(
+                                                color: Colors.grey[700],
+                                                fontSize: h * 0.02,
+                                                fontWeight:
+                                                    FontWeight.bold))),
+                                    Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            0.0, 0.0, 0.0, h * 0.02),
+                                        child: Text('${journeyDetails[4]}',
+                                            style: TextStyle(
+                                                fontSize: h * 0.034))),
+                                    Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            0.0, 0.0, 0.0, h * 0.005),
+                                        child: Text('AVAILABLE SEATS',
+                                            style: TextStyle(
+                                                color: Colors.grey[700],
+                                                fontSize: h * 0.02,
+                                                fontWeight:
+                                                    FontWeight.bold))),
+                                    Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            0.0, 0.0, 0.0, h * 0.02),
+                                        child: Text('${journeyDetails[5]}',
+                                            style: TextStyle(
+                                                fontSize: h * 0.034))),
+                                    Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            0.0, 0.0, 0.0, h * 0.005),
+                                        child: Text('ROUTE',
+                                            style: TextStyle(
+                                                color: Colors.grey[700],
+                                                fontSize: h * 0.02,
+                                                fontWeight:
+                                                    FontWeight.bold))),
+                                    Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            0.0, 0.0, 0.0, h * 0.02),
+                                        child: Text('${journeyDetails[6]}',
+                                            style: TextStyle(
+                                                fontSize: h * 0.034))),
+                                    Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            0.0, 0.0, 0.0, h * 0.005),
+                                        child: Text('PAID/UNPAID',
+                                            style: TextStyle(
+                                                color: Colors.grey[700],
+                                                fontSize: h * 0.02,
+                                                fontWeight:
+                                                    FontWeight.bold))),
+                                    Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            0.0, 0.0, 0.0, h * 0.02),
+                                        child: Text('${journeyDetails[7]}',
+                                            style: TextStyle(
+                                                fontSize: h * 0.034))),
+                                    Visibility(
+                                      visible: journeyDetails[8] != "",
+                                      child: Column(children: [
                                         Padding(
                                             padding: EdgeInsets.fromLTRB(
                                                 0.0, 0.0, 0.0, h * 0.005),
-                                            child: Text('SCHEDULED ON',
+                                            child: Text('DESCRIPTION',
                                                 style: TextStyle(
                                                     color: Colors.grey[700],
                                                     fontSize: h * 0.02,
@@ -75,178 +212,39 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
                                             padding: EdgeInsets.fromLTRB(
                                                 0.0, 0.0, 0.0, h * 0.02),
                                             child: Text(
-                                                '${journeyDetails[0]} ${journeyDay}',
+                                                '${journeyDetails[8]}',
                                                 style: TextStyle(
-                                                    fontSize: h * 0.034))),
-                                        Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                0.0, 0.0, 0.0, h * 0.005),
-                                            child: Text('LEAVE TIME',
-                                                style: TextStyle(
-                                                    color: Colors.grey[700],
-                                                    fontSize: h * 0.02,
-                                                    fontWeight:
-                                                        FontWeight.bold))),
-                                        Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                0.0, 0.0, 0.0, h * 0.02),
-                                            child: Text('${journeyDetails[1]}',
-                                                style: TextStyle(
-                                                    fontSize: h * 0.034))),
-                                        Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                0.0, 0.0, 0.0, h * 0.005),
-                                            child: Text('SOURCE',
-                                                style: TextStyle(
-                                                    color: Colors.grey[700],
-                                                    fontSize: h * 0.02,
-                                                    fontWeight:
-                                                        FontWeight.bold))),
-                                        Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                0.0, 0.0, 0.0, h * 0.02),
-                                            child: Text('${journeyDetails[2]}',
-                                                style: TextStyle(
-                                                    fontSize: h * 0.034))),
-                                        Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                0.0, 0.0, 0.0, h * 0.005),
-                                            child: Text('DESTINATION',
-                                                style: TextStyle(
-                                                    color: Colors.grey[700],
-                                                    fontSize: h * 0.02,
-                                                    fontWeight:
-                                                        FontWeight.bold))),
-                                        Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                0.0, 0.0, 0.0, h * 0.02),
-                                            child: Text('${journeyDetails[3]}',
-                                                style: TextStyle(
-                                                    fontSize: h * 0.034))),
-                                        Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                0.0, 0.0, 0.0, h * 0.005),
-                                            child: Text('NUMBER PLATE',
-                                                style: TextStyle(
-                                                    color: Colors.grey[700],
-                                                    fontSize: h * 0.02,
-                                                    fontWeight:
-                                                        FontWeight.bold))),
-                                        Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                0.0, 0.0, 0.0, h * 0.02),
-                                            child: Text('${journeyDetails[9]}',
-                                                style: TextStyle(
-                                                    fontSize: h * 0.034))),
-                                        Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                0.0, 0.0, 0.0, h * 0.005),
-                                            child: Text('VEHICLE TYPE',
-                                                style: TextStyle(
-                                                    color: Colors.grey[700],
-                                                    fontSize: h * 0.02,
-                                                    fontWeight:
-                                                        FontWeight.bold))),
-                                        Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                0.0, 0.0, 0.0, h * 0.02),
-                                            child: Text('${journeyDetails[4]}',
-                                                style: TextStyle(
-                                                    fontSize: h * 0.034))),
-                                        Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                0.0, 0.0, 0.0, h * 0.005),
-                                            child: Text('AVAILABLE SEATS',
-                                                style: TextStyle(
-                                                    color: Colors.grey[700],
-                                                    fontSize: h * 0.02,
-                                                    fontWeight:
-                                                        FontWeight.bold))),
-                                        Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                0.0, 0.0, 0.0, h * 0.02),
-                                            child: Text('${journeyDetails[5]}',
-                                                style: TextStyle(
-                                                    fontSize: h * 0.034))),
-                                        Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                0.0, 0.0, 0.0, h * 0.005),
-                                            child: Text('ROUTE',
-                                                style: TextStyle(
-                                                    color: Colors.grey[700],
-                                                    fontSize: h * 0.02,
-                                                    fontWeight:
-                                                        FontWeight.bold))),
-                                        Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                0.0, 0.0, 0.0, h * 0.02),
-                                            child: Text('${journeyDetails[6]}',
-                                                style: TextStyle(
-                                                    fontSize: h * 0.034))),
-                                        Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                0.0, 0.0, 0.0, h * 0.005),
-                                            child: Text('PAID/UNPAID',
-                                                style: TextStyle(
-                                                    color: Colors.grey[700],
-                                                    fontSize: h * 0.02,
-                                                    fontWeight:
-                                                        FontWeight.bold))),
-                                        Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                0.0, 0.0, 0.0, h * 0.02),
-                                            child: Text('${journeyDetails[7]}',
-                                                style: TextStyle(
-                                                    fontSize: h * 0.034))),
-                                        Visibility(
-                                          visible: journeyDetails[8] != "",
-                                          child: Column(children: [
-                                            Padding(
-                                                padding: EdgeInsets.fromLTRB(
-                                                    0.0, 0.0, 0.0, h * 0.005),
-                                                child: Text('DESCRIPTION',
-                                                    style: TextStyle(
-                                                        color: Colors.grey[700],
-                                                        fontSize: h * 0.02,
-                                                        fontWeight:
-                                                            FontWeight.bold))),
-                                            Padding(
-                                                padding: EdgeInsets.fromLTRB(
-                                                    0.0, 0.0, 0.0, h * 0.02),
-                                                child: Text(
-                                                    '${journeyDetails[8]}',
-                                                    style: TextStyle(
-                                                        fontSize: h * 0.025)))
-                                          ]),
-                                        )
-                                      ])),
-                              Expanded(
-                                  flex: 1,
-                                  child: Column(children: <Widget>[
-                                    IconButton(
-                                        onPressed: () {},
-                                        icon: const FaIcon(Icons.edit)),
-                                    IconButton(
-                                        onPressed: () {},
-                                        icon: const FaIcon(Icons.delete)),
-                                    IconButton(
-                                        onPressed: () {},
-                                        icon: const FaIcon(
-                                            Icons.notifications_off)),
-                                    IconButton(
-                                        onPressed: () {},
-                                        icon: const FaIcon(Icons.chat)),
-                                    IconButton(
-                                        onPressed: () {},
-                                        icon: const FaIcon(Icons.check_box))
-                                  ]))
-                            ]))),
+                                                    fontSize: h * 0.025)))
+                                      ]),
+                                    )
+                                  ])),
+                          Expanded(
+                              flex: 1,
+                              child: Column(children: <Widget>[
+                                IconButton(
+                                    onPressed: () {},
+                                    icon: const FaIcon(Icons.edit)),
+                                IconButton(
+                                    onPressed: () {},
+                                    icon: const FaIcon(Icons.delete)),
+                                IconButton(
+                                    onPressed: () {},
+                                    icon: const FaIcon(
+                                        Icons.notifications_off)),
+                                IconButton(
+                                    onPressed: () {},
+                                    icon: const FaIcon(Icons.chat)),
+                                IconButton(
+                                    onPressed: () {},
+                                    icon: const FaIcon(Icons.check_box))
+                              ]))
+                        ])),
                     Visibility(
                       visible: pendingVisibility,
                       child: Column(children: <Widget>[
                         Text('Pending Requests',
                             style: TextStyle(fontSize: h * 0.035)),
-                        Container(
+                        SizedBox(
                             width: w,
                             child: ListView.builder(
                                 primary: false,
@@ -314,7 +312,7 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
                       child: Column(children: <Widget>[
                         Text('Accepted Requests',
                             style: TextStyle(fontSize: h * 0.035)),
-                        Container(
+                        SizedBox(
                             width: w,
                             child: ListView.builder(
                                 primary: false,
@@ -352,10 +350,10 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
                     )
                   ]));
                 } else {
-                  return Loading();
+                  return const Loading();
                 }
               } else {
-                return Loading();
+                return const Loading();
               }
             }));
   }
@@ -432,20 +430,21 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
             t[m - 1] +
             d) %
         7;
-    if (ans == 0)
+    if (ans == 0) {
       return "Sunday";
-    else if (ans == 1)
+    } else if (ans == 1) {
       return "Monday";
-    else if (ans == 2)
+    } else if (ans == 2) {
       return "Tuesday";
-    else if (ans == 3)
+    } else if (ans == 3) {
       return "Wednesday";
-    else if (ans == 4)
+    } else if (ans == 4) {
       return "Thursday";
-    else if (ans == 5)
+    } else if (ans == 5) {
       return "Friday";
-    else
+    } else {
       return "Saturday";
+    }
   }
 
   Future<List> fetchJourneyDetails() async {
@@ -454,7 +453,6 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
 
   Future<void> initial() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    var phoneNumber = sharedPreferences.getString('phoneNumber');
     var journeyData = await FirebaseFirestore.instance
         .collection('TransporterList')
         .doc(widget.journeyID)
@@ -506,14 +504,16 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
         month = int.parse(journeyDetails[0].substring(3, 5)),
         date = int.parse(journeyDetails[0].substring(6));
     setState(() {
-      if (pendingRequests.length > 0)
+      if (pendingRequests.isNotEmpty) {
         pendingVisibility = true;
-      else
+      } else {
         pendingVisibility = false;
-      if (acceptedRequests.length > 0)
+      }
+      if (acceptedRequests.isNotEmpty) {
         acceptedVisibility = true;
-      else
+      } else {
         acceptedVisibility = false;
+      }
       journeyDate =
           date.toString() + "/" + month.toString() + "/" + year.toString();
       journeyDay = dayofweek(date, month, year);

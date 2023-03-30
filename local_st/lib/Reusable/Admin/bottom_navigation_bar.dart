@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:local_st/Admin/pendingRequest.dart';
-import 'package:local_st/General/startNewJourney.dart';
+import 'package:local_st/Admin/pending_request.dart';
+import 'package:local_st/General/start_new_journey.dart';
 
 class BottomNavBar extends StatefulWidget {
-  @override
   int selectedIndex = 2;
-  BottomNavBar(int currIndex) {
+  BottomNavBar(int currIndex, {Key? key}) : super(key: key) {
     selectedIndex = currIndex;
   }
+  @override
   State<BottomNavBar> createState() => _BottomNavBarState(selectedIndex);
 }
 
@@ -20,12 +20,13 @@ class _BottomNavBarState extends State<BottomNavBar> {
   void onItemTapped(int index) {
     setState(() {
       if (index == selectedIndex) return;
-      if (index == 0)
+      if (index == 0) {
         Navigator.pushReplacement(context,
-            new MaterialPageRoute(builder: (context) => StartNewJourney()));
-      else if (index == 2)
+            MaterialPageRoute(builder: (context) => const StartNewJourney()));
+      } else if (index == 2) {
         Navigator.pushReplacement(context,
-            new MaterialPageRoute(builder: (context) => PendingRequest()));
+            MaterialPageRoute(builder: (context) => const PendingRequest()));
+      }
       selectedIndex = index;
     });
   }
@@ -33,18 +34,17 @@ class _BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
-    double w = MediaQuery.of(context).size.width;
-    return Container(
+    return SizedBox(
       height: h * 0.12,
       child: ClipRRect(
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topRight: Radius.circular(30),
           topLeft: Radius.circular(30),
         ),
         child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
-          unselectedItemColor: Color.fromARGB(255, 22, 23, 23),
-          backgroundColor: Color.fromARGB(255, 254, 254, 255),
+          unselectedItemColor: const Color.fromARGB(255, 22, 23, 23),
+          backgroundColor: const Color.fromARGB(255, 254, 254, 255),
           iconSize: 25.0,
           items: const [
             BottomNavigationBarItem(
@@ -60,7 +60,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 icon: FaIcon(FontAwesomeIcons.flag), label: "Reports"),
           ],
           currentIndex: selectedIndex,
-          selectedItemColor: Color.fromARGB(255, 122, 187, 217),
+          selectedItemColor: const Color.fromARGB(255, 122, 187, 217),
           onTap: onItemTapped,
         ),
       ),

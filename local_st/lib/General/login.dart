@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:local_st/Admin/manageUsers.dart';
-import 'package:local_st/Admin/pendingRequest.dart';
+import 'package:local_st/Admin/manage_users.dart';
+import 'package:local_st/Admin/pending_request.dart';
 import 'package:local_st/Data-Services/utilities.dart';
-import 'package:local_st/General/forgotPassword.dart';
+import 'package:local_st/General/forgot_password.dart';
 import 'package:local_st/General/home.dart';
 import 'package:local_st/General/register.dart';
 import 'package:local_st/Reusable/colors.dart';
@@ -30,14 +30,15 @@ class _MyWidgetState extends State<Login> {
 
   //Receiver OTP
   String verificationIdReceived = '';
-  bool OTPVisibility = false;
+  bool otpVisibility = false;
   //TextEditingController
   TextEditingController userIDController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  TextEditingController OTPController = TextEditingController();
+  TextEditingController otpController = TextEditingController();
   ManageUsers manageUsers = ManageUsers();
   Utilities utilities = Utilities();
 
+  @override
   Widget build(BuildContext context) {
     //height and width of screen
     double h = MediaQuery.of(context).size.height;
@@ -52,7 +53,7 @@ class _MyWidgetState extends State<Login> {
             padding: EdgeInsets.fromLTRB(0, 0.12 * h, 0, 0),
             child: Container(
               height: h * 0.2,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   image: DecorationImage(
                 image: AssetImage('assets/images/bike1.png'),
               )),
@@ -86,44 +87,43 @@ class _MyWidgetState extends State<Login> {
                                 w * 0.07, h * 0.08, w * 0.07, h * 0.05),
                             child: Column(children: <Widget>[
                               Visibility(
-                                visible: !OTPVisibility,
+                                visible: !otpVisibility,
                                 child: Column(children: <Widget>[
-                                  Container(
-                                      child: Material(
+                                  Material(
                                     borderRadius: BorderRadius.circular(30),
                                     elevation: 15,
                                     child: TextField(
-                                        controller: userIDController,
-                                        cursorColor: MyColorScheme.darkColor,
-                                        style: TextStyle(
+                                    controller: userIDController,
+                                    cursorColor: MyColorScheme.darkColor,
+                                    style: TextStyle(
+                                        color: MyColorScheme.darkColor),
+                                    decoration: InputDecoration(
+                                        fillColor: MyColorScheme.baseColor,
+                                        prefixIcon: Icon(Icons.person,
                                             color: MyColorScheme.darkColor),
-                                        decoration: InputDecoration(
-                                            fillColor: MyColorScheme.baseColor,
-                                            prefixIcon: Icon(Icons.person,
-                                                color: MyColorScheme.darkColor),
-                                            labelText:
-                                                "Phone Number / Organization Email",
-                                            labelStyle: TextStyle(
-                                              color: MyColorScheme.darkColor,
-                                              fontWeight: FontWeight.w800,
-                                              fontSize: h * 0.020,
-                                            ),
-                                            focusedBorder: OutlineInputBorder(
-                                                // ignore: prefer_const_constructors
-                                                borderSide: BorderSide(
-                                                    color:
-                                                        MyColorScheme.darkColor,
-                                                    width: 2.0),
-                                                borderRadius:
-                                                    BorderRadius.circular(30)),
-                                            enabledBorder: OutlineInputBorder(
-                                                borderSide: const BorderSide(
-                                                    width: 2.0,
-                                                    color: Colors.transparent),
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        30)))),
-                                  )),
+                                        labelText:
+                                            "Phone Number / Organization Email",
+                                        labelStyle: TextStyle(
+                                          color: MyColorScheme.darkColor,
+                                          fontWeight: FontWeight.w800,
+                                          fontSize: h * 0.020,
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                            // ignore: prefer_const_constructors
+                                            borderSide: BorderSide(
+                                                color:
+                                                    MyColorScheme.darkColor,
+                                                width: 2.0),
+                                            borderRadius:
+                                                BorderRadius.circular(30)),
+                                        enabledBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                width: 2.0,
+                                                color: Colors.transparent),
+                                            borderRadius:
+                                                BorderRadius.circular(
+                                                    30)))),
+                                  ),
                                   Container(
                                       padding: EdgeInsets.fromLTRB(
                                           0, h * 0.05, 0, h * 0.05),
@@ -180,71 +180,68 @@ class _MyWidgetState extends State<Login> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: <Widget>[
-                                            Container(
-                                                child: TextButton(
-                                                    onPressed: () => {
-                                                          Navigator.pushReplacement(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      ((context) =>
-                                                                          ForgotPassword())))
-                                                        },
-                                                    child: Text(
-                                                        "Forgot Password?",
-                                                        style: TextStyle(
-                                                            fontSize: h * 0.02,
-                                                            color: MyColorScheme
-                                                                .darkColor,
-                                                            fontWeight:
-                                                                FontWeight.w700,
-                                                            decoration:
-                                                                TextDecoration
-                                                                    .underline)))),
-                                            Container(
-                                                child: TextButton(
-                                                    onPressed: () => {
-                                                          Navigator.pushReplacement(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      ((context) =>
-                                                                          Register())))
-                                                        },
-                                                    child: Text("Register",
-                                                        style: TextStyle(
-                                                            fontSize: h * 0.02,
-                                                            color: MyColorScheme
-                                                                .darkColor,
-                                                            fontWeight:
-                                                                FontWeight.w700,
-                                                            decoration:
-                                                                TextDecoration
-                                                                    .underline))))
+                                            TextButton(
+                                                onPressed: () => {
+                                                      Navigator.pushReplacement(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder:
+                                                                  ((context) =>
+                                                                      const ForgotPassword())))
+                                                    },
+                                                child: Text(
+                                                    "Forgot Password?",
+                                                    style: TextStyle(
+                                                        fontSize: h * 0.02,
+                                                        color: MyColorScheme
+                                                            .darkColor,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        decoration:
+                                                            TextDecoration
+                                                                .underline))),
+                                            TextButton(
+                                                onPressed: () => {
+                                                      Navigator.pushReplacement(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder:
+                                                                  ((context) =>
+                                                                      const Register())))
+                                                    },
+                                                child: Text("Register",
+                                                    style: TextStyle(
+                                                        fontSize: h * 0.02,
+                                                        color: MyColorScheme
+                                                            .darkColor,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        decoration:
+                                                            TextDecoration
+                                                                .underline)))
                                           ])),
-                                  Container(
-                                      child: ElevatedButton(
-                                          onPressed: () => {login()},
-                                          style: ButtonStyle(
-                                              elevation:
-                                                  MaterialStateProperty.all(15),
-                                              backgroundColor: MaterialStateProperty.all(
-                                                  MyColorScheme.darkColor),
-                                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                                  RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              18.0),
-                                                      side: BorderSide(
-                                                          color: MyColorScheme
-                                                              .darkColor)))),
-                                          child: Padding(
-                                              padding: EdgeInsets.fromLTRB(w * 0.05, h * 0.005, w * 0.05, h * 0.005),
-                                              child: Text('Login', style: TextStyle(fontFamily: 'Montserrat', fontSize: w * 0.08, color: MyColorScheme.baseColor)))))
+                                  ElevatedButton(
+                                      onPressed: () => {login()},
+                                      style: ButtonStyle(
+                                          elevation:
+                                              MaterialStateProperty.all(15),
+                                          backgroundColor: MaterialStateProperty.all(
+                                              MyColorScheme.darkColor),
+                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                              RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          18.0),
+                                                  side: BorderSide(
+                                                      color: MyColorScheme
+                                                          .darkColor)))),
+                                      child: Padding(
+                                          padding: EdgeInsets.fromLTRB(w * 0.05, h * 0.005, w * 0.05, h * 0.005),
+                                          child: Text('Login', style: TextStyle(fontFamily: 'Montserrat', fontSize: w * 0.08, color: MyColorScheme.baseColor))))
                                 ]),
                               ),
                               Visibility(
-                                visible: OTPVisibility,
+                                visible: otpVisibility,
                                 child: Column(
                                   children: <Widget>[
                                     Container(
@@ -259,7 +256,7 @@ class _MyWidgetState extends State<Login> {
                                                     MyColorScheme.darkColor,
                                                 obscureText: true,
                                                 obscuringCharacter: "•",
-                                                controller: OTPController,
+                                                controller: otpController,
                                                 style: TextStyle(
                                                     color: MyColorScheme
                                                         .darkColor),
@@ -298,24 +295,23 @@ class _MyWidgetState extends State<Login> {
                                                             BorderRadius
                                                                 .circular(
                                                                     30)))))),
-                                    Container(
-                                        child: ElevatedButton(
-                                            onPressed: () => {verifyCode()},
-                                            style: ButtonStyle(
-                                                elevation: MaterialStateProperty.all(
-                                                    15),
-                                                backgroundColor: MaterialStateProperty.all(
-                                                    MyColorScheme.darkColor),
-                                                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                                    RoundedRectangleBorder(
-                                                        borderRadius: BorderRadius.circular(
-                                                            18.0),
-                                                        side: BorderSide(
-                                                            color: MyColorScheme
-                                                                .darkColor)))),
-                                            child: Padding(
-                                                padding: EdgeInsets.fromLTRB(w * 0.05, h * 0.005, w * 0.05, h * 0.005),
-                                                child: Text('Login', style: TextStyle(fontFamily: 'Montserrat', fontSize: w * 0.08, color: MyColorScheme.baseColor)))))
+                                    ElevatedButton(
+                                        onPressed: () => {verifyCode()},
+                                        style: ButtonStyle(
+                                            elevation: MaterialStateProperty.all(
+                                                15),
+                                            backgroundColor: MaterialStateProperty.all(
+                                                MyColorScheme.darkColor),
+                                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                                RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(
+                                                        18.0),
+                                                    side: BorderSide(
+                                                        color: MyColorScheme
+                                                            .darkColor)))),
+                                        child: Padding(
+                                            padding: EdgeInsets.fromLTRB(w * 0.05, h * 0.005, w * 0.05, h * 0.005),
+                                            child: Text('Login', style: TextStyle(fontFamily: 'Montserrat', fontSize: w * 0.08, color: MyColorScheme.baseColor))))
                                   ],
                                 ),
                               )
@@ -337,9 +333,10 @@ class _MyWidgetState extends State<Login> {
       String errorMessage = "";
       if (userID == "") errorMessage += "UserID cannot be empty\n";
       if (password == "") errorMessage += "Password cannot be empty";
-      utilities.AlertMessage(context, 'Invalid Input', errorMessage);
-    } else {
-      String OGpassword = ManageUsers.encrypt(password);
+      utilities.alertMessage(context, 'Invalid Input', errorMessage);
+    } 
+    else {
+      String originalPassword = ManageUsers.encrypt(password);
       if (userID.startsWith('\$')) {
         String phoneNumber = utilities.add91(userID.substring(1));
         await FirebaseFirestore.instance
@@ -349,14 +346,14 @@ class _MyWidgetState extends State<Login> {
             .then((result) => {
                   if (!result.exists)
                     {
-                      utilities.AlertMessage(
+                      utilities.alertMessage(
                           context, 'Invalid Input', 'Invalid UserID')
                     }
                   else
                     {
-                      if (result['Password'] != OGpassword)
+                      if (result['Password'] != originalPassword)
                         {
-                          utilities.AlertMessage(
+                          utilities.alertMessage(
                               context, 'Invalid input', 'Incorrect Password!')
                         }
                       else
@@ -383,24 +380,24 @@ class _MyWidgetState extends State<Login> {
               await auth.signInWithEmailAndPassword(
                   email: user['OrganizationEmailID'], password: password);
               Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => Home()));
-            } on FirebaseAuthException catch (e) {
+                  MaterialPageRoute(builder: (context) => const Home()));
+            } on FirebaseAuthException {
               // Invalid credentials case
-              utilities.AlertMessage(
+              utilities.alertMessage(
                   context, 'Invalid input', 'Invalid login credentials!');
             }
           } else {
-            utilities.AlertMessage(
+            utilities.alertMessage(
                 context, 'Incorrect Input', 'Incorrect password!');
           }
         } else {
-           // Check if Email matches
+          // Check if Email matches
           var mapping = await FirebaseFirestore.instance
               .collection('Mapping/Permanent/MailtoPhone')
               .doc(userID)
               .get();
           if (!mapping.exists) {
-            utilities.AlertMessage(context, 'Invalid Input', 'Invalid UserID');
+            utilities.alertMessage(context, 'Invalid Input', 'Invalid UserID');
           } else {
             // Check password
             var phoneNumber = mapping['PhoneNumber'];
@@ -420,15 +417,16 @@ class _MyWidgetState extends State<Login> {
                 await auth.signInWithEmailAndPassword(
                     email: user['OrganizationEmailID'], password: password);
                 Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => Home()));
-              } on FirebaseAuthException catch (e) {
+                    MaterialPageRoute(builder: (context) => const Home()));
+              } on FirebaseAuthException {
                 // Handle invalid credentials
-                utilities.AlertMessage(context, 'Invalid input', 'Invalid login credentials!');
+                utilities.alertMessage(
+                    context, 'Invalid input', 'Invalid login credentials!');
               }
               Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => Home()));
+                  MaterialPageRoute(builder: (context) => const Home()));
             } else {
-              utilities.AlertMessage(
+              utilities.alertMessage(
                   context, 'Incorrect Input', 'Incorrect Password');
             }
           }
@@ -444,11 +442,12 @@ class _MyWidgetState extends State<Login> {
           await auth.signInWithCredential(credential);
         },
         verificationFailed: (FirebaseAuthException exception) {
-          print('Verification failed');
+          utilities.alertMessage(context, 'Verification failed', 'Verification of your mobile number failed!');
+          setState(() {});
         },
         codeSent: (String verificationID, int? resendToken) {
           verificationIdReceived = verificationID;
-          OTPVisibility = true;
+          otpVisibility = true;
           setState(() {});
         },
         codeAutoRetrievalTimeout: (String verificationID) {});
@@ -456,7 +455,7 @@ class _MyWidgetState extends State<Login> {
 
   void verifyCode() async {
     PhoneAuthCredential credential = PhoneAuthProvider.credential(
-        verificationId: verificationIdReceived, smsCode: OTPController.text);
+        verificationId: verificationIdReceived, smsCode: otpController.text);
     await auth
         .signInWithCredential(credential)
         .then((value) => {
@@ -464,16 +463,16 @@ class _MyWidgetState extends State<Login> {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: ((context) => PendingRequest())));
+                        builder: ((context) => const PendingRequest())));
               })
             })
         .onError((error, stackTrace) => {
-              utilities.AlertMessage(context, 'Incorrect OTP',
+              utilities.alertMessage(context, 'Incorrect OTP',
                   'OTP incorrect or timed out! Try again.'),
               setState(() {
-                OTPVisibility = false;
+                otpVisibility = false;
                 userIDController.text = "";
-                OTPController.text = "";
+                otpController.text = "";
               })
             });
   }

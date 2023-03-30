@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:local_st/Data-Services/utilities.dart';
 import 'package:local_st/Data-Services/validators.dart';
 import 'package:local_st/General/home.dart';
-import 'package:local_st/Reusable/bottomNavigationBar.dart';
+import 'package:local_st/Reusable/bottom_navigation_bar.dart';
 import 'package:local_st/Reusable/colors.dart';
-import 'package:local_st/Reusable/navigationBar.dart';
+import 'package:local_st/Reusable/navigation_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 
@@ -17,7 +17,6 @@ class StartNewJourney extends StatefulWidget {
 }
 
 class _StartNewJourneyState extends State<StartNewJourney> {
-  @override
   late SharedPreferences sharedPreferences;
   TextEditingController journeyDateController = TextEditingController();
   TextEditingController leaveTimeController = TextEditingController();
@@ -34,14 +33,14 @@ class _StartNewJourneyState extends State<StartNewJourney> {
   List<String> vehicleTypes = ['2-Wheeler', '3-Wheeler', '4-Wheeler'];
   List<String> paidUnpaid = ['Paid', 'Unpaid'];
   var selectedVehicleType, paidUnpaidValue;
-
+  @override
   void initState() {
     super.initState();
     initial();
   }
 
   int visibility = 1;
-
+  @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
@@ -51,12 +50,12 @@ class _StartNewJourneyState extends State<StartNewJourney> {
       ),
       Scaffold(
           appBar: AppBar(
-            title: Text('Start A New Journey'),
+            title: const Text('Start A New Journey'),
             centerTitle: true,
             backgroundColor: MyColorScheme.darkColor,
             elevation: 0,
           ),
-          drawer: NavBar(),
+          drawer: const NavBar(),
           bottomNavigationBar: BottomNavBar(0),
           body: SingleChildScrollView(
               scrollDirection: Axis.vertical,
@@ -101,7 +100,7 @@ class _StartNewJourneyState extends State<StartNewJourney> {
                                 DateTime? pickedDate = await showDatePicker(
                                     context: context,
                                     initialDate: DateTime.now(),
-                                    firstDate: DateTime.now().subtract(Duration(
+                                    firstDate: DateTime.now().subtract(const Duration(
                                         days:
                                             0)), //DateTime.now() - not to allow to choose before today.
                                     lastDate: DateTime(2101),
@@ -119,7 +118,7 @@ class _StartNewJourneyState extends State<StartNewJourney> {
                                               textButtonTheme:
                                                   TextButtonThemeData(
                                                       style: TextButton.styleFrom(
-                                                          primary: MyColorScheme
+                                                          foregroundColor: MyColorScheme
                                                               .darkColor // button text color
                                                           ))),
                                           child: child!);
@@ -149,7 +148,7 @@ class _StartNewJourneyState extends State<StartNewJourney> {
                                     color: MyColorScheme.darkColor,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                  hintStyle: TextStyle(
+                                  hintStyle: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
                                   filled: true,
@@ -166,7 +165,7 @@ class _StartNewJourneyState extends State<StartNewJourney> {
                               onTap: () async {
                                 TimeOfDay time = TimeOfDay.now();
                                 FocusScope.of(context)
-                                    .requestFocus(new FocusNode());
+                                    .requestFocus(FocusNode());
                                 TimeOfDay? picked = await showTimePicker(
                                     builder: (context, child) {
                                       return Theme(
@@ -222,7 +221,7 @@ class _StartNewJourneyState extends State<StartNewJourney> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      Icon(Icons.motorcycle),
+                                      const Icon(Icons.motorcycle),
                                       DropdownButtonHideUnderline(
                                           child: DropdownButton(
                                               iconSize: 0,
@@ -255,7 +254,7 @@ class _StartNewJourneyState extends State<StartNewJourney> {
                                                               w * 0.05,
                                                               0),
                                                       child: Text(options,
-                                                          style: TextStyle(
+                                                          style: const TextStyle(
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold)),
@@ -277,7 +276,7 @@ class _StartNewJourneyState extends State<StartNewJourney> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   IconButton(
-                                      icon: Icon(Icons.remove),
+                                      icon: const Icon(Icons.remove),
                                       onPressed: () => {
                                             if (int.parse(
                                                     availableSeatsController
@@ -324,7 +323,7 @@ class _StartNewJourneyState extends State<StartNewJourney> {
                                                         30)))),
                                   ),
                                   IconButton(
-                                      icon: Icon(Icons.add),
+                                      icon: const Icon(Icons.add),
                                       onPressed: () => {
                                             if (int.parse(
                                                     availableSeatsController
@@ -344,9 +343,7 @@ class _StartNewJourneyState extends State<StartNewJourney> {
                           ElevatedButton(
                               onPressed: () => {
                                     setState(() {
-                                      if (journeyDateController.text != null && 
-                                      leaveTimeController.text != null &&
-                                      selectedVehicleType != null &&
+                                      if (selectedVehicleType != null &&
                                       journeyDateController.text != "" &&
                                           leaveTimeController.text != "" &&
                                           selectedVehicleType != "" &&
@@ -356,20 +353,20 @@ class _StartNewJourneyState extends State<StartNewJourney> {
                                         visibility = 2;
                                       } else {
                                         String msg = "";
-                                        if (journeyDateController.text != null && 
-                                      leaveTimeController.text != null &&
-                                      selectedVehicleType != null &&
+                                        if (selectedVehicleType != null &&
                                       journeyDateController.text != "" &&
                                           leaveTimeController.text != "" &&
-                                          selectedVehicleType != "")
+                                          selectedVehicleType != "") {
                                           msg = "Please fill all the fields!";
+                                        }
                                         if (!checkAvailableSeatsValid(
                                             int.parse(availableSeatsController.text),
-                                            selectedVehicleType))
+                                            selectedVehicleType)) {
                                           msg +=
                                               "Available seats invalid for this vehicle type!";
-                                        utilities.AlertMessage(
-                                            context, 'Invalid Input', '${msg}');
+                                        }
+                                        utilities.alertMessage(
+                                            context, 'Invalid Input', msg);
                                       }
                                     })
                                   },
@@ -566,13 +563,13 @@ class _StartNewJourneyState extends State<StartNewJourney> {
                                                   visibility = 3;
                                                 });
                                               } else {
-                                                utilities.AlertMessage(
+                                                utilities.alertMessage(
                                                     context,
                                                     'Invalid Input',
                                                     'NumberPlate is invald!');
                                               }
                                             } else {
-                                              utilities.AlertMessage(
+                                              utilities.alertMessage(
                                                   context,
                                                   'Invalid Input',
                                                   'Please fill all the fields!');
@@ -617,7 +614,7 @@ class _StartNewJourneyState extends State<StartNewJourney> {
                                 padding: EdgeInsets.fromLTRB(w * 0.02, 0, 0, 0),
                                 child: Row(
                                   children: [
-                                    Icon(Icons.currency_rupee_sharp),
+                                    const Icon(Icons.currency_rupee_sharp),
                                     DropdownButton(
                                         iconSize: 0,
                                         focusColor: MyColorScheme.bgColor,
@@ -642,7 +639,7 @@ class _StartNewJourneyState extends State<StartNewJourney> {
                                                 padding: EdgeInsets.fromLTRB(
                                                     w * 0.05, 0, w * 0.05, 0),
                                                 child: Text(options,
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold)),
                                               ),
@@ -723,7 +720,7 @@ class _StartNewJourneyState extends State<StartNewJourney> {
                                       onPressed: () => {
                                             if (paidUnpaidValue == "")
                                               {
-                                                utilities.AlertMessage(
+                                                utilities.alertMessage(
                                                     context,
                                                     'Invalid Input',
                                                     'Please select Paid or Unpaid')
@@ -768,7 +765,7 @@ class _StartNewJourneyState extends State<StartNewJourney> {
         utilities.padCharacters(datetime.hour.toString(), "0", 2);
     journeyID += utilities.padCharacters(datetime.minute.toString(), "0", 2) +
         utilities.padCharacters(datetime.second.toString(), "0", 2);
-    var journeyRef = await FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection('TransporterList')
         .doc(journeyID)
         .set({
@@ -787,7 +784,7 @@ class _StartNewJourneyState extends State<StartNewJourney> {
       'TransporterID': utilities.remove91(phoneNumber),
       'IsJourneyAvailable': true
     });
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => Home()));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Home()));
   }
 
   bool checkAvailableSeatsValid(

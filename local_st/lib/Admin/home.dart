@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:local_st/Reusable/Admin/bottomNavigationBar.dart';
+import 'package:local_st/Reusable/Admin/bottom_navigation_bar.dart';
 import 'package:local_st/Reusable/colors.dart';
 
 class Home extends StatefulWidget {
@@ -16,7 +14,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Smart Transportation',
         ),
         centerTitle: true,

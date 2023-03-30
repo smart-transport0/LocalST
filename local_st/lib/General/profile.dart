@@ -1,15 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:local_st/Reusable/bottomNavigationBar.dart';
+import 'package:local_st/Reusable/bottom_navigation_bar.dart';
 import 'package:local_st/Reusable/colors.dart';
-import 'package:local_st/Reusable/navigationBar.dart';
+import 'package:local_st/Reusable/navigation_bar.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 class Profile extends StatefulWidget {
-  String userID = "";
-  Profile(String userID) {
-    this.userID = userID;
-  }
+  final String userID;
+  const Profile(this.userID, {Key? key}) : super(key: key);
   @override
   State<Profile> createState() => _ProfileState();
 }
@@ -24,6 +22,7 @@ class _ProfileState extends State<Profile> {
     [22, 6]
   ];
   String userName = "", phoneNumber = "", email = "";
+  @override
   void initState() {
     super.initState();
     initial();
@@ -42,12 +41,12 @@ class _ProfileState extends State<Profile> {
           backgroundColor: Colors.black,
           elevation: 0,
         ),
-        drawer: NavBar(),
+        drawer: const NavBar(),
         bottomNavigationBar: BottomNavBar(2),
         body: Stack(children: <Widget>[
-          Container(child: Container(color: MyColorScheme.baseColor)),
+          Container(color: MyColorScheme.baseColor),
           SingleChildScrollView(
-            child: Container(
+            child: SizedBox(
                 height: h,
                 child: Column(children: <Widget>[
                   Padding(
@@ -71,8 +70,8 @@ class _ProfileState extends State<Profile> {
                                     height: h * 0.1,
                                     width: h * 0.1,
                                     fit: BoxFit.cover,
-                                    image:
-                                        AssetImage('assets/images/panda.jpg')))
+                                    image: const AssetImage(
+                                        'assets/images/panda.jpg')))
                           ])),
                   Container(
                       height: h * 0.3,

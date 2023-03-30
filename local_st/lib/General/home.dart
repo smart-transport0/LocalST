@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:local_st/Data-Services/utilities.dart';
-import 'package:local_st/Reusable/bottomNavigationBar.dart';
-import 'package:local_st/Reusable/navigationBar.dart';
+import 'package:local_st/Reusable/bottom_navigation_bar.dart';
+import 'package:local_st/Reusable/navigation_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math';
 
@@ -19,7 +19,6 @@ class _MyWidgetState extends State<Home> {
     initial();
   }
 
-  @override
   String userName = "", greeting = "";
   String userID = '';
   late SharedPreferences sharedPreferences;
@@ -45,31 +44,32 @@ class _MyWidgetState extends State<Home> {
     'Over the past four years, Mumbai, Delhi and Bengaluru have consistently featured on TomTom\'s top 10 most congested cities in the world for traffic.'
   ];
 
+  @override
   Widget build(BuildContext context) {
     //height and width of screen
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
-    Random random = new Random();
+    Random random = Random();
     int randomNumber = random.nextInt(16);
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Smart Transportation',
         ),
         centerTitle: true,
         backgroundColor: Colors.black,
         elevation: 0,
       ),
-      drawer: NavBar(),
+      drawer: const NavBar(),
       bottomNavigationBar: BottomNavBar(2),
       extendBody: true,
       body: Stack(children: <Widget>[
         Container(
           height: h,
-          color: Color.fromARGB(255, 249, 244, 243),
+          color: const Color.fromARGB(255, 249, 244, 243),
         ),
         SingleChildScrollView(
-          child: Container(
+          child: SizedBox(
             height: h,
             child: Column(
               children: [
@@ -86,28 +86,26 @@ class _MyWidgetState extends State<Home> {
                             height: h * 0.1,
                             width: h * 0.1,
                             fit: BoxFit.cover,
-                            image: AssetImage('assets/images/panda.jpg'),
+                            image: const AssetImage('assets/images/panda.jpg'),
                           )),
                         ],
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.fromLTRB(0, h * 0.06, 0, h * 0.02),
-                      child: Container(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              greeting + ",",
-                              style: TextStyle(fontFamily: 'Montserrat'),
-                            ),
-                            Text(
-                              userName,
-                              style: TextStyle(
-                                  fontFamily: 'Montserrat', fontSize: h * 0.04),
-                            )
-                          ],
-                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            greeting + ",",
+                            style: const TextStyle(fontFamily: 'Montserrat'),
+                          ),
+                          Text(
+                            userName,
+                            style: TextStyle(
+                                fontFamily: 'Montserrat', fontSize: h * 0.04),
+                          )
+                        ],
                       ),
                     ),
                     Padding(
@@ -121,7 +119,7 @@ class _MyWidgetState extends State<Home> {
                               width: w * 0.05,
                               margin: EdgeInsets.fromLTRB(
                                   w * 0.05, h * 0.006, 0, 0),
-                              child: Text('2',
+                              child: const Text('2',
                                   style: TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w900)))
@@ -143,7 +141,7 @@ class _MyWidgetState extends State<Home> {
                   child: Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: Color.fromARGB(255, 195, 219, 230)),
+                        color: const Color.fromARGB(255, 195, 219, 230)),
                     child: Column(
                       children: [
                         Padding(
@@ -175,12 +173,12 @@ class _MyWidgetState extends State<Home> {
                                       child: Column(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
-                                            Icon(Icons.location_on_rounded),
+                                            const Icon(Icons.location_on_rounded),
                                             Expanded(
                                               child: Container(
                                                   width: 2, color: Colors.grey),
                                             ),
-                                            Icon(Icons.location_on_rounded)
+                                            const Icon(Icons.location_on_rounded)
                                           ])),
                                   Column(
                                       crossAxisAlignment:
@@ -227,7 +225,6 @@ class _MyWidgetState extends State<Home> {
 
   Future<void> initial() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    int idx = 0;
     String fullName = sharedPreferences.get('userName').toString();
     setState(() {
       for (int i = 0; i < fullName.length; i++) {
@@ -237,12 +234,14 @@ class _MyWidgetState extends State<Home> {
           userName += fullName[i];
         }
       }
-      int currentHour = new DateTime.now().hour;
-      if (currentHour >= 4 && currentHour <= 12)
+      int currentHour = DateTime.now().hour;
+      if (currentHour >= 4 && currentHour <= 12) {
         greeting = "Good Morning";
-      else if (currentHour >= 12 && currentHour <= 17)
+      } else if (currentHour >= 12 && currentHour <= 17) {
         greeting = "Good Afternoon";
-      else if (currentHour > 17) greeting = "Good Evening";
+      } else if (currentHour > 17) {
+        greeting = "Good Evening";
+      }
     });
   }
 }

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:local_st/Admin/manageUsers.dart';
+import 'package:local_st/Admin/manage_users.dart';
 import 'package:local_st/Data-Services/utilities.dart';
 import 'package:local_st/Data-Services/validators.dart';
 import 'package:local_st/Reusable/colors.dart';
@@ -74,7 +74,7 @@ class _MyWidgetState extends State<Register> {
                         : EdgeInsets.fromLTRB(0.55 * w, 0.095 * h, 0, 0))),
             child: Container(
               height: h * 0.17,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage('assets/images/bike1.png'))),
             ),
@@ -84,18 +84,17 @@ class _MyWidgetState extends State<Register> {
                 flex: 4,
                 child: Stack(
                   children: [
-                    Container(
-                        child: Padding(
-                            padding: EdgeInsets.fromLTRB(0, h * 0.03, 0, 0),
-                            child: Text('Smart Transportation',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: h * 0.045,
-                                  letterSpacing: 2,
-                                  fontFamily: 'NotoSans',
-                                  fontWeight: FontWeight.w900,
-                                  color: MyColorScheme.baseColor,
-                                )))),
+                    Padding(
+                        padding: EdgeInsets.fromLTRB(0, h * 0.03, 0, 0),
+                        child: Text('Smart Transportation',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: h * 0.045,
+                              letterSpacing: 2,
+                              fontFamily: 'NotoSans',
+                              fontWeight: FontWeight.w900,
+                              color: MyColorScheme.baseColor,
+                            ))),
                   ],
                 )),
             Expanded(
@@ -245,114 +244,107 @@ class _MyWidgetState extends State<Register> {
                                                           30)))),
                                     ),
                                   ),
-                                  Container(
-                                      child: ElevatedButton(
-                                          onPressed: () => {
-                                                if (validators
-                                                            .validateName(
-                                                                firstNameController
-                                                                    .text)
-                                                            .length +
-                                                        validators
-                                                            .validateName(
-                                                                middleNameController
-                                                                    .text)
-                                                            .length +
-                                                        validators
-                                                            .validateName(
-                                                                lastNameController
-                                                                    .text)
-                                                            .length ==
-                                                    0)
-                                                  {
-                                                    setState(() {
-                                                      outerVisibility = 2;
-                                                    })
+                                  ElevatedButton(
+                                      onPressed: () => {
+                                            if (validators
+                                                        .validateName(
+                                                            firstNameController
+                                                                .text)
+                                                        .length +
+                                                    validators
+                                                        .validateName(
+                                                            middleNameController
+                                                                .text)
+                                                        .length +
+                                                    validators
+                                                        .validateName(
+                                                            lastNameController
+                                                                .text)
+                                                        .length ==
+                                                0)
+                                              {
+                                                setState(() {
+                                                  outerVisibility = 2;
+                                                })
+                                              }
+                                            else
+                                              {
+                                                setState(() {
+                                                  errorMessage = '';
+                                                  if (validators
+                                                          .validateName(
+                                                              firstNameController
+                                                                  .text).isNotEmpty) {
+                                                    errorMessage += 'First Name' +
+                                                        validators.validateName(
+                                                            firstNameController
+                                                                .text);
                                                   }
-                                                else
-                                                  {
-                                                    setState(() {
-                                                      errorMessage = '';
-                                                      if (validators
-                                                              .validateName(
-                                                                  firstNameController
-                                                                      .text)
-                                                              .length >
-                                                          0) {
-                                                        errorMessage += 'First Name' +
-                                                            validators.validateName(
-                                                                firstNameController
-                                                                    .text);
-                                                      }
-                                                      if (validators
-                                                              .validateName(
-                                                                  middleNameController
-                                                                      .text)
-                                                              .length >
-                                                          0) {
-                                                        errorMessage += 'Middle Name' +
-                                                            validators.validateName(
-                                                                middleNameController
-                                                                    .text);
-                                                      }
-                                                      if (validators
-                                                              .validateName(
-                                                                  lastNameController
-                                                                      .text)
-                                                              .length >
-                                                          0) {
-                                                        errorMessage += 'Last Name' +
-                                                            validators.validateName(
-                                                                lastNameController
-                                                                    .text);
-                                                      }
-                                                    }),
-                                                    Navigator.of(context).push(
-                                                        MaterialPageRoute(
-                                                            builder:
-                                                                (context) =>
-                                                                    AlertDialog(
-                                                                      title: const Text(
-                                                                          'Invalid input'),
-                                                                      content: Text(
-                                                                          '${errorMessage}'),
-                                                                      actions: <
-                                                                          Widget>[
-                                                                        TextButton(
-                                                                          onPressed: () => Navigator.pop(
-                                                                              context,
-                                                                              'OK'),
-                                                                          child:
-                                                                              const Text('OK'),
-                                                                        ),
-                                                                      ],
-                                                                    )))
+                                                  if (validators
+                                                          .validateName(
+                                                              middleNameController
+                                                                  .text).isNotEmpty) {
+                                                    errorMessage += 'Middle Name' +
+                                                        validators.validateName(
+                                                            middleNameController
+                                                                .text);
                                                   }
-                                              },
-                                          style: ButtonStyle(
-                                              elevation:
-                                                  MaterialStateProperty.all(15),
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      MyColorScheme.darkColor),
-                                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                                  RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              18.0),
-                                                      side: BorderSide(
-                                                          color: MyColorScheme
-                                                              .darkColor)))),
-                                          child: Padding(
-                                              padding: EdgeInsets.fromLTRB(w * 0.05, h * 0.005, w * 0.05, h * 0.005),
-                                              child: Text('Next', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: MyColorScheme.baseColor))))),
+                                                  if (validators
+                                                          .validateName(
+                                                              lastNameController
+                                                                  .text).isNotEmpty) {
+                                                    errorMessage += 'Last Name' +
+                                                        validators.validateName(
+                                                            lastNameController
+                                                                .text);
+                                                  }
+                                                }),
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder:
+                                                            (context) =>
+                                                                AlertDialog(
+                                                                  title: const Text(
+                                                                      'Invalid input'),
+                                                                  content: Text(
+                                                                      errorMessage),
+                                                                  actions: <
+                                                                      Widget>[
+                                                                    TextButton(
+                                                                      onPressed: () => Navigator.pop(
+                                                                          context,
+                                                                          'OK'),
+                                                                      child:
+                                                                          const Text('OK'),
+                                                                    ),
+                                                                  ],
+                                                                )))
+                                              }
+                                          },
+                                      style: ButtonStyle(
+                                          elevation:
+                                              MaterialStateProperty.all(15),
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  MyColorScheme.darkColor),
+                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                              RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          18.0),
+                                                  side: BorderSide(
+                                                      color: MyColorScheme
+                                                          .darkColor)))),
+                                      child: Padding(
+                                          padding: EdgeInsets.fromLTRB(w * 0.05, h * 0.005, w * 0.05, h * 0.005),
+                                          child: Text('Next', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: MyColorScheme.baseColor)))),
                                   TextButton(
                                       onPressed: () => {
                                             Navigator.pushReplacement(
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: ((context) =>
-                                                        Login())))
+                                                        const Login())))
                                           },
                                       child: Padding(
                                           padding: EdgeInsets.fromLTRB(
@@ -398,7 +390,7 @@ class _MyWidgetState extends State<Register> {
                                                 borderRadius:
                                                     BorderRadius.circular(30)),
                                             enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
+                                                borderSide: const BorderSide(
                                                     color: Colors.transparent,
                                                     width: 2.0),
                                                 borderRadius:
@@ -435,7 +427,7 @@ class _MyWidgetState extends State<Register> {
                                                               TextButtonThemeData(
                                                                   style: TextButton
                                                                       .styleFrom(
-                                                            primary: Colors
+                                                            foregroundColor: Colors
                                                                 .blueAccent, // button text color
                                                           ))),
                                                   child: child!);
@@ -548,111 +540,104 @@ class _MyWidgetState extends State<Register> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: <Widget>[
-                                            Container(
-                                                child: ElevatedButton(
-                                                    onPressed: () => {
-                                                          setState(() {
-                                                            outerVisibility = 1;
-                                                          })
-                                                        },
-                                                    style: ButtonStyle(
-                                                        elevation: MaterialStateProperty.all(
-                                                            15),
-                                                        backgroundColor:
-                                                            MaterialStateProperty.all(
-                                                                MyColorScheme
-                                                                    .darkColor),
-                                                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                                                            borderRadius: BorderRadius.circular(
-                                                                18.0),
-                                                            side: BorderSide(
-                                                                color: MyColorScheme
-                                                                    .darkColor)))),
-                                                    child: Padding(
-                                                        padding: EdgeInsets.fromLTRB(w * 0.05, h * 0.005, w * 0.05, h * 0.005),
-                                                        child: Text('Back', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: MyColorScheme.baseColor))))),
-                                            Container(
-                                                child: ElevatedButton(
-                                                    onPressed: () => {
-                                                          if (validators
-                                                                      .checkNotEmpty(
-                                                                          dateOfBirthController
-                                                                              .text)
-                                                                      .length ==
-                                                                  0 &&
-                                                              validators
-                                                                      .validateRollNumber(
-                                                                          rollNumberController
-                                                                              .text)
-                                                                      .length ==
-                                                                  0)
-                                                            {
-                                                              setState(() {
-                                                                outerVisibility =
-                                                                    3;
-                                                              })
-                                                            }
-                                                          else
-                                                            {
-                                                              setState(() {
-                                                                errorMessage =
-                                                                    '';
-                                                                if (validators
-                                                                        .checkNotEmpty(dateOfBirthController
-                                                                            .text)
-                                                                        .length >
-                                                                    0)
-                                                                  errorMessage +=
-                                                                      'Date of Birth ' +
-                                                                          validators
-                                                                              .checkNotEmpty(dateOfBirthController.text);
-                                                                errorMessage +=
-                                                                    validators.validateRollNumber(
-                                                                        rollNumberController
-                                                                            .text);
-                                                              }),
-                                                              Navigator.of(context).push(
-                                                                  MaterialPageRoute(
-                                                                      builder:
-                                                                          (context) =>
-                                                                              AlertDialog(
-                                                                                title: const Text('Invalid input'),
-                                                                                content: Text('${errorMessage}'),
-                                                                                actions: <Widget>[
-                                                                                  TextButton(
-                                                                                    onPressed: () => Navigator.pop(context, 'OK'),
-                                                                                    child: const Text('OK'),
-                                                                                  ),
-                                                                                ],
-                                                                              )))
-                                                            }
-                                                        },
-                                                    style: ButtonStyle(
-                                                        elevation: MaterialStateProperty.all(
-                                                            15),
-                                                        backgroundColor: MaterialStateProperty.all(
+                                            ElevatedButton(
+                                                onPressed: () => {
+                                                      setState(() {
+                                                        outerVisibility = 1;
+                                                      })
+                                                    },
+                                                style: ButtonStyle(
+                                                    elevation: MaterialStateProperty.all(
+                                                        15),
+                                                    backgroundColor:
+                                                        MaterialStateProperty.all(
                                                             MyColorScheme
                                                                 .darkColor),
-                                                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                                            RoundedRectangleBorder(
-                                                                borderRadius: BorderRadius.circular(
-                                                                    18.0),
-                                                                side:
-                                                                    BorderSide(
-                                                                  color: MyColorScheme
-                                                                      .darkColor,
-                                                                )))),
-                                                    child: Padding(
-                                                        padding: EdgeInsets.fromLTRB(
-                                                            w * 0.05,
-                                                            h * 0.005,
-                                                            w * 0.05,
-                                                            h * 0.005),
-                                                        child: Text('Next',
-                                                            style: TextStyle(
-                                                                fontFamily: 'comic',
-                                                                fontSize: w * 0.08,
-                                                                color: MyColorScheme.baseColor)))))
+                                                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(
+                                                            18.0),
+                                                        side: BorderSide(
+                                                            color: MyColorScheme
+                                                                .darkColor)))),
+                                                child: Padding(
+                                                    padding: EdgeInsets.fromLTRB(w * 0.05, h * 0.005, w * 0.05, h * 0.005),
+                                                    child: Text('Back', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: MyColorScheme.baseColor)))),
+                                            ElevatedButton(
+                                                onPressed: () => {
+                                                      if (validators
+                                                                  .checkNotEmpty(
+                                                                      dateOfBirthController
+                                                                          .text).isEmpty &&
+                                                          validators
+                                                                  .validateRollNumber(
+                                                                      rollNumberController
+                                                                          .text).isEmpty)
+                                                        {
+                                                          setState(() {
+                                                            outerVisibility =
+                                                                3;
+                                                          })
+                                                        }
+                                                      else
+                                                        {
+                                                          setState(() {
+                                                            errorMessage =
+                                                                '';
+                                                            if (validators
+                                                                    .checkNotEmpty(dateOfBirthController
+                                                                        .text).isNotEmpty) {
+                                                              errorMessage +=
+                                                                  'Date of Birth ' +
+                                                                      validators
+                                                                          .checkNotEmpty(dateOfBirthController.text);
+                                                            }
+                                                            errorMessage +=
+                                                                validators.validateRollNumber(
+                                                                    rollNumberController
+                                                                        .text);
+                                                          }),
+                                                          Navigator.of(context).push(
+                                                              MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          AlertDialog(
+                                                                            title: const Text('Invalid input'),
+                                                                            content: Text(errorMessage),
+                                                                            actions: <Widget>[
+                                                                              TextButton(
+                                                                                onPressed: () => Navigator.pop(context, 'OK'),
+                                                                                child: const Text('OK'),
+                                                                              ),
+                                                                            ],
+                                                                          )))
+                                                        }
+                                                    },
+                                                style: ButtonStyle(
+                                                    elevation: MaterialStateProperty.all(
+                                                        15),
+                                                    backgroundColor: MaterialStateProperty.all(
+                                                        MyColorScheme
+                                                            .darkColor),
+                                                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                                        RoundedRectangleBorder(
+                                                            borderRadius: BorderRadius.circular(
+                                                                18.0),
+                                                            side:
+                                                                BorderSide(
+                                                              color: MyColorScheme
+                                                                  .darkColor,
+                                                            )))),
+                                                child: Padding(
+                                                    padding: EdgeInsets.fromLTRB(
+                                                        w * 0.05,
+                                                        h * 0.005,
+                                                        w * 0.05,
+                                                        h * 0.005),
+                                                    child: Text('Next',
+                                                        style: TextStyle(
+                                                            fontFamily: 'comic',
+                                                            fontSize: w * 0.08,
+                                                            color: MyColorScheme.baseColor))))
                                           ]))
                                 ])),
                             //Part 3 of visiblity
@@ -773,113 +758,103 @@ class _MyWidgetState extends State<Register> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: <Widget>[
-                                            Container(
-                                                child: ElevatedButton(
-                                                    onPressed: () => {
-                                                          setState(() {
-                                                            outerVisibility = 2;
-                                                          })
-                                                        },
-                                                    style: ButtonStyle(
-                                                        elevation: MaterialStateProperty.all(
-                                                            15),
-                                                        backgroundColor:
-                                                            MaterialStateProperty.all(
-                                                                MyColorScheme
-                                                                    .darkColor),
-                                                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                                                            borderRadius: BorderRadius.circular(
-                                                                18.0),
-                                                            side: BorderSide(
-                                                                color: MyColorScheme
-                                                                    .darkColor)))),
-                                                    child: Padding(
-                                                        padding: EdgeInsets.fromLTRB(w * 0.02, h * 0.005, w * 0.02, h * 0.005),
-                                                        child: Text('Back', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: MyColorScheme.baseColor))))),
-                                            Container(
-                                                child: ElevatedButton(
-                                                    onPressed: (() {
-                                                      errorMessage = '';
-                                                      if (validators
-                                                                  .validatePhoneNumber(
-                                                                      phoneNumberController
-                                                                          .text)
-                                                                  .length >
-                                                              0 ||
-                                                          emergencyContactNumberController
-                                                                  .text ==
-                                                              phoneNumberController
-                                                                  .text ||
-                                                          validators
-                                                                  .validatePhoneNumber(
-                                                                      emergencyContactNumberController
-                                                                          .text)
-                                                                  .length >
-                                                              0) {
-                                                        if (validators
-                                                                .validatePhoneNumber(
-                                                                    phoneNumberController
-                                                                        .text)
-                                                                .length >
-                                                            0) {
-                                                          errorMessage =
-                                                              'Invalid Phone Number\n';
-                                                        }
-                                                        if (validators
-                                                                .validatePhoneNumber(
-                                                                    emergencyContactNumberController
-                                                                        .text)
-                                                                .length >
-                                                            0) {
-                                                          errorMessage +=
-                                                              'Invalid Emergency Contact Number\n';
-                                                        }
-                                                        if (phoneNumberController
-                                                                .text ==
-                                                            emergencyContactNumberController
-                                                                .text) {
-                                                          errorMessage +=
-                                                              'Phone Number and Emergency Contact Number cannot be same.\n';
-                                                        }
+                                            ElevatedButton(
+                                                onPressed: () => {
+                                                      setState(() {
+                                                        outerVisibility = 2;
+                                                      })
+                                                    },
+                                                style: ButtonStyle(
+                                                    elevation: MaterialStateProperty.all(
+                                                        15),
+                                                    backgroundColor:
+                                                        MaterialStateProperty.all(
+                                                            MyColorScheme
+                                                                .darkColor),
+                                                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(
+                                                            18.0),
+                                                        side: BorderSide(
+                                                            color: MyColorScheme
+                                                                .darkColor)))),
+                                                child: Padding(
+                                                    padding: EdgeInsets.fromLTRB(w * 0.02, h * 0.005, w * 0.02, h * 0.005),
+                                                    child: Text('Back', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: MyColorScheme.baseColor)))),
+                                            ElevatedButton(
+                                                onPressed: (() {
+                                                  errorMessage = '';
+                                                  if (validators
+                                                              .validatePhoneNumber(
+                                                                  phoneNumberController
+                                                                      .text).isNotEmpty ||
+                                                      emergencyContactNumberController
+                                                              .text ==
+                                                          phoneNumberController
+                                                              .text ||
+                                                      validators
+                                                              .validatePhoneNumber(
+                                                                  emergencyContactNumberController
+                                                                      .text).isNotEmpty) {
+                                                    if (validators
+                                                            .validatePhoneNumber(
+                                                                phoneNumberController
+                                                                    .text).isNotEmpty) {
+                                                      errorMessage =
+                                                          'Invalid Phone Number\n';
+                                                    }
+                                                    if (validators
+                                                            .validatePhoneNumber(
+                                                                emergencyContactNumberController
+                                                                    .text).isNotEmpty) {
+                                                      errorMessage +=
+                                                          'Invalid Emergency Contact Number\n';
+                                                    }
+                                                    if (phoneNumberController
+                                                            .text ==
+                                                        emergencyContactNumberController
+                                                            .text) {
+                                                      errorMessage +=
+                                                          'Phone Number and Emergency Contact Number cannot be same.\n';
+                                                    }
 
-                                                        Navigator.of(context).push(
-                                                            MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    AlertDialog(
-                                                                        title: const Text(
-                                                                            'Invalid input'),
-                                                                        content:
-                                                                            Text(
-                                                                                '${errorMessage}'),
-                                                                        actions: <
-                                                                            Widget>[
-                                                                          TextButton(
-                                                                            onPressed: () =>
-                                                                                Navigator.pop(context, 'OK'),
-                                                                            child:
-                                                                                const Text('OK'),
-                                                                          )
-                                                                        ])));
-                                                      } else {
-                                                        verifyNumber();
-                                                      }
-                                                    }),
-                                                    style: ButtonStyle(
-                                                        elevation: MaterialStateProperty.all(
-                                                            15),
-                                                        backgroundColor:
-                                                            MaterialStateProperty.all(
-                                                                MyColorScheme
-                                                                    .darkColor),
-                                                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                                                            borderRadius: BorderRadius.circular(
-                                                                18.0),
-                                                            side: BorderSide(
-                                                                color: MyColorScheme
-                                                                    .darkColor)))),
-                                                    child: Padding(
-                                                        padding: EdgeInsets.fromLTRB(w * 0.02, h * 0.005, w * 0.02, h * 0.005),
-                                                        child: Text('Send OTP', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: MyColorScheme.baseColor)))))
+                                                    Navigator.of(context).push(
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                AlertDialog(
+                                                                    title: const Text(
+                                                                        'Invalid input'),
+                                                                    content:
+                                                                        Text(
+                                                                            errorMessage),
+                                                                    actions: <
+                                                                        Widget>[
+                                                                      TextButton(
+                                                                        onPressed: () =>
+                                                                            Navigator.pop(context, 'OK'),
+                                                                        child:
+                                                                            const Text('OK'),
+                                                                      )
+                                                                    ])));
+                                                  } else {
+                                                    verifyNumber();
+                                                  }
+                                                }),
+                                                style: ButtonStyle(
+                                                    elevation: MaterialStateProperty.all(
+                                                        15),
+                                                    backgroundColor:
+                                                        MaterialStateProperty.all(
+                                                            MyColorScheme
+                                                                .darkColor),
+                                                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(
+                                                            18.0),
+                                                        side: BorderSide(
+                                                            color: MyColorScheme
+                                                                .darkColor)))),
+                                                child: Padding(
+                                                    padding: EdgeInsets.fromLTRB(w * 0.02, h * 0.005, w * 0.02, h * 0.005),
+                                                    child: Text('Send OTP', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: MyColorScheme.baseColor))))
                                           ])
                                     ]),
                                   ),
@@ -943,28 +918,27 @@ class _MyWidgetState extends State<Register> {
                                                               30)))),
                                         ),
                                       ),
-                                      Container(
-                                          child: ElevatedButton(
-                                              onPressed: (() {
-                                                verifyCode();
-                                              }),
-                                              style: ButtonStyle(
-                                                  elevation:
-                                                      MaterialStateProperty.all(
-                                                          15),
-                                                  backgroundColor: MaterialStateProperty.all(
-                                                      MyColorScheme.darkColor),
-                                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                                      RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                  18.0),
-                                                          side: BorderSide(
-                                                              color: MyColorScheme
-                                                                  .darkColor)))),
-                                              child: Padding(
-                                                  padding: EdgeInsets.fromLTRB(w * 0.05, h * 0.005, w * 0.05, h * 0.005),
-                                                  child: Text('Verify', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: MyColorScheme.baseColor)))))
+                                      ElevatedButton(
+                                          onPressed: (() {
+                                            verifyCode();
+                                          }),
+                                          style: ButtonStyle(
+                                              elevation:
+                                                  MaterialStateProperty.all(
+                                                      15),
+                                              backgroundColor: MaterialStateProperty.all(
+                                                  MyColorScheme.darkColor),
+                                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                                  RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              18.0),
+                                                      side: BorderSide(
+                                                          color: MyColorScheme
+                                                              .darkColor)))),
+                                          child: Padding(
+                                              padding: EdgeInsets.fromLTRB(w * 0.05, h * 0.005, w * 0.05, h * 0.005),
+                                              child: Text('Verify', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: MyColorScheme.baseColor))))
                                     ]),
                                   )
                                 ])),
@@ -1108,169 +1082,160 @@ class _MyWidgetState extends State<Register> {
                                                           30)))),
                                     ),
                                   ),
-                                  Container(
-                                      child: ElevatedButton(
-                                          onPressed: (() {
-                                            if (validators
-                                                        .validateEmail(
-                                                            organizationEMailIDController
-                                                                .text)
-                                                        .length ==
-                                                    0 &&
-                                                validators
-                                                        .validatePassword(
-                                                            passwordController
-                                                                .text)
-                                                        .length ==
-                                                    0 &&
-                                                passwordController.text ==
-                                                    confirmPasswordController
-                                                        .text) {
-                                              FirebaseFirestore.instance
-                                                  .collection(
-                                                      'Mapping/Permanent/MailtoPhone')
-                                                  .doc(
-                                                      organizationEMailIDController
-                                                          .text)
-                                                  .get()
-                                                  .then((result) => {
-                                                        if (!result.exists)
-                                                          {
-                                                            FirebaseFirestore
-                                                                .instance
-                                                                .collection(
-                                                                    'Mapping/Admin/MailtoPhone')
-                                                                .doc(
-                                                                    organizationEMailIDController
-                                                                        .text)
-                                                                .get()
-                                                                .then(
-                                                                    (result) =>
+                                  ElevatedButton(
+                                      onPressed: (() {
+                                        if (validators
+                                                    .validateEmail(
+                                                        organizationEMailIDController
+                                                            .text).isEmpty &&
+                                            validators
+                                                    .validatePassword(
+                                                        passwordController
+                                                            .text).isEmpty &&
+                                            passwordController.text ==
+                                                confirmPasswordController
+                                                    .text) {
+                                          FirebaseFirestore.instance
+                                              .collection(
+                                                  'Mapping/Permanent/MailtoPhone')
+                                              .doc(
+                                                  organizationEMailIDController
+                                                      .text)
+                                              .get()
+                                              .then((result) => {
+                                                    if (!result.exists)
+                                                      {
+                                                        FirebaseFirestore
+                                                            .instance
+                                                            .collection(
+                                                                'Mapping/Admin/MailtoPhone')
+                                                            .doc(
+                                                                organizationEMailIDController
+                                                                    .text)
+                                                            .get()
+                                                            .then(
+                                                                (result) =>
+                                                                    {
+                                                                      if (!result
+                                                                          .exists)
                                                                         {
-                                                                          if (!result
-                                                                              .exists)
-                                                                            {
-                                                                              auth.createUserWithEmailAndPassword(email: organizationEMailIDController.text, password: passwordController.text).then((value) => {
-                                                                                    Navigator.of(context).push(MaterialPageRoute(
-                                                                                        builder: (context) => AlertDialog(title: Text('Verify Email'), content: Text('An email has been sent to the ${value.user?.email} please verify it by clicking it to the link on email'), actions: <Widget>[
-                                                                                              Visibility(
-                                                                                                visible: false,
-                                                                                                child: TextButton(
-                                                                                                  onPressed: () => Navigator.pop(context, 'OK'),
-                                                                                                  child: const Text('OK'),
-                                                                                                ),
-                                                                                              )
-                                                                                            ]))),
-                                                                                    setState(() {
-                                                                                      user = auth.currentUser!;
-                                                                                      user.sendEmailVerification();
+                                                                          auth.createUserWithEmailAndPassword(email: organizationEMailIDController.text, password: passwordController.text).then((value) => {
+                                                                                Navigator.of(context).push(MaterialPageRoute(
+                                                                                    builder: (context) => AlertDialog(title: const Text('Verify Email'), content: Text('An email has been sent to the ${value.user?.email} please verify it by clicking it to the link on email'), actions: <Widget>[
+                                                                                          Visibility(
+                                                                                            visible: false,
+                                                                                            child: TextButton(
+                                                                                              onPressed: () => Navigator.pop(context, 'OK'),
+                                                                                              child: const Text('OK'),
+                                                                                            ),
+                                                                                          )
+                                                                                        ]))),
+                                                                                setState(() {
+                                                                                  user = auth.currentUser!;
+                                                                                  user.sendEmailVerification();
 
-                                                                                      timer = Timer.periodic(Duration(seconds: 3), (timer) {
-                                                                                        checkEmailVerified();
-                                                                                      });
-                                                                                    })
-                                                                                  })
-                                                                            }
-                                                                          else
-                                                                            {
-                                                                              Navigator.of(context).push(MaterialPageRoute(
-                                                                                  builder: (context) => AlertDialog(title: const Text('Invalid input'), content: Text("You have already requested registration with this email ID, please wait for admin to accept!"), actions: <Widget>[
-                                                                                        TextButton(
-                                                                                          onPressed: () => Navigator.pop(context, 'OK'),
-                                                                                          child: const Text('OK'),
-                                                                                        )
-                                                                                      ])))
-                                                                            }
-                                                                        })
-                                                          }
-                                                        else
-                                                          {
-                                                            Navigator.of(context).push(
-                                                                MaterialPageRoute(
-                                                                    builder: (context) =>
-                                                                        AlertDialog(
-                                                                            title:
-                                                                                const Text('Invalid input'),
-                                                                            content: Text("You are already a user with this email ID!"),
-                                                                            actions: <Widget>[
-                                                                              TextButton(
-                                                                                onPressed: () => Navigator.pop(context, 'OK'),
-                                                                                child: const Text('OK'),
-                                                                              )
-                                                                            ])))
-                                                          }
-                                                      });
-                                            } else {
-                                              setState(() {
-                                                errorMessage = '';
-                                                if (validators
-                                                        .validateEmail(
-                                                            organizationEMailIDController
-                                                                .text)
-                                                        .length >
-                                                    0) {
-                                                  errorMessage +=
-                                                      validators.validateEmail(
-                                                          organizationEMailIDController
-                                                              .text);
-                                                }
-                                                if (validators
-                                                        .validatePassword(
-                                                            passwordController
-                                                                .text)
-                                                        .length >
-                                                    0) {
-                                                  errorMessage += validators
-                                                      .validatePassword(
-                                                          passwordController
-                                                              .text);
-                                                }
-                                                if (passwordController.text !=
-                                                    confirmPasswordController
-                                                        .text) {
-                                                  errorMessage +=
-                                                      "Password and Confirm Password Must be Same";
-                                                }
-                                                Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            AlertDialog(
-                                                                title: const Text(
-                                                                    'Invalid input'),
-                                                                content: Text(
-                                                                    '${errorMessage}'),
-                                                                actions: <
-                                                                    Widget>[
-                                                                  TextButton(
-                                                                    onPressed: () =>
-                                                                        Navigator.pop(
-                                                                            context,
-                                                                            'OK'),
-                                                                    child:
-                                                                        const Text(
-                                                                            'OK'),
-                                                                  )
-                                                                ])));
-                                              });
+                                                                                  timer = Timer.periodic(const Duration(seconds: 3), (timer) {
+                                                                                    checkEmailVerified();
+                                                                                  });
+                                                                                })
+                                                                              })
+                                                                        }
+                                                                      else
+                                                                        {
+                                                                          Navigator.of(context).push(MaterialPageRoute(
+                                                                              builder: (context) => AlertDialog(title: const Text('Invalid input'), content: const Text("You have already requested registration with this email ID, please wait for admin to accept!"), actions: <Widget>[
+                                                                                    TextButton(
+                                                                                      onPressed: () => Navigator.pop(context, 'OK'),
+                                                                                      child: const Text('OK'),
+                                                                                    )
+                                                                                  ])))
+                                                                        }
+                                                                    })
+                                                      }
+                                                    else
+                                                      {
+                                                        Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    AlertDialog(
+                                                                        title:
+                                                                            const Text('Invalid input'),
+                                                                        content: const Text("You are already a user with this email ID!"),
+                                                                        actions: <Widget>[
+                                                                          TextButton(
+                                                                            onPressed: () => Navigator.pop(context, 'OK'),
+                                                                            child: const Text('OK'),
+                                                                          )
+                                                                        ])))
+                                                      }
+                                                  });
+                                        } else {
+                                          setState(() {
+                                            errorMessage = '';
+                                            if (validators
+                                                    .validateEmail(
+                                                        organizationEMailIDController
+                                                            .text).isNotEmpty) {
+                                              errorMessage +=
+                                                  validators.validateEmail(
+                                                      organizationEMailIDController
+                                                          .text);
                                             }
-                                          }),
-                                          style: ButtonStyle(
-                                              elevation:
-                                                  MaterialStateProperty.all(15),
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      MyColorScheme.darkColor),
-                                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                                  RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              18.0),
-                                                      side: BorderSide(
-                                                          color: MyColorScheme
-                                                              .darkColor)))),
-                                          child: Padding(
-                                              padding: EdgeInsets.fromLTRB(w * 0.05, h * 0.005, w * 0.05, h * 0.005),
-                                              child: Text('Verify', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: MyColorScheme.baseColor)))))
+                                            if (validators
+                                                    .validatePassword(
+                                                        passwordController
+                                                            .text).isNotEmpty) {
+                                              errorMessage += validators
+                                                  .validatePassword(
+                                                      passwordController
+                                                          .text);
+                                            }
+                                            if (passwordController.text !=
+                                                confirmPasswordController
+                                                    .text) {
+                                              errorMessage +=
+                                                  "Password and Confirm Password Must be Same";
+                                            }
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        AlertDialog(
+                                                            title: const Text(
+                                                                'Invalid input'),
+                                                            content: Text(
+                                                                errorMessage),
+                                                            actions: <
+                                                                Widget>[
+                                                              TextButton(
+                                                                onPressed: () =>
+                                                                    Navigator.pop(
+                                                                        context,
+                                                                        'OK'),
+                                                                child:
+                                                                    const Text(
+                                                                        'OK'),
+                                                              )
+                                                            ])));
+                                          });
+                                        }
+                                      }),
+                                      style: ButtonStyle(
+                                          elevation:
+                                              MaterialStateProperty.all(15),
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  MyColorScheme.darkColor),
+                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                              RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          18.0),
+                                                  side: BorderSide(
+                                                      color: MyColorScheme
+                                                          .darkColor)))),
+                                      child: Padding(
+                                          padding: EdgeInsets.fromLTRB(w * 0.05, h * 0.005, w * 0.05, h * 0.005),
+                                          child: Text('Verify', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: MyColorScheme.baseColor))))
                                 ]))
                           ]))),
                 ))
@@ -1305,7 +1270,7 @@ class _MyWidgetState extends State<Register> {
                                       Navigator.of(context).push(
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  Register()));
+                                                  const Register()));
                                     },
                                     codeSent: (String verificationID,
                                         int? resendToken) {
@@ -1322,7 +1287,7 @@ class _MyWidgetState extends State<Register> {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => AlertDialog(
                                             title: const Text('Invalid input'),
-                                            content: Text(
+                                            content: const Text(
                                                 "You have already requested registration. Please wait until admin verifies your details."),
                                             actions: <Widget>[
                                               TextButton(
@@ -1339,7 +1304,7 @@ class _MyWidgetState extends State<Register> {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => AlertDialog(
                               title: const Text('Invalid input'),
-                              content: Text(
+                              content: const Text(
                                   "You are already a user with this phone number!"),
                               actions: <Widget>[
                                 TextButton(
@@ -1364,7 +1329,7 @@ class _MyWidgetState extends State<Register> {
               })
             })
         .onError((error, stackTrace) => {
-              utilities.AlertMessage(context, 'Incorrect OTP',
+              utilities.alertMessage(context, 'Incorrect OTP',
                   'OTP incorrect or timed out! Try again.'),
               setState(() {
                 outerVisibility = 3;
@@ -1405,11 +1370,11 @@ class _MyWidgetState extends State<Register> {
           .set({'PhoneNumber': utilities.add91(phoneNumberController.text)});
       Navigator.pop(context, 'OK');
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => Login()));
+          context, MaterialPageRoute(builder: (context) => const Login()));
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => AlertDialog(
-                  title: Text('Notice'),
-                  content: Text('Please wait for Admin Acknowledgement'),
+                  title: const Text('Notice'),
+                  content: const Text('Please wait for Admin Acknowledgement'),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context, 'OK'),

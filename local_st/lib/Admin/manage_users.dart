@@ -13,7 +13,7 @@ class ManageUsers {
       String firstName,
       String middleName,
       String lastName,
-      String DateOfBirth,
+      String dateOfBirth,
       String emergencyContactNo,
       String organizationEmailID,
       String rollNumber) async {
@@ -26,7 +26,7 @@ class ManageUsers {
       'FirstName': firstName,
       'MiddleName': middleName,
       'LastName': lastName,
-      'DateOfBirth': DateOfBirth,
+      'DateOfBirth': dateOfBirth,
       'EmergencyContactNumber': utilities.add91(emergencyContactNo),
       'OrganizationEmailID': organizationEmailID,
       'OrganizationName': 'Pandit Deendayal Energy University',
