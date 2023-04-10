@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:local_st/Chat/group_chat.dart';
+import 'package:local_st/Data-Services/realtimeDatabaseOperations.dart';
 import 'package:local_st/Reusable/bottom_navigation_bar.dart';
 import 'package:local_st/Reusable/colors.dart';
 import 'package:local_st/Reusable/loading.dart';
@@ -9,7 +11,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ListedJourneyDetails extends StatefulWidget {
   final String journeyID;
-  const ListedJourneyDetails({Key? key, required this.journeyID}) : super(key: key);
+  const ListedJourneyDetails({Key? key, required this.journeyID})
+      : super(key: key);
   @override
   State<ListedJourneyDetails> createState() => _ListedJourneyDetailsState();
 }
@@ -57,8 +60,7 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
                           Expanded(
                               flex: 4,
                               child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
@@ -67,8 +69,7 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
                                             style: TextStyle(
                                                 color: Colors.grey[700],
                                                 fontSize: h * 0.02,
-                                                fontWeight:
-                                                    FontWeight.bold))),
+                                                fontWeight: FontWeight.bold))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.02),
@@ -83,8 +84,7 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
                                             style: TextStyle(
                                                 color: Colors.grey[700],
                                                 fontSize: h * 0.02,
-                                                fontWeight:
-                                                    FontWeight.bold))),
+                                                fontWeight: FontWeight.bold))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.02),
@@ -98,8 +98,7 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
                                             style: TextStyle(
                                                 color: Colors.grey[700],
                                                 fontSize: h * 0.02,
-                                                fontWeight:
-                                                    FontWeight.bold))),
+                                                fontWeight: FontWeight.bold))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.02),
@@ -113,8 +112,7 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
                                             style: TextStyle(
                                                 color: Colors.grey[700],
                                                 fontSize: h * 0.02,
-                                                fontWeight:
-                                                    FontWeight.bold))),
+                                                fontWeight: FontWeight.bold))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.02),
@@ -128,8 +126,7 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
                                             style: TextStyle(
                                                 color: Colors.grey[700],
                                                 fontSize: h * 0.02,
-                                                fontWeight:
-                                                    FontWeight.bold))),
+                                                fontWeight: FontWeight.bold))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.02),
@@ -143,8 +140,7 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
                                             style: TextStyle(
                                                 color: Colors.grey[700],
                                                 fontSize: h * 0.02,
-                                                fontWeight:
-                                                    FontWeight.bold))),
+                                                fontWeight: FontWeight.bold))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.02),
@@ -158,8 +154,7 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
                                             style: TextStyle(
                                                 color: Colors.grey[700],
                                                 fontSize: h * 0.02,
-                                                fontWeight:
-                                                    FontWeight.bold))),
+                                                fontWeight: FontWeight.bold))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.02),
@@ -173,8 +168,7 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
                                             style: TextStyle(
                                                 color: Colors.grey[700],
                                                 fontSize: h * 0.02,
-                                                fontWeight:
-                                                    FontWeight.bold))),
+                                                fontWeight: FontWeight.bold))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.02),
@@ -188,8 +182,7 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
                                             style: TextStyle(
                                                 color: Colors.grey[700],
                                                 fontSize: h * 0.02,
-                                                fontWeight:
-                                                    FontWeight.bold))),
+                                                fontWeight: FontWeight.bold))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.02),
@@ -211,8 +204,7 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
                                         Padding(
                                             padding: EdgeInsets.fromLTRB(
                                                 0.0, 0.0, 0.0, h * 0.02),
-                                            child: Text(
-                                                '${journeyDetails[8]}',
+                                            child: Text('${journeyDetails[8]}',
                                                 style: TextStyle(
                                                     fontSize: h * 0.025)))
                                       ]),
@@ -229,10 +221,15 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
                                     icon: const FaIcon(Icons.delete)),
                                 IconButton(
                                     onPressed: () {},
-                                    icon: const FaIcon(
-                                        Icons.notifications_off)),
+                                    icon:
+                                        const FaIcon(Icons.notifications_off)),
                                 IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const GroupChatUI()));
+                                    },
                                     icon: const FaIcon(Icons.chat)),
                                 IconButton(
                                     onPressed: () {},
@@ -379,25 +376,30 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
         .collection('TransporterList')
         .doc(widget.journeyID)
         .get();
-    if (data['IsJourneyAvailable']){
+    if (data['IsJourneyAvailable']) {
       await FirebaseFirestore.instance
-        .collection('TransporterList')
-        .doc(widget.journeyID)
-        .update({
-      'PendingRequestsCount': data['PendingRequestsCount'] - 1,
-      'AcceptedRequestsCount': data['AcceptedRequestsCount'] + 1,
-      'IsJourneyAvailable': data['AcceptedRequestsCount'] + 1 < data['AvailableSeats']
-    });
-    await FirebaseFirestore.instance
-        .collection('TransporterList')
-        .doc(widget.journeyID)
-        .collection('ActiveRequests')
-        .doc(userID)
-        .delete();
-    setState(() {
-      initial();
-    });
-    }  
+          .collection('TransporterList')
+          .doc(widget.journeyID)
+          .update({
+        'PendingRequestsCount': data['PendingRequestsCount'] - 1,
+        'AcceptedRequestsCount': data['AcceptedRequestsCount'] + 1,
+        'IsJourneyAvailable':
+            data['AcceptedRequestsCount'] + 1 < data['AvailableSeats']
+      });
+      await FirebaseFirestore.instance
+          .collection('TransporterList')
+          .doc(widget.journeyID)
+          .collection('ActiveRequests')
+          .doc(userID)
+          .delete();
+      RealTimeDatabase rdb = RealTimeDatabase();
+      await rdb.updateDataIntoRTDB(
+          "Chat/" + widget.journeyID + "/Members/" + userID,
+          {"UserName": fullName});
+      setState(() {
+        initial();
+      });
+    }
   }
 
   Future<void> rejectRequest(String userID, String fullName) async {

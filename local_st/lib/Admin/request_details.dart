@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:local_st/Admin/pending_request.dart';
 
@@ -85,17 +86,16 @@ class _RequestDetailsState extends State<RequestDetails> {
                                               const PendingRequest()));
                                 }),
                                 style: ButtonStyle(
-                                    elevation:
-                                        MaterialStateProperty.all(15),
+                                    elevation: MaterialStateProperty.all(15),
                                     backgroundColor: MaterialStateProperty.all(
-                                        const Color.fromARGB(255, 62, 124, 217)),
+                                        const Color.fromARGB(
+                                            255, 62, 124, 217)),
                                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                         RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(18.0),
                                             side: BorderSide(
-                                                color: Colors
-                                                    .blue.shade900)))),
+                                                color: Colors.blue.shade900)))),
                                 child: Padding(
                                     padding: EdgeInsets.fromLTRB(
                                         w * 0.05, h * 0.005, w * 0.05, h * 0.005),
@@ -111,17 +111,16 @@ class _RequestDetailsState extends State<RequestDetails> {
                                               const PendingRequest()));
                                 }),
                                 style: ButtonStyle(
-                                    elevation:
-                                        MaterialStateProperty.all(15),
+                                    elevation: MaterialStateProperty.all(15),
                                     backgroundColor: MaterialStateProperty.all(
-                                        const Color.fromARGB(255, 62, 124, 217)),
+                                        const Color.fromARGB(
+                                            255, 62, 124, 217)),
                                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                         RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(18.0),
                                             side: BorderSide(
-                                                color: Colors
-                                                    .blue.shade900)))),
+                                                color: Colors.blue.shade900)))),
                                 child: Padding(
                                     padding: EdgeInsets.fromLTRB(
                                         w * 0.05, h * 0.005, w * 0.05, h * 0.005),
@@ -164,6 +163,25 @@ class _RequestDetailsState extends State<RequestDetails> {
       String emergencyContactNumber,
       String password) async {
     await FirebaseFirestore.instance
+        .collection('UserInformation')
+        .doc(phoneNumber)
+        .set({
+      'PhoneNumber': phoneNumber,
+      'FirstName': firstName,
+      'LastName': lastName,
+      'MiddleName': middleName,
+      'EmergencyContactNumber': emergencyContactNumber,
+      'OrganizationEmailID': organizationEmailID,
+      'DateOfBirth': dateOfBirth,
+      'RollNumber': rollNumber,
+      'Password': password,
+      'TotalJourneyCount': 0,
+      'TotalJourneysCompleted': 0,
+      'ListedJourneyCount': 0,
+      'JoinedJourneyCount': 0,
+      'TotalPoints': 0
+    });
+    await FirebaseFirestore.instance
         .collection('Mapping/Permanent/PhonetoMail')
         .doc(phoneNumber)
         .set({'Email': organizationEmailID});
@@ -171,6 +189,9 @@ class _RequestDetailsState extends State<RequestDetails> {
         .collection('Mapping/Permanent/MailtoPhone')
         .doc(organizationEmailID)
         .set({'PhoneNumber': phoneNumber});
+    DatabaseReference dbRef =
+        FirebaseDatabase.instance.reference().child('UserInformation');
+    await dbRef.child(phoneNumber).set({'phoneNumber': phoneNumber});
   }
 
   void removeVerifiedUser(String phoneNumber, String email) async {

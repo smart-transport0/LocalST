@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:local_st/Chat/group_chat.dart';
+import 'package:local_st/Data-Services/realtimeDatabaseOperations.dart';
 import 'package:local_st/Data-Services/utilities.dart';
 import 'package:local_st/Reusable/bottom_navigation_bar.dart';
 import 'package:local_st/Reusable/colors.dart';
@@ -63,8 +65,7 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
                           Expanded(
                               flex: 4,
                               child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
@@ -73,8 +74,7 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
                                             style: TextStyle(
                                                 color: Colors.grey[700],
                                                 fontSize: h * 0.02,
-                                                fontWeight:
-                                                    FontWeight.bold))),
+                                                fontWeight: FontWeight.bold))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.02),
@@ -89,8 +89,7 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
                                             style: TextStyle(
                                                 color: Colors.grey[700],
                                                 fontSize: h * 0.02,
-                                                fontWeight:
-                                                    FontWeight.bold))),
+                                                fontWeight: FontWeight.bold))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.02),
@@ -104,8 +103,7 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
                                             style: TextStyle(
                                                 color: Colors.grey[700],
                                                 fontSize: h * 0.02,
-                                                fontWeight:
-                                                    FontWeight.bold))),
+                                                fontWeight: FontWeight.bold))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.02),
@@ -119,8 +117,7 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
                                             style: TextStyle(
                                                 color: Colors.grey[700],
                                                 fontSize: h * 0.02,
-                                                fontWeight:
-                                                    FontWeight.bold))),
+                                                fontWeight: FontWeight.bold))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.02),
@@ -134,8 +131,7 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
                                             style: TextStyle(
                                                 color: Colors.grey[700],
                                                 fontSize: h * 0.02,
-                                                fontWeight:
-                                                    FontWeight.bold))),
+                                                fontWeight: FontWeight.bold))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.02),
@@ -149,8 +145,7 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
                                             style: TextStyle(
                                                 color: Colors.grey[700],
                                                 fontSize: h * 0.02,
-                                                fontWeight:
-                                                    FontWeight.bold))),
+                                                fontWeight: FontWeight.bold))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.02),
@@ -164,8 +159,7 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
                                             style: TextStyle(
                                                 color: Colors.grey[700],
                                                 fontSize: h * 0.02,
-                                                fontWeight:
-                                                    FontWeight.bold))),
+                                                fontWeight: FontWeight.bold))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.02),
@@ -179,8 +173,7 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
                                             style: TextStyle(
                                                 color: Colors.grey[700],
                                                 fontSize: h * 0.02,
-                                                fontWeight:
-                                                    FontWeight.bold))),
+                                                fontWeight: FontWeight.bold))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.02),
@@ -194,8 +187,7 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
                                             style: TextStyle(
                                                 color: Colors.grey[700],
                                                 fontSize: h * 0.02,
-                                                fontWeight:
-                                                    FontWeight.bold))),
+                                                fontWeight: FontWeight.bold))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.02),
@@ -210,32 +202,35 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
                                                   0.0, 0.0, 0.0, h * 0.005),
                                               child: Text('DESCRIPTION',
                                                   style: TextStyle(
-                                                      color:
-                                                          Colors.grey[700],
+                                                      color: Colors.grey[700],
                                                       fontSize: h * 0.02,
-                                                      fontWeight: FontWeight
-                                                          .bold))),
+                                                      fontWeight:
+                                                          FontWeight.bold))),
                                           Padding(
                                               padding: EdgeInsets.fromLTRB(
                                                   0.0, 0.0, 0.0, h * 0.02),
                                               child: Text(
                                                   '${journeyDetails[8]}',
                                                   style: TextStyle(
-                                                      fontSize:
-                                                          h * 0.025))),
+                                                      fontSize: h * 0.025))),
                                         ]))
                                   ])),
                           Expanded(
                               flex: 1,
                               child: Visibility(
-                                  visible: false,
+                                  visible: true,
                                   child: Column(children: <Widget>[
                                     IconButton(
                                         onPressed: () {},
                                         icon: const FaIcon(
                                             Icons.notifications_off)),
                                     IconButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const GroupChatUI()));
+                                        },
                                         icon: const FaIcon(Icons.chat)),
                                     IconButton(
                                         onPressed: () {},
@@ -244,49 +239,49 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
                         ])),
                     Column(children: [
                       Card(
-                      child: Padding(
-                          padding: EdgeInsets.fromLTRB(
-                              w * 0.05, h * 0.02, w * 0.05, h * 0.02),
-                          child: Column(children: [
-                            Padding(
-                                padding: EdgeInsets.fromLTRB(
-                                    0.0, 0.0, 0.0, 0.02 * h),
-                                child: Text('TRANSPORTER DETAILS',
-                                    style: TextStyle(
-                                        fontSize: h * 0.02,
-                                        color: Colors.grey[700],
-                                        fontWeight: FontWeight.bold))),
-                            Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0),
-                                child: Text(
-                                    '${journeyDetails[9]} ${journeyDetails[10]}',
-                                    style: TextStyle(fontSize: h * 0.03))),
-                            Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0),
-                                child: Text('${journeyDetails[11]}',
-                                    style: TextStyle(fontSize: h * 0.03))),
-                          ]))),
+                          child: Padding(
+                              padding: EdgeInsets.fromLTRB(
+                                  w * 0.05, h * 0.02, w * 0.05, h * 0.02),
+                              child: Column(children: [
+                                Padding(
+                                    padding: EdgeInsets.fromLTRB(
+                                        0.0, 0.0, 0.0, 0.02 * h),
+                                    child: Text('TRANSPORTER DETAILS',
+                                        style: TextStyle(
+                                            fontSize: h * 0.02,
+                                            color: Colors.grey[700],
+                                            fontWeight: FontWeight.bold))),
+                                Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        0.0, 0.0, 0.0, 0),
+                                    child: Text(
+                                        '${journeyDetails[9]} ${journeyDetails[10]}',
+                                        style: TextStyle(fontSize: h * 0.03))),
+                                Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        0.0, 0.0, 0.0, 0),
+                                    child: Text('${journeyDetails[11]}',
+                                        style: TextStyle(fontSize: h * 0.03))),
+                              ]))),
                       Padding(
-                    padding: EdgeInsets.fromLTRB(0, h * 0.01, 0, 0),
-                    child: ElevatedButton(
-                        child: Text(buttonValue,
-                            style: TextStyle(
-                                fontSize: w * 0.06,
-                                color: MyColorScheme.baseColor)),
-                        style: ButtonStyle(
-                            elevation: MaterialStateProperty.all(15),
-                            backgroundColor: MaterialStateProperty.all(
-                                MyColorScheme.darkColor),
-                            shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(18.0),
-                                    side: BorderSide(
-                                        color: MyColorScheme.darkColor)))),
-                        onPressed: () => sendRequest()),
+                        padding: EdgeInsets.fromLTRB(0, h * 0.01, 0, 0),
+                        child: ElevatedButton(
+                            child: Text(buttonValue,
+                                style: TextStyle(
+                                    fontSize: w * 0.06,
+                                    color: MyColorScheme.baseColor)),
+                            style: ButtonStyle(
+                                elevation: MaterialStateProperty.all(15),
+                                backgroundColor: MaterialStateProperty.all(
+                                    MyColorScheme.darkColor),
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18.0),
+                                        side: BorderSide(
+                                            color: MyColorScheme.darkColor)))),
+                            onPressed: () => sendRequest()),
                       )
                     ]),
                     Visibility(
@@ -408,9 +403,7 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
       await FirebaseFirestore.instance
           .collection('TransporterList')
           .doc(widget.journeyID)
-          .update({
-        'PendingRequestsCount': data['PendingRequestsCount'] + 1
-      });
+          .update({'PendingRequestsCount': data['PendingRequestsCount'] + 1});
     } else if (buttonValue == 'Leave') {
       await FirebaseFirestore.instance
           .collection('TransporterList')
@@ -418,6 +411,9 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
           .collection('AcceptedRequests')
           .doc(userID)
           .delete();
+      RealTimeDatabase rdb = RealTimeDatabase();
+      await rdb.deleteDataIntoRTDB(
+          "Chat/" + widget.journeyID + "/Members/" + userID!);
       await FirebaseFirestore.instance
           .collection('TransporterList')
           .doc(widget.journeyID)

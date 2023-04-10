@@ -86,31 +86,27 @@ class _JoinedJourneysState extends State<JoinedJourneys> {
                                             Text(
                                                 'Date ${snapshot.data?[index][0]}',
                                                 style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w900,
-                                                    color: Colors
-                                                        .blue.shade900)),
+                                                    fontWeight: FontWeight.w900,
+                                                    color:
+                                                        Colors.blue.shade900)),
                                             Row(
                                               children: [
                                                 Padding(
-                                                  padding:
-                                                      EdgeInsets.fromLTRB(
-                                                          0, 0, w * 0.03, 0),
+                                                  padding: EdgeInsets.fromLTRB(
+                                                      0, 0, w * 0.03, 0),
                                                   child: Container(
                                                       width: 25,
                                                       height: 25,
                                                       decoration:
                                                           const BoxDecoration(
-                                                        shape:
-                                                            BoxShape.circle,
+                                                        shape: BoxShape.circle,
                                                         color: Colors.red,
                                                       ),
                                                       child: Center(
                                                           child: Text(
                                                         '${snapshot.data?[index][5]}',
                                                         style: const TextStyle(
-                                                            color:
-                                                                Colors.white,
+                                                            color: Colors.white,
                                                             fontWeight:
                                                                 FontWeight
                                                                     .w900),
@@ -119,7 +115,8 @@ class _JoinedJourneysState extends State<JoinedJourneys> {
                                                 Container(
                                                     width: 25,
                                                     height: 25,
-                                                    decoration: const BoxDecoration(
+                                                    decoration:
+                                                        const BoxDecoration(
                                                       shape: BoxShape.circle,
                                                       color: Colors.green,
                                                     ),
@@ -129,8 +126,7 @@ class _JoinedJourneysState extends State<JoinedJourneys> {
                                                       style: const TextStyle(
                                                           color: Colors.white,
                                                           fontWeight:
-                                                              FontWeight
-                                                                  .w900),
+                                                              FontWeight.w900),
                                                     ))),
                                               ],
                                             ),
@@ -145,8 +141,7 @@ class _JoinedJourneysState extends State<JoinedJourneys> {
                                               '${snapshot.data?[index][1]}',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w900,
-                                                  color:
-                                                      Colors.blue.shade900),
+                                                  color: Colors.blue.shade900),
                                             ),
                                             SizedBox(height: h * 0.01),
                                             const Text('Destination Place'),
@@ -154,8 +149,7 @@ class _JoinedJourneysState extends State<JoinedJourneys> {
                                               '${snapshot.data?[index][2]}',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w900,
-                                                  color:
-                                                      Colors.blue.shade900),
+                                                  color: Colors.blue.shade900),
                                             ),
                                             SizedBox(height: h * 0.01),
                                             const Text('Transporter Name'),
@@ -163,8 +157,7 @@ class _JoinedJourneysState extends State<JoinedJourneys> {
                                               '${snapshot.data?[index][6]}',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w900,
-                                                  color:
-                                                      Colors.blue.shade900),
+                                                  color: Colors.blue.shade900),
                                             )
                                           ])
                                     ]),

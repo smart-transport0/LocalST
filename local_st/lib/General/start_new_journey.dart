@@ -8,6 +8,7 @@ import 'package:local_st/Reusable/colors.dart';
 import 'package:local_st/Reusable/navigation_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
+import 'package:local_st/Data-Services/realtimeDatabaseOperations.dart';
 
 class StartNewJourney extends StatefulWidget {
   const StartNewJourney({Key? key}) : super(key: key);
@@ -100,9 +101,10 @@ class _StartNewJourneyState extends State<StartNewJourney> {
                                 DateTime? pickedDate = await showDatePicker(
                                     context: context,
                                     initialDate: DateTime.now(),
-                                    firstDate: DateTime.now().subtract(const Duration(
-                                        days:
-                                            0)), //DateTime.now() - not to allow to choose before today.
+                                    firstDate: DateTime.now().subtract(
+                                        const Duration(
+                                            days:
+                                                0)), //DateTime.now() - not to allow to choose before today.
                                     lastDate: DateTime(2101),
                                     builder: (context, child) {
                                       return Theme(
@@ -118,8 +120,9 @@ class _StartNewJourneyState extends State<StartNewJourney> {
                                               textButtonTheme:
                                                   TextButtonThemeData(
                                                       style: TextButton.styleFrom(
-                                                          foregroundColor: MyColorScheme
-                                                              .darkColor // button text color
+                                                          foregroundColor:
+                                                              MyColorScheme
+                                                                  .darkColor // button text color
                                                           ))),
                                           child: child!);
                                     });
@@ -181,8 +184,9 @@ class _StartNewJourneyState extends State<StartNewJourney> {
                                               textButtonTheme:
                                                   TextButtonThemeData(
                                                       style: TextButton.styleFrom(
-                                                          foregroundColor: MyColorScheme
-                                                              .darkColor // button text color
+                                                          foregroundColor:
+                                                              MyColorScheme
+                                                                  .darkColor // button text color
                                                           ))),
                                           child: child!);
                                     },
@@ -344,23 +348,25 @@ class _StartNewJourneyState extends State<StartNewJourney> {
                               onPressed: () => {
                                     setState(() {
                                       if (selectedVehicleType != null &&
-                                      journeyDateController.text != "" &&
+                                          journeyDateController.text != "" &&
                                           leaveTimeController.text != "" &&
                                           selectedVehicleType != "" &&
                                           checkAvailableSeatsValid(
-                                              int.parse(availableSeatsController.text),
+                                              int.parse(availableSeatsController
+                                                  .text),
                                               selectedVehicleType)) {
                                         visibility = 2;
                                       } else {
                                         String msg = "";
                                         if (selectedVehicleType != null &&
-                                      journeyDateController.text != "" &&
-                                          leaveTimeController.text != "" &&
-                                          selectedVehicleType != "") {
+                                            journeyDateController.text != "" &&
+                                            leaveTimeController.text != "" &&
+                                            selectedVehicleType != "") {
                                           msg = "Please fill all the fields!";
                                         }
                                         if (!checkAvailableSeatsValid(
-                                            int.parse(availableSeatsController.text),
+                                            int.parse(
+                                                availableSeatsController.text),
                                             selectedVehicleType)) {
                                           msg +=
                                               "Available seats invalid for this vehicle type!";
@@ -757,6 +763,7 @@ class _StartNewJourneyState extends State<StartNewJourney> {
 
   Future<void> createJourney() async {
     String? phoneNumber = sharedPreferences.getString('phoneNumber');
+    String? userName = sharedPreferences.getString('userName');
     DateTime datetime = DateTime.now();
     String journeyID = utilities.remove91(phoneNumber!);
     journeyID += utilities.padCharacters(datetime.day.toString(), "0", 2);
@@ -765,6 +772,18 @@ class _StartNewJourneyState extends State<StartNewJourney> {
         utilities.padCharacters(datetime.hour.toString(), "0", 2);
     journeyID += utilities.padCharacters(datetime.minute.toString(), "0", 2) +
         utilities.padCharacters(datetime.second.toString(), "0", 2);
+    String journeyDateTime =
+        utilities.padCharacters(datetime.day.toString(), "0", 2) +
+            '/' +
+            utilities.padCharacters(datetime.month.toString(), "0", 2) +
+            '/' +
+            utilities.padCharacters(datetime.year.toString(), "0", 2) +
+            ' ' +
+            utilities.padCharacters(datetime.hour.toString(), "0", 2) +
+            ':' +
+            utilities.padCharacters(datetime.minute.toString(), "0", 2) +
+            ':' +
+            utilities.padCharacters(datetime.second.toString(), "0", 2);
     await FirebaseFirestore.instance
         .collection('TransporterList')
         .doc(journeyID)
@@ -784,7 +803,16 @@ class _StartNewJourneyState extends State<StartNewJourney> {
       'TransporterID': utilities.remove91(phoneNumber),
       'IsJourneyAvailable': true
     });
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Home()));
+    // Create an entry in Chat and add transporter
+    RealTimeDatabase rdb = RealTimeDatabase();
+    rdb.setDataIntoRTDB('Chat/' + journeyID, {
+      'GroupName': destinationController.text + ' ' + journeyDateTime,
+      'Members': {
+        phoneNumber: {'UserName': userName}
+      }
+    });
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const Home()));
   }
 
   bool checkAvailableSeatsValid(
