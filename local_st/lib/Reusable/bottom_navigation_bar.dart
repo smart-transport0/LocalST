@@ -4,6 +4,7 @@ import 'package:local_st/Data-Services/utilities.dart';
 import 'package:local_st/General/available_journeys.dart';
 import 'package:local_st/General/start_new_journey.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../Chat/chat_rooms.dart';
 import '../General/home.dart';
 
 class BottomNavBar extends StatefulWidget {
@@ -43,6 +44,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
       } else if (index == 2) {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => const Home()));
+      } else if (index == 4) {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => const ChatRooms()));
       }
       selectedIndex = index;
     });

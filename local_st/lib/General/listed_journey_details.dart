@@ -395,7 +395,7 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
       RealTimeDatabase rdb = RealTimeDatabase();
       await rdb.updateDataIntoRTDB(
           "Chat/" + widget.journeyID + "/Members/" + userID,
-          {"UserName": fullName});
+          {"UserName": fullName, 'Unread': 0});
       setState(() {
         initial();
       });

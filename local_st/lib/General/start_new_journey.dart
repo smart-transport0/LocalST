@@ -807,8 +807,9 @@ class _StartNewJourneyState extends State<StartNewJourney> {
     RealTimeDatabase rdb = RealTimeDatabase();
     rdb.setDataIntoRTDB('Chat/' + journeyID, {
       'GroupName': destinationController.text + ' ' + journeyDateTime,
+      'LastMessage': {'Message': '', 'Time': ''},
       'Members': {
-        phoneNumber: {'UserName': userName}
+        phoneNumber: {'UserName': userName, 'Unread': 0}
       }
     });
     Navigator.of(context)
