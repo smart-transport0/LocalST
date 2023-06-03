@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:local_st/Chat/group_chat.dart';
+import 'package:local_st/Chat/chat.dart';
 import 'package:local_st/Data-Services/realtimeDatabaseOperations.dart';
 import 'package:local_st/Data-Services/utilities.dart';
 import 'package:local_st/Reusable/bottom_navigation_bar.dart';
@@ -26,6 +26,7 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
   String journeyDay = "";
   String journeyLeaveTime = "";
   String buttonValue = "Join";
+  String chatName = "";
   List journeyDetails = [];
   List acceptedRequests = [];
   List pendingRequests = [];
@@ -228,8 +229,8 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
                                         onPressed: () {
                                           Navigator.of(context).push(
                                               MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const GroupChatUI()));
+                                                  builder: (context) => ChatUI(
+                                                      widget.journeyID, chatName)));
                                         },
                                         icon: const FaIcon(Icons.chat)),
                                     IconButton(
@@ -433,6 +434,11 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
         .collection('UserInformation')
         .doc(utilities.add91(transporterPhoneNumber))
         .get();
+    chatName = journeyData['SourcePlace'] +
+        " to " +
+        journeyData['DestinationPlace'] +
+        " " +
+        journeyData['LeaveTime'];
     journeyDetails.add(journeyData['JourneyDate']);
     journeyDetails.add(journeyData['LeaveTime']);
     journeyDetails.add(journeyData['SourcePlace']);

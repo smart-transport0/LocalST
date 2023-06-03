@@ -1,50 +1,124 @@
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
+import 'package:local_st/Data-Services/realtimeDatabaseOperations.dart';
+import 'package:local_st/Data-Services/utilities.dart';
 import 'package:local_st/Reusable/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'chat_detail_page.dart';
 
 class ChatUI extends StatefulWidget {
-  const ChatUI({Key? key}) : super(key: key);
+  String journeyID;
+  String chatName;
+  ChatUI(this.journeyID, this.chatName);
   @override
   State<ChatUI> createState() => _ChatUIState();
 }
 
 class _ChatUIState extends State<ChatUI> {
+  late SharedPreferences sharedPreferences;
+  String userID = "";
+  Utilities utilities = Utilities();
+
+  @override
+  void initState() {
+    super.initState();
+    initial();
+  }
+
   @override
   Widget build(BuildContext context) {
+    double h = MediaQuery.of(context).size.height;
+    double w = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-          title: Text('GroupName'), backgroundColor: MyColorScheme.darkColor),
+          title: Text(widget.chatName),
+          backgroundColor: MyColorScheme.darkColor),
       body: Stack(
         children: <Widget>[
-          ListView.builder(
-            itemCount: messages.length,
-            shrinkWrap: true,
-            padding: const EdgeInsets.only(top: 10, bottom: 10),
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return Container(
-                padding: const EdgeInsets.only(
-                    left: 14, right: 14, top: 10, bottom: 10),
-                child: Align(
-                  alignment: (messages[index].messageType == "receiver"
-                      ? Alignment.topLeft
-                      : Alignment.topRight),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: (messages[index].messageType == "receiver"
-                          ? Colors.grey.shade200
-                          : Colors.blue[200]),
-                    ),
-                    padding: const EdgeInsets.all(16),
-                    child: Text(
-                      messages[index].messageContent,
-                      style: const TextStyle(fontSize: 15),
-                    ),
-                  ),
-                ),
-              );
-            },
+          Column(
+            children: [
+              Expanded(
+                child: StreamBuilder(
+                    stream: FirebaseDatabase.instance
+                        .reference()
+                        .child('Chat')
+                        .child(widget.journeyID)
+                        .child("Messages")
+                        .onValue,
+                    builder: (context, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting ||
+                          !snapshot.hasData ||
+                          snapshot.hasError ||
+                          snapshot.data.snapshot.value == null ||
+                          userID == "") {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasData) {
+                        List snapshotKeys =
+                            (snapshot.data.snapshot.value.keys).toList();
+                        return ListView.builder(
+                          itemCount: snapshot.data.snapshot.value.length,
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          physics: const ClampingScrollPhysics(),
+                          padding: const EdgeInsets.only(top: 10, bottom: 10),
+                          itemBuilder: (context, index) {
+                            String sender = snapshot.data.snapshot
+                                .value[snapshotKeys[index]]['sender'];
+                            String time = snapshot.data.snapshot
+                                .value[snapshotKeys[index]]['time'];
+                            String content = snapshot.data.snapshot
+                                .value[snapshotKeys[index]]['content'];
+                            return Container(
+                                padding: const EdgeInsets.only(
+                                    left: 14, right: 14, top: 10, bottom: 10),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: Align(
+                                  alignment: userID == sender
+                                      ? Alignment.centerRight
+                                      : Alignment.centerLeft,
+                                  child: Container(
+                                    width: w * 0.6,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: (userID == sender
+                                          ? Colors.grey.shade200
+                                          : Colors.blue[200]),
+                                    ),
+                                    padding: const EdgeInsets.all(16),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              Text(sender,
+                                                  style: TextStyle(
+                                                      color:
+                                                          Colors.blueAccent)),
+                                              Text(time,
+                                                  style: const TextStyle(
+                                                      fontSize: 12,
+                                                      color: Colors.grey)),
+                                            ]),
+                                        Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(content,
+                                                style: const TextStyle(
+                                                    fontSize: 15)))
+                                      ],
+                                    ),
+                                  ),
+                                ));
+                          },
+                        );
+                      } else {
+                        return Container();
+                      }
+                    }),
+              ),
+            ],
           ),
           Align(
             alignment: Alignment.bottomLeft,
@@ -104,5 +178,11 @@ class _ChatUIState extends State<ChatUI> {
         ],
       ),
     );
+  }
+
+  void initial() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    userID = utilities
+        .remove91(sharedPreferences.getString('phoneNumber').toString());
   }
 }
