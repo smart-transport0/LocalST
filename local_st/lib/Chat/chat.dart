@@ -52,7 +52,9 @@ class _ChatUIState extends State<ChatUI> {
                           snapshot.hasError ||
                           snapshot.data.snapshot.value == null ||
                           userID == "") {
-                        return const Center(child: CircularProgressIndicator());
+                        return const Center(
+                            child: Text('No messages here yet!',
+                                style: TextStyle(fontSize: 18)));
                       } else if (snapshot.hasData) {
                         List snapshotKeys =
                             (snapshot.data.snapshot.value.keys).toList();

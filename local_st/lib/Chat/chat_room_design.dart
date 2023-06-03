@@ -1,16 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:local_st/Reusable/colors.dart';
 
 class ChatRoomDesign extends StatefulWidget {
   String name;
   String messageText;
-  String imageUrl;
   String time;
   bool isMessageRead;
   ChatRoomDesign(
       {required this.name,
       required this.messageText,
-      required this.imageUrl,
       required this.time,
       required this.isMessageRead});
   @override
@@ -31,14 +30,15 @@ class _ChatRoomDesignState extends State<ChatRoomDesign> {
                 children: <Widget>[
                   Expanded(
                     child: Container(
-                      color: Colors.transparent,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
                             widget.name,
                             style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w700),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: MyColorScheme.darkColor),
                           ),
                           SizedBox(
                             height: 6,
@@ -47,7 +47,7 @@ class _ChatRoomDesignState extends State<ChatRoomDesign> {
                             widget.messageText,
                             style: TextStyle(
                                 fontSize: 13,
-                                color: Colors.grey.shade600,
+                                color: MyColorScheme.darkColor,
                                 fontWeight: widget.isMessageRead
                                     ? FontWeight.bold
                                     : FontWeight.normal),
@@ -65,7 +65,8 @@ class _ChatRoomDesignState extends State<ChatRoomDesign> {
                   fontSize: 12,
                   fontWeight: widget.isMessageRead
                       ? FontWeight.bold
-                      : FontWeight.normal),
+                      : FontWeight.normal,
+                  color: MyColorScheme.darkColor),
             ),
           ],
         ),

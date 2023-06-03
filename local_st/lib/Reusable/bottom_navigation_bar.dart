@@ -46,7 +46,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
             context, MaterialPageRoute(builder: (context) => const Home()));
       } else if (index == 4) {
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const ChatRooms()));
+            context, MaterialPageRoute(builder: (context) => ChatRooms()));
       }
       selectedIndex = index;
     });

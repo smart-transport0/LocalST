@@ -572,7 +572,7 @@ class _StartNewJourneyState extends State<StartNewJourney> {
                                                 utilities.alertMessage(
                                                     context,
                                                     'Invalid Input',
-                                                    'NumberPlate is invald!');
+                                                    'NumberPlate is invalid!');
                                               }
                                             } else {
                                               utilities.alertMessage(
@@ -781,9 +781,7 @@ class _StartNewJourneyState extends State<StartNewJourney> {
             ' ' +
             utilities.padCharacters(datetime.hour.toString(), "0", 2) +
             ':' +
-            utilities.padCharacters(datetime.minute.toString(), "0", 2) +
-            ':' +
-            utilities.padCharacters(datetime.second.toString(), "0", 2);
+            utilities.padCharacters(datetime.minute.toString(), "0", 2);
     await FirebaseFirestore.instance
         .collection('TransporterList')
         .doc(journeyID)
@@ -807,7 +805,8 @@ class _StartNewJourneyState extends State<StartNewJourney> {
     RealTimeDatabase rdb = RealTimeDatabase();
     rdb.setDataIntoRTDB('Chat/' + journeyID, {
       'GroupName': destinationController.text + ' ' + journeyDateTime,
-      'LastMessage': {'Message': '', 'Time': datetime.toString()},
+      'JourneyDateTime': datetime.toString(),
+      'LastMessage': {'Message': '', 'Time': journeyDateTime},
       'Members': {
         phoneNumber: {'UserName': userName, 'Unread': 0}
       }
