@@ -34,7 +34,7 @@ class _ChatRoomsState extends State<ChatRooms> {
     // TODO: Optimize the journey data fetched in this widget
     return Scaffold(
         appBar: AppBar(
-            title: Text('Journey Chats'),
+            title: const Text('Journey Chats'),
             backgroundColor: MyColorScheme.darkColor),
         drawer: const NavBar(),
         bottomNavigationBar: BottomNavBar(4),
@@ -44,7 +44,7 @@ class _ChatRoomsState extends State<ChatRooms> {
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
                     Widget>[
               Padding(
-                  padding: EdgeInsets.only(top: 16, left: 16, right: 16),
+                  padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
                   child: TextField(
                       decoration: InputDecoration(
                           hintText: "Search...",
@@ -57,6 +57,10 @@ class _ChatRoomsState extends State<ChatRooms> {
                           filled: true,
                           fillColor: Colors.grey.shade100,
                           contentPadding: EdgeInsets.all(8),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide:
+                                  BorderSide(color: Colors.grey.shade100)),
                           enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20),
                               borderSide:
@@ -99,9 +103,9 @@ class _ChatRoomsState extends State<ChatRooms> {
                                     return Theme.of(context)
                                         .colorScheme
                                         .primary
-                                        .withGreen(245)
-                                        .withBlue(242)
-                                        .withRed(249);
+                                        .withGreen(228)
+                                        .withBlue(221)
+                                        .withRed(233);
                                   }
                                   return Theme.of(context)
                                       .colorScheme

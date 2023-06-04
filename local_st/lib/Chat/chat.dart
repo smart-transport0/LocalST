@@ -1,16 +1,14 @@
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:local_st/Data-Services/realtimeDatabaseOperations.dart';
 import 'package:local_st/Data-Services/utilities.dart';
 import 'package:local_st/Reusable/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'chat_detail_page.dart';
 
 class ChatUI extends StatefulWidget {
   String journeyID;
   String chatName;
-  ChatUI(this.journeyID, this.chatName);
+  ChatUI(this.journeyID, this.chatName, {Key? key}) : super(key: key);
   @override
   State<ChatUI> createState() => _ChatUIState();
 }
@@ -19,6 +17,7 @@ class _ChatUIState extends State<ChatUI> {
   late SharedPreferences sharedPreferences;
   String userID = "";
   Utilities utilities = Utilities();
+  TextEditingController messageController = TextEditingController();
 
   @override
   void initState() {
@@ -28,7 +27,6 @@ class _ChatUIState extends State<ChatUI> {
 
   @override
   Widget build(BuildContext context) {
-    double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
@@ -65,6 +63,7 @@ class _ChatUIState extends State<ChatUI> {
                           physics: const ClampingScrollPhysics(),
                           padding: const EdgeInsets.only(top: 10, bottom: 10),
                           itemBuilder: (context, index) {
+                            // TODO: Show name instead of phone number?
                             String sender = snapshot.data.snapshot
                                 .value[snapshotKeys[index]]['sender'];
                             String time = snapshot.data.snapshot
@@ -96,7 +95,7 @@ class _ChatUIState extends State<ChatUI> {
                                                 MainAxisAlignment.spaceBetween,
                                             children: <Widget>[
                                               Text(sender,
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                       color:
                                                           Colors.blueAccent)),
                                               Text(time,
@@ -150,9 +149,10 @@ class _ChatUIState extends State<ChatUI> {
                   const SizedBox(
                     width: 15,
                   ),
-                  const Expanded(
+                  Expanded(
                     child: TextField(
-                      decoration: InputDecoration(
+                      controller: messageController,
+                      decoration: const InputDecoration(
                           hintText: "Write message...",
                           hintStyle: TextStyle(color: Colors.black54),
                           border: InputBorder.none),
@@ -163,7 +163,40 @@ class _ChatUIState extends State<ChatUI> {
                   ),
                   FloatingActionButton(
                     onPressed: () {
-                      //insert message to database here code
+                      if (messageController.text.isNotEmpty) {
+                        RealTimeDatabase rdb = RealTimeDatabase();
+                        DateTime datetime = DateTime.now();
+                        String messageID = utilities.padCharacters(
+                            datetime.year.toString(), "0", 2);
+                        messageID += utilities.padCharacters(
+                                datetime.month.toString(), "0", 2) +
+                            utilities.padCharacters(
+                                datetime.day.toString(), "0", 2) +
+                            utilities.padCharacters(
+                                datetime.hour.toString(), "0", 2);
+                        messageID += utilities.padCharacters(
+                                datetime.minute.toString(), "0", 2) +
+                            utilities.padCharacters(
+                                datetime.second.toString(), "0", 2);
+                        messageID += userID;
+                        String time = utilities.padCharacters(
+                                datetime.hour.toString(), "0", 2) +
+                            ':' +
+                            utilities.padCharacters(
+                                datetime.minute.toString(), "0", 2);
+                        rdb.setDataIntoRTDB(
+                            "Chat/" +
+                                widget.journeyID +
+                                "/Messages/" +
+                                messageID,
+                            {
+                              // TODO: Find a solution to show full datetime or just time and date some other way
+                              "content": messageController.text.trim(),
+                              "time": time,
+                              "sender": userID
+                            });
+                        messageController.text = "";
+                      }
                     },
                     child: const Icon(
                       Icons.send,
