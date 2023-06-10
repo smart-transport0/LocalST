@@ -41,6 +41,8 @@ dependencies:
   fl_chart: ^0.61.0
   firebase_database: ^8.0.0
   firebase_core: ^1.6.0
+  firebase_storage: ^10.3.11
+  file_picker: ^4.0.0
 
 dev_dependencies:
   flutter_test:

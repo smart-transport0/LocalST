@@ -18,6 +18,7 @@ class _ChatUIState extends State<ChatUI> {
   String userID = "";
   Utilities utilities = Utilities();
   TextEditingController messageController = TextEditingController();
+  ScrollController _controller = ScrollController();
 
   @override
   void initState() {
@@ -37,87 +38,101 @@ class _ChatUIState extends State<ChatUI> {
           Column(
             children: [
               Expanded(
-                child: StreamBuilder(
-                    stream: FirebaseDatabase.instance
-                        .reference()
-                        .child('Chat')
-                        .child(widget.journeyID)
-                        .child("Messages")
-                        .onValue,
-                    builder: (context, AsyncSnapshot snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting ||
-                          !snapshot.hasData ||
-                          snapshot.hasError ||
-                          snapshot.data.snapshot.value == null ||
-                          userID == "") {
-                        return const Center(
-                            child: Text('No messages here yet!',
-                                style: TextStyle(fontSize: 18)));
-                      } else if (snapshot.hasData) {
-                        List snapshotKeys =
-                            (snapshot.data.snapshot.value.keys).toList();
-                        return ListView.builder(
-                          itemCount: snapshot.data.snapshot.value.length,
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          physics: const ClampingScrollPhysics(),
-                          padding: const EdgeInsets.only(top: 10, bottom: 10),
-                          itemBuilder: (context, index) {
-                            // TODO: Show name instead of phone number?
-                            String sender = snapshot.data.snapshot
-                                .value[snapshotKeys[index]]['sender'];
-                            String time = snapshot.data.snapshot
-                                .value[snapshotKeys[index]]['time'];
-                            String content = snapshot.data.snapshot
-                                .value[snapshotKeys[index]]['content'];
-                            return Container(
-                                padding: const EdgeInsets.only(
-                                    left: 14, right: 14, top: 10, bottom: 10),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20)),
-                                child: Align(
-                                  alignment: userID == sender
-                                      ? Alignment.centerRight
-                                      : Alignment.centerLeft,
-                                  child: Container(
-                                    width: w * 0.6,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: (userID == sender
-                                          ? Colors.grey.shade200
-                                          : Colors.blue[200]),
-                                    ),
-                                    padding: const EdgeInsets.all(16),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: <Widget>[
-                                              Text(sender,
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: w * 0.1),
+                  child: StreamBuilder(
+                      stream: FirebaseDatabase.instance
+                          .reference()
+                          .child('Chat')
+                          .child(widget.journeyID)
+                          .child("Messages")
+                          .onValue,
+                      builder: (context, AsyncSnapshot snapshot) {
+                        if (snapshot.connectionState ==
+                                ConnectionState.waiting ||
+                            !snapshot.hasData ||
+                            snapshot.hasError ||
+                            snapshot.data.snapshot.value == null ||
+                            userID == "") {
+                          return const Center(
+                              child: Text('No messages here yet!',
+                                  style: TextStyle(fontSize: 18)));
+                        } else if (snapshot.hasData) {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            if (_controller.hasClients) {
+                              _controller
+                                  .jumpTo(_controller.position.maxScrollExtent);
+                            } else {
+                              setState(() => null);
+                            }
+                          });
+                          List snapshotKeys =
+                              (snapshot.data.snapshot.value.keys).toList();
+                          return ListView.builder(
+                            controller: _controller,
+                            shrinkWrap: true,
+                            itemCount: snapshot.data.snapshot.value.length,
+                            scrollDirection: Axis.vertical,
+                            physics: const ClampingScrollPhysics(),
+                            padding: const EdgeInsets.only(top: 10, bottom: 10),
+                            itemBuilder: (context, index) {
+                              // TODO: Show name instead of phone number?
+                              String sender = snapshot.data.snapshot
+                                  .value[snapshotKeys[index]]['sender'];
+                              String time = snapshot.data.snapshot
+                                  .value[snapshotKeys[index]]['time'];
+                              String content = snapshot.data.snapshot
+                                  .value[snapshotKeys[index]]['content'];
+                              return Container(
+                                  padding: const EdgeInsets.only(
+                                      left: 14, right: 14, top: 10, bottom: 10),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: Align(
+                                    alignment: userID == sender
+                                        ? Alignment.centerRight
+                                        : Alignment.centerLeft,
+                                    child: Container(
+                                      width: w * 0.6,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: (userID == sender
+                                            ? Colors.grey.shade200
+                                            : Colors.blue[200]),
+                                      ),
+                                      padding: const EdgeInsets.all(16),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: <Widget>[
+                                                Text(sender,
+                                                    style: const TextStyle(
+                                                        color:
+                                                            Colors.blueAccent)),
+                                                Text(time,
+                                                    style: const TextStyle(
+                                                        fontSize: 12,
+                                                        color: Colors.grey)),
+                                              ]),
+                                          Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(content,
                                                   style: const TextStyle(
-                                                      color:
-                                                          Colors.blueAccent)),
-                                              Text(time,
-                                                  style: const TextStyle(
-                                                      fontSize: 12,
-                                                      color: Colors.grey)),
-                                            ]),
-                                        Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(content,
-                                                style: const TextStyle(
-                                                    fontSize: 15)))
-                                      ],
+                                                      fontSize: 15)))
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ));
-                          },
-                        );
-                      } else {
-                        return Container();
-                      }
-                    }),
+                                  ));
+                            },
+                          );
+                        } else {
+                          return Container();
+                        }
+                      }),
+                ),
               ),
             ],
           ),
