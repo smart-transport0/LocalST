@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:local_st/Chat/chat.dart';
 import 'package:local_st/Chat/group_chat.dart';
 import 'package:local_st/Data-Services/realtimeDatabaseOperations.dart';
+import 'package:local_st/Data-Services/utilities.dart';
 import 'package:local_st/Reusable/bottom_navigation_bar.dart';
 import 'package:local_st/Reusable/colors.dart';
 import 'package:local_st/Reusable/loading.dart';
@@ -33,6 +35,10 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
   String journeyDate = "";
   String journeyDay = "";
   String journeyLeaveTime = "";
+  String chatName = "";
+  bool isAllowedToStart = false;
+  bool isAllowedToComplete = false;
+  late Utilities utilities;
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
@@ -227,13 +233,33 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
                                     onPressed: () {
                                       Navigator.of(context).push(
                                           MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const GroupChatUI()));
+                                              builder: (context) => ChatUI(
+                                                  widget.journeyID, chatName)));
                                     },
                                     icon: const FaIcon(Icons.chat)),
-                                IconButton(
-                                    onPressed: () {},
-                                    icon: const FaIcon(Icons.check_box))
+                                Visibility(
+                                  visible: isAllowedToStart,
+                                  child: IconButton(
+                                      onPressed: () async {
+                                        // notify users about the journey has started
+                                        await FirebaseFirestore.instance
+                                            .collection("TransporterList")
+                                            .doc(widget.journeyID)
+                                            .update({
+                                          "StartTime":
+                                              utilities.getFormattedDateTime(
+                                                  DateTime.now())
+                                        });
+                                      },
+                                      icon: const FaIcon(
+                                          Icons.play_circle_filled)),
+                                ),
+                                Visibility(
+                                  visible: isAllowedToComplete,
+                                  child: IconButton(
+                                      onPressed: () {},
+                                      icon: const FaIcon(Icons.check_box)),
+                                )
                               ]))
                         ])),
                     Visibility(
@@ -454,6 +480,7 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
   }
 
   Future<void> initial() async {
+    utilities = Utilities();
     sharedPreferences = await SharedPreferences.getInstance();
     var journeyData = await FirebaseFirestore.instance
         .collection('TransporterList')
@@ -470,6 +497,11 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
     journeyDetails.add(journeyData['PaidUnpaid']);
     journeyDetails.add(journeyData['Description']);
     journeyDetails.add(journeyData['NumberPlate']);
+    chatName = journeyData['SourcePlace'] +
+        " to " +
+        journeyData['DestinationPlace'] +
+        " " +
+        journeyData['LeaveTime'];
     var activeRequests = await FirebaseFirestore.instance
         .collection('TransporterList')
         .doc(widget.journeyID)
@@ -502,24 +534,59 @@ class _ListedJourneyDetailsState extends State<ListedJourneyDetails> {
       acceptedRequests
           .add([email['Email'], request['FullName'], request['PhoneNumber']]);
     }
-    int year = int.parse(journeyDetails[0].substring(0, 2)),
+    int date = int.parse(journeyDetails[0].substring(0, 2)),
         month = int.parse(journeyDetails[0].substring(3, 5)),
-        date = int.parse(journeyDetails[0].substring(6));
-    setState(() {
-      if (pendingRequests.isNotEmpty) {
-        pendingVisibility = true;
-      } else {
-        pendingVisibility = false;
-      }
-      if (acceptedRequests.isNotEmpty) {
-        acceptedVisibility = true;
-      } else {
-        acceptedVisibility = false;
-      }
-      journeyDate =
-          date.toString() + "/" + month.toString() + "/" + year.toString();
-      journeyDay = dayofweek(date, month, year);
-      journeyLeaveTime = journeyDetails[1];
-    });
+        year = int.parse(journeyDetails[0].substring(6));
+    if (mounted) {
+      int hour, minute;
+      hour = utilities.getHourFromTime(journeyData['LeaveTime']);
+      minute = utilities.getMinuteFromTime(journeyData['LeaveTime']);
+      setState(() {
+        if (pendingRequests.isNotEmpty) {
+          pendingVisibility = true;
+        } else {
+          pendingVisibility = false;
+        }
+        if (acceptedRequests.isNotEmpty) {
+          acceptedVisibility = true;
+        } else {
+          acceptedVisibility = false;
+        }
+        journeyDate =
+            date.toString() + "/" + month.toString() + "/" + year.toString();
+        journeyDay = dayofweek(date, month, year);
+        journeyLeaveTime = journeyDetails[1];
+        if (journeyData.data()!.containsKey('StartTime') == false) {
+          // Allow to start journey from 15 before the leave time to 30 minutes after the leavetime
+          int allowToStartJourneyMinutesBeforeTheLeaveTime = sharedPreferences
+                  .getInt('allowToStartJourneyMinutesBeforeTheLeaveTime')
+                  ?.toInt() ??
+              0;
+          int allowToStartJourneyMinutesAfterTheLeaveTime = sharedPreferences
+                  .getInt('allowToStartJourneyMinutesAfterTheLeaveTime')
+                  ?.toInt() ??
+              0;
+          if (DateTime(year, month, date, hour, minute)
+                      .difference(DateTime.now()) <=
+                  Duration(
+                      minutes: allowToStartJourneyMinutesBeforeTheLeaveTime) &&
+              DateTime.now()
+                      .difference(DateTime(year, month, date, hour, minute)) <=
+                  Duration(
+                      minutes: allowToStartJourneyMinutesAfterTheLeaveTime)) {
+            isAllowedToStart = true;
+          } else {
+            isAllowedToStart = false;
+          }
+        } else {
+          String startTime = journeyData['StartTime'];
+          DateTime startDateTime =
+              utilities.getDateTimeFromFormattedString(startTime);
+          if (DateTime.now()
+                  .difference(startDateTime.add(const Duration(hours: 2))) >=
+              const Duration()) isAllowedToComplete = true;
+        }
+      });
+    }
   }
 }

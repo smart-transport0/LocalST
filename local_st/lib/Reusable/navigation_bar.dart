@@ -66,16 +66,18 @@ class _NavBarState extends State<NavBar> {
                   builder: (context) => Profile(phoneNumber)))),
           ListTile(
             leading: const FaIcon(FontAwesomeIcons.mapLocationDot),
-            title: const Text('Listed Journeys', style: TextStyle(fontSize: 18)),
+            title:
+                const Text('Listed Journeys', style: TextStyle(fontSize: 18)),
             onTap: () => Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) =>
                     ListedJourney(userID: utilities.remove91(phoneNumber)))),
           ),
           ListTile(
             leading: const FaIcon(FontAwesomeIcons.plus),
-            title: const Text('Joined Journeys', style: TextStyle(fontSize: 18)),
-            onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const JoinedJourneys())),
+            title:
+                const Text('Joined Journeys', style: TextStyle(fontSize: 18)),
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const JoinedJourneys())),
           ),
           const ListTile(
             leading: FaIcon(FontAwesomeIcons.clockRotateLeft),

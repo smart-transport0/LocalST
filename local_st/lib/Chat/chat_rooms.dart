@@ -1,9 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:local_st/Chat/chat.dart';
 import 'package:local_st/Chat/chat_room_design.dart';
 import 'package:local_st/Data-Services/utilities.dart';
@@ -14,6 +10,8 @@ import '../Reusable/colors.dart';
 import '../Reusable/navigation_bar.dart';
 
 class ChatRooms extends StatefulWidget {
+  const ChatRooms({Key? key}) : super(key: key);
+
   @override
   State<ChatRooms> createState() => _ChatRoomsState();
 }
@@ -39,7 +37,7 @@ class _ChatRoomsState extends State<ChatRooms> {
         drawer: const NavBar(),
         bottomNavigationBar: BottomNavBar(4),
         body: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
                     Widget>[
@@ -56,7 +54,7 @@ class _ChatRoomsState extends State<ChatRooms> {
                           ),
                           filled: true,
                           fillColor: Colors.grey.shade100,
-                          contentPadding: EdgeInsets.all(8),
+                          contentPadding: const EdgeInsets.all(8),
                           focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20),
                               borderSide:

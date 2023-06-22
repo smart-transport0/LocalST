@@ -13,7 +13,8 @@ class _GroupChatUIState extends State<GroupChatUI> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text('GroupName'), backgroundColor: MyColorScheme.darkColor),
+          title: const Text('GroupName'),
+          backgroundColor: MyColorScheme.darkColor),
       body: Stack(
         children: <Widget>[
           ListView.builder(

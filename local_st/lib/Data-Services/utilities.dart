@@ -32,6 +32,31 @@ class Utilities {
     return formattedDate;
   }
 
+  int getHourFromTime(String time) {
+    int hour = int.parse(time.split(":")[0]);
+    if (time[time.length - 2] == 'P') hour += 12;
+    return hour;
+  }
+
+  int getMinuteFromTime(String time) {
+    String minute = (time.split(":")[1]).split(" ")[0];
+    return int.parse(minute);
+  }
+
+  String getFormattedDateTime(DateTime datetime) {
+    return datetime.toString().substring(0, 19);
+  }
+
+  DateTime getDateTimeFromFormattedString(String datetimeString) {
+    int year = int.parse(datetimeString.substring(0, 4));
+    int month = int.parse(datetimeString.substring(5, 7));
+    int day = int.parse(datetimeString.substring(8, 10));
+    int hour = int.parse(datetimeString.substring(11, 13));
+    int minute = int.parse(datetimeString.substring(14, 16));
+    int second = int.parse(datetimeString.substring(17));
+    return DateTime(year, month, day, hour, minute, second);
+  }
+
   // returns an alert dialog with given title and content
   void alertMessage(context, String title, String content) {
     Navigator.of(context).push(MaterialPageRoute(

@@ -6,9 +6,9 @@ import 'package:local_st/Reusable/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ChatUI extends StatefulWidget {
-  String journeyID;
-  String chatName;
-  ChatUI(this.journeyID, this.chatName, {Key? key}) : super(key: key);
+  final String journeyID;
+  final String chatName;
+  const ChatUI(this.journeyID, this.chatName, {Key? key}) : super(key: key);
   @override
   State<ChatUI> createState() => _ChatUIState();
 }
@@ -16,9 +16,10 @@ class ChatUI extends StatefulWidget {
 class _ChatUIState extends State<ChatUI> {
   late SharedPreferences sharedPreferences;
   String userID = "";
+  String userName = "";
   Utilities utilities = Utilities();
   TextEditingController messageController = TextEditingController();
-  ScrollController _controller = ScrollController();
+  final ScrollController _controller = ScrollController();
 
   @override
   void initState() {
@@ -45,7 +46,6 @@ class _ChatUIState extends State<ChatUI> {
                           .reference()
                           .child('Chat')
                           .child(widget.journeyID)
-                          .child("Messages")
                           .onValue,
                       builder: (context, AsyncSnapshot snapshot) {
                         if (snapshot.connectionState ==
@@ -53,6 +53,7 @@ class _ChatUIState extends State<ChatUI> {
                             !snapshot.hasData ||
                             snapshot.hasError ||
                             snapshot.data.snapshot.value == null ||
+                            snapshot.data.snapshot.value['Messages'] == null ||
                             userID == "") {
                           return const Center(
                               child: Text('No messages here yet!',
@@ -63,40 +64,47 @@ class _ChatUIState extends State<ChatUI> {
                               _controller
                                   .jumpTo(_controller.position.maxScrollExtent);
                             } else {
-                              setState(() => null);
+                              setState(() => {});
                             }
                           });
                           List snapshotKeys =
-                              (snapshot.data.snapshot.value.keys).toList();
+                              (snapshot.data.snapshot.value['Messages'].keys)
+                                  .toList();
                           return ListView.builder(
                             controller: _controller,
                             shrinkWrap: true,
-                            itemCount: snapshot.data.snapshot.value.length,
+                            itemCount:
+                                snapshot.data.snapshot.value['Messages'].length,
                             scrollDirection: Axis.vertical,
                             physics: const ClampingScrollPhysics(),
                             padding: const EdgeInsets.only(top: 10, bottom: 10),
                             itemBuilder: (context, index) {
-                              // TODO: Show name instead of phone number?
-                              String sender = snapshot.data.snapshot
-                                  .value[snapshotKeys[index]]['sender'];
-                              String time = snapshot.data.snapshot
-                                  .value[snapshotKeys[index]]['time'];
-                              String content = snapshot.data.snapshot
-                                  .value[snapshotKeys[index]]['content'];
+                              String senderID =
+                                  snapshot.data.snapshot.value['Messages']
+                                      [snapshotKeys[index]]['sender'];
+                              String sender =
+                                  snapshot.data.snapshot.value['Members']
+                                      ['+91 ' + senderID]['UserName'];
+                              String time =
+                                  snapshot.data.snapshot.value['Messages']
+                                      [snapshotKeys[index]]['time'];
+                              String content =
+                                  snapshot.data.snapshot.value['Messages']
+                                      [snapshotKeys[index]]['content'];
                               return Container(
                                   padding: const EdgeInsets.only(
                                       left: 14, right: 14, top: 10, bottom: 10),
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20)),
                                   child: Align(
-                                    alignment: userID == sender
+                                    alignment: userName == sender
                                         ? Alignment.centerRight
                                         : Alignment.centerLeft,
                                     child: Container(
                                       width: w * 0.6,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(20),
-                                        color: (userID == sender
+                                        color: (userName == sender
                                             ? Colors.grey.shade200
                                             : Colors.blue[200]),
                                       ),
@@ -234,5 +242,6 @@ class _ChatUIState extends State<ChatUI> {
     sharedPreferences = await SharedPreferences.getInstance();
     userID = utilities
         .remove91(sharedPreferences.getString('phoneNumber').toString());
+    userName = sharedPreferences.getString('userName')!;
   }
 }

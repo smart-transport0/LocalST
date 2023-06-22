@@ -718,7 +718,6 @@ class _MyWidgetState extends State<Register> {
                                                           .pickFiles(
                                                               type: FileType
                                                                   .image);
-                                                  print(idCardPicker);
                                                 },
                                                 child: Text('Profile Photo',
                                                     style: TextStyle(
@@ -1473,7 +1472,7 @@ class _MyWidgetState extends State<Register> {
               .child('Admin/IDCard/+91 ' + phoneNumberController.text)
               .putFile(file);
         } catch (e) {
-          print("Couldn't upload image!");
+          // Do something
         }
       }
       if (profilePhotoPicker != null) {
@@ -1489,7 +1488,7 @@ class _MyWidgetState extends State<Register> {
               .child('Admin/ProfilePhoto/+91 ' + phoneNumberController.text)
               .putFile(file);
         } catch (e) {
-          print("Couldn't upload image!");
+          // Do something
         }
       }
       Navigator.pop(context, 'OK');

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:local_st/Admin/manage_users.dart';
 import 'package:local_st/Admin/pending_request.dart';
@@ -9,6 +10,8 @@ import 'package:local_st/General/home.dart';
 import 'package:local_st/General/register.dart';
 import 'package:local_st/Reusable/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../Data-Services/realtimeDatabaseOperations.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -93,36 +96,36 @@ class _MyWidgetState extends State<Login> {
                                     borderRadius: BorderRadius.circular(30),
                                     elevation: 15,
                                     child: TextField(
-                                    controller: userIDController,
-                                    cursorColor: MyColorScheme.darkColor,
-                                    style: TextStyle(
-                                        color: MyColorScheme.darkColor),
-                                    decoration: InputDecoration(
-                                        fillColor: MyColorScheme.baseColor,
-                                        prefixIcon: Icon(Icons.person,
+                                        controller: userIDController,
+                                        cursorColor: MyColorScheme.darkColor,
+                                        style: TextStyle(
                                             color: MyColorScheme.darkColor),
-                                        labelText:
-                                            "Phone Number / Organization Email",
-                                        labelStyle: TextStyle(
-                                          color: MyColorScheme.darkColor,
-                                          fontWeight: FontWeight.w800,
-                                          fontSize: h * 0.020,
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                            // ignore: prefer_const_constructors
-                                            borderSide: BorderSide(
-                                                color:
-                                                    MyColorScheme.darkColor,
-                                                width: 2.0),
-                                            borderRadius:
-                                                BorderRadius.circular(30)),
-                                        enabledBorder: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                                width: 2.0,
-                                                color: Colors.transparent),
-                                            borderRadius:
-                                                BorderRadius.circular(
-                                                    30)))),
+                                        decoration: InputDecoration(
+                                            fillColor: MyColorScheme.baseColor,
+                                            prefixIcon: Icon(Icons.person,
+                                                color: MyColorScheme.darkColor),
+                                            labelText:
+                                                "Phone Number / Organization Email",
+                                            labelStyle: TextStyle(
+                                              color: MyColorScheme.darkColor,
+                                              fontWeight: FontWeight.w800,
+                                              fontSize: h * 0.020,
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                                // ignore: prefer_const_constructors
+                                                borderSide: BorderSide(
+                                                    color:
+                                                        MyColorScheme.darkColor,
+                                                    width: 2.0),
+                                                borderRadius:
+                                                    BorderRadius.circular(30)),
+                                            enabledBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    width: 2.0,
+                                                    color: Colors.transparent),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        30)))),
                                   ),
                                   Container(
                                       padding: EdgeInsets.fromLTRB(
@@ -185,12 +188,10 @@ class _MyWidgetState extends State<Login> {
                                                       Navigator.pushReplacement(
                                                           context,
                                                           MaterialPageRoute(
-                                                              builder:
-                                                                  ((context) =>
-                                                                      const ForgotPassword())))
+                                                              builder: ((context) =>
+                                                                  const ForgotPassword())))
                                                     },
-                                                child: Text(
-                                                    "Forgot Password?",
+                                                child: Text("Forgot Password?",
                                                     style: TextStyle(
                                                         fontSize: h * 0.02,
                                                         color: MyColorScheme
@@ -205,9 +206,8 @@ class _MyWidgetState extends State<Login> {
                                                       Navigator.pushReplacement(
                                                           context,
                                                           MaterialPageRoute(
-                                                              builder:
-                                                                  ((context) =>
-                                                                      const Register())))
+                                                              builder: ((context) =>
+                                                                  const Register())))
                                                     },
                                                 child: Text("Register",
                                                     style: TextStyle(
@@ -225,18 +225,18 @@ class _MyWidgetState extends State<Login> {
                                       style: ButtonStyle(
                                           elevation:
                                               MaterialStateProperty.all(15),
-                                          backgroundColor: MaterialStateProperty.all(
-                                              MyColorScheme.darkColor),
-                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                              RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          18.0),
-                                                  side: BorderSide(
-                                                      color: MyColorScheme
-                                                          .darkColor)))),
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  MyColorScheme.darkColor),
+                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(18.0),
+                                              side: BorderSide(
+                                                  color: MyColorScheme
+                                                      .darkColor)))),
                                       child: Padding(
-                                          padding: EdgeInsets.fromLTRB(w * 0.05, h * 0.005, w * 0.05, h * 0.005),
+                                          padding: EdgeInsets.fromLTRB(w * 0.05,
+                                              h * 0.005, w * 0.05, h * 0.005),
                                           child: Text('Login', style: TextStyle(fontFamily: 'Montserrat', fontSize: w * 0.08, color: MyColorScheme.baseColor))))
                                 ]),
                               ),
@@ -298,19 +298,23 @@ class _MyWidgetState extends State<Login> {
                                     ElevatedButton(
                                         onPressed: () => {verifyCode()},
                                         style: ButtonStyle(
-                                            elevation: MaterialStateProperty.all(
-                                                15),
-                                            backgroundColor: MaterialStateProperty.all(
-                                                MyColorScheme.darkColor),
-                                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                                RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(
-                                                        18.0),
-                                                    side: BorderSide(
-                                                        color: MyColorScheme
-                                                            .darkColor)))),
+                                            elevation:
+                                                MaterialStateProperty.all(15),
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    MyColorScheme.darkColor),
+                                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(18.0),
+                                                side: BorderSide(
+                                                    color: MyColorScheme
+                                                        .darkColor)))),
                                         child: Padding(
-                                            padding: EdgeInsets.fromLTRB(w * 0.05, h * 0.005, w * 0.05, h * 0.005),
+                                            padding: EdgeInsets.fromLTRB(
+                                                w * 0.05,
+                                                h * 0.005,
+                                                w * 0.05,
+                                                h * 0.005),
                                             child: Text('Login', style: TextStyle(fontFamily: 'Montserrat', fontSize: w * 0.08, color: MyColorScheme.baseColor))))
                                   ],
                                 ),
@@ -334,8 +338,7 @@ class _MyWidgetState extends State<Login> {
       if (userID == "") errorMessage += "UserID cannot be empty\n";
       if (password == "") errorMessage += "Password cannot be empty";
       utilities.alertMessage(context, 'Invalid Input', errorMessage);
-    } 
-    else {
+    } else {
       String originalPassword = ManageUsers.encrypt(password);
       if (userID.startsWith('\$')) {
         String phoneNumber = utilities.add91(userID.substring(1));
@@ -379,6 +382,13 @@ class _MyWidgetState extends State<Login> {
               //Change status in firebaseauth
               await auth.signInWithEmailAndPassword(
                   email: user['OrganizationEmailID'], password: password);
+              var variables = (await FirebaseDatabase.instance
+                      .reference()
+                      .child('VARIABLES/')
+                      .get())
+                  .value;
+              variables.forEach((key, value) =>
+                  {sharedPreferences.setInt(key.toString(), value)});
               Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => const Home()));
             } on FirebaseAuthException {
@@ -442,7 +452,8 @@ class _MyWidgetState extends State<Login> {
           await auth.signInWithCredential(credential);
         },
         verificationFailed: (FirebaseAuthException exception) {
-          utilities.alertMessage(context, 'Verification failed', 'Verification of your mobile number failed!');
+          utilities.alertMessage(context, 'Verification failed',
+              'Verification of your mobile number failed!');
           setState(() {});
         },
         codeSent: (String verificationID, int? resendToken) {

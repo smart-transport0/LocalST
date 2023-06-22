@@ -3,15 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:local_st/Reusable/colors.dart';
 
 class ChatRoomDesign extends StatefulWidget {
-  String name;
-  String messageText;
-  String time;
-  bool isMessageRead;
-  ChatRoomDesign(
-      {required this.name,
+  final String name;
+  final String messageText;
+  final String time;
+  final bool isMessageRead;
+  const ChatRoomDesign(
+      {Key? key,
+      required this.name,
       required this.messageText,
       required this.time,
-      required this.isMessageRead});
+      required this.isMessageRead})
+      : super(key: key);
   @override
   _ChatRoomDesignState createState() => _ChatRoomDesignState();
 }
@@ -22,7 +24,8 @@ class _ChatRoomDesignState extends State<ChatRoomDesign> {
     return GestureDetector(
       onTap: () {},
       child: Container(
-        padding: EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),
+        padding:
+            const EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),
         child: Row(
           children: <Widget>[
             Expanded(
@@ -40,7 +43,7 @@ class _ChatRoomDesignState extends State<ChatRoomDesign> {
                                 fontWeight: FontWeight.w700,
                                 color: MyColorScheme.darkColor),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 6,
                           ),
                           Text(
