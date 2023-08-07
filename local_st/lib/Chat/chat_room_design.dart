@@ -32,31 +32,29 @@ class _ChatRoomDesignState extends State<ChatRoomDesign> {
               child: Row(
                 children: <Widget>[
                   Expanded(
-                    child: Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            widget.name,
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: MyColorScheme.darkColor),
-                          ),
-                          const SizedBox(
-                            height: 6,
-                          ),
-                          Text(
-                            widget.messageText,
-                            style: TextStyle(
-                                fontSize: 13,
-                                color: MyColorScheme.darkColor,
-                                fontWeight: widget.isMessageRead
-                                    ? FontWeight.bold
-                                    : FontWeight.normal),
-                          ),
-                        ],
-                      ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          widget.name,
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: MyColorScheme.darkColor),
+                        ),
+                        const SizedBox(
+                          height: 6,
+                        ),
+                        Text(
+                          widget.messageText,
+                          style: TextStyle(
+                              fontSize: 13,
+                              color: MyColorScheme.darkColor,
+                              fontWeight: widget.isMessageRead
+                                  ? FontWeight.bold
+                                  : FontWeight.normal),
+                        ),
+                      ],
                     ),
                   ),
                 ],

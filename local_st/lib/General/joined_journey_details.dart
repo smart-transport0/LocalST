@@ -8,7 +8,10 @@ import 'package:local_st/Reusable/bottom_navigation_bar.dart';
 import 'package:local_st/Reusable/colors.dart';
 import 'package:local_st/Reusable/loading.dart';
 import 'package:local_st/Reusable/navigation_bar.dart';
+import 'package:local_st/Reusable/size_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'dart:math';
 
 class JoinedJourneyDetails extends StatefulWidget {
   final String journeyID;
@@ -21,17 +24,26 @@ class JoinedJourneyDetails extends StatefulWidget {
 class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
   late SharedPreferences sharedPreferences;
   Utilities utilities = Utilities();
+  TextEditingController feedbackController = TextEditingController();
   String userEmail = "";
   String journeyDate = "";
   String journeyDay = "";
   String journeyLeaveTime = "";
-  String buttonValue = "Join";
+  String buttonValue = "JOIN";
   String chatName = "";
+  String userID = "a";
   List journeyDetails = [];
   List acceptedRequests = [];
   List pendingRequests = [];
+  List toStart = [];
+  List toComplete = [];
   bool acceptedVisibility = true;
   bool pendingVisibility = true;
+  bool hasStarted = false;
+  bool hasSubmittedFeedback = false;
+  bool hasCompletedJourney = false;
+  double _rating = 0;
+  var journeyData;
 
   @override
   void initState() {
@@ -41,8 +53,11 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
 
   @override
   Widget build(BuildContext context) {
-    double h = MediaQuery.of(context).size.height;
-    double w = MediaQuery.of(context).size.width;
+    SizeConfig sizeConfig = SizeConfig(context);
+    double height = sizeConfig.screenHeight;
+    double width = sizeConfig.screenWidth;
+    double h = max(height, width);
+    double w = min(height, width);
     return Scaffold(
         appBar: AppBar(
             title: Text('$journeyDate $journeyLeaveTime'),
@@ -82,7 +97,7 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
                                         child: Text(
                                             '${journeyDetails[0]} $journeyDay',
                                             style: TextStyle(
-                                                fontSize: h * 0.034))),
+                                                fontSize: h * 0.025))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.005),
@@ -96,7 +111,7 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
                                             0.0, 0.0, 0.0, h * 0.02),
                                         child: Text('${journeyDetails[1]}',
                                             style: TextStyle(
-                                                fontSize: h * 0.034))),
+                                                fontSize: h * 0.025))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.005),
@@ -110,7 +125,7 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
                                             0.0, 0.0, 0.0, h * 0.02),
                                         child: Text('${journeyDetails[2]}',
                                             style: TextStyle(
-                                                fontSize: h * 0.034))),
+                                                fontSize: h * 0.025))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.005),
@@ -124,7 +139,7 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
                                             0.0, 0.0, 0.0, h * 0.02),
                                         child: Text('${journeyDetails[3]}',
                                             style: TextStyle(
-                                                fontSize: h * 0.034))),
+                                                fontSize: h * 0.025))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.005),
@@ -138,7 +153,7 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
                                             0.0, 0.0, 0.0, h * 0.02),
                                         child: Text('${journeyDetails[12]}',
                                             style: TextStyle(
-                                                fontSize: h * 0.034))),
+                                                fontSize: h * 0.025))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.005),
@@ -152,7 +167,7 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
                                             0.0, 0.0, 0.0, h * 0.02),
                                         child: Text('${journeyDetails[4]}',
                                             style: TextStyle(
-                                                fontSize: h * 0.034))),
+                                                fontSize: h * 0.025))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.005),
@@ -166,7 +181,7 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
                                             0.0, 0.0, 0.0, h * 0.02),
                                         child: Text('${journeyDetails[5]}',
                                             style: TextStyle(
-                                                fontSize: h * 0.034))),
+                                                fontSize: h * 0.025))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.005),
@@ -180,7 +195,7 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
                                             0.0, 0.0, 0.0, h * 0.02),
                                         child: Text('${journeyDetails[6]}',
                                             style: TextStyle(
-                                                fontSize: h * 0.034))),
+                                                fontSize: h * 0.025))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.005),
@@ -194,7 +209,7 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
                                             0.0, 0.0, 0.0, h * 0.02),
                                         child: Text('${journeyDetails[7]}',
                                             style: TextStyle(
-                                                fontSize: h * 0.034))),
+                                                fontSize: h * 0.025))),
                                     Visibility(
                                         visible: journeyDetails[8] != "",
                                         child: Column(children: [
@@ -222,76 +237,208 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
                                   visible: true,
                                   child: Column(children: <Widget>[
                                     IconButton(
-                                        onPressed: () {},
-                                        icon: const FaIcon(
-                                            Icons.notifications_off)),
-                                    IconButton(
                                         onPressed: () {
                                           Navigator.of(context).push(
                                               MaterialPageRoute(
                                                   builder: (context) => ChatUI(
-                                                      widget.journeyID, chatName)));
+                                                      widget.journeyID,
+                                                      chatName)));
                                         },
-                                        icon: const FaIcon(Icons.chat)),
-                                    IconButton(
-                                        onPressed: () {},
-                                        icon: const FaIcon(Icons.check_box))
+                                        icon: const FaIcon(Icons.chat))
                                   ])))
                         ])),
                     Column(children: [
-                      Card(
-                          child: Padding(
-                              padding: EdgeInsets.fromLTRB(
-                                  w * 0.05, h * 0.02, w * 0.05, h * 0.02),
-                              child: Column(children: [
-                                Padding(
-                                    padding: EdgeInsets.fromLTRB(
-                                        0.0, 0.0, 0.0, 0.02 * h),
-                                    child: Text('TRANSPORTER DETAILS',
-                                        style: TextStyle(
-                                            fontSize: h * 0.02,
-                                            color: Colors.grey[700],
-                                            fontWeight: FontWeight.bold))),
-                                Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        0.0, 0.0, 0.0, 0),
-                                    child: Text(
-                                        '${journeyDetails[9]} ${journeyDetails[10]}',
-                                        style: TextStyle(fontSize: h * 0.03))),
-                                Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        0.0, 0.0, 0.0, 0),
-                                    child: Text('${journeyDetails[11]}',
-                                        style: TextStyle(fontSize: h * 0.03))),
-                              ]))),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, h * 0.01, 0, 0),
-                        child: ElevatedButton(
-                            child: Text(buttonValue,
-                                style: TextStyle(
-                                    fontSize: w * 0.06,
-                                    color: MyColorScheme.baseColor)),
-                            style: ButtonStyle(
-                                elevation: MaterialStateProperty.all(15),
-                                backgroundColor: MaterialStateProperty.all(
-                                    MyColorScheme.darkColor),
-                                shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(18.0),
-                                        side: BorderSide(
-                                            color: MyColorScheme.darkColor)))),
-                            onPressed: () => sendRequest()),
-                      )
+                      SizedBox(
+                        width: width * 0.9,
+                        child: Card(
+                            margin:
+                                EdgeInsets.fromLTRB(0, h * 0.05, 0, h * 0.03),
+                            child: Padding(
+                                padding: EdgeInsets.fromLTRB(
+                                    w * 0.05, h * 0.02, w * 0.05, h * 0.02),
+                                child: Column(children: [
+                                  Padding(
+                                      padding: EdgeInsets.fromLTRB(
+                                          0.0, 0.0, 0.0, 0.02 * h),
+                                      child: Text('TRANSPORTER DETAILS',
+                                          style: TextStyle(
+                                              fontSize: h * 0.02,
+                                              color: Colors.grey[700],
+                                              fontWeight: FontWeight.bold))),
+                                  Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0.0, 0.0, 0.0, 0),
+                                      child: Text(
+                                          '${journeyDetails[9]} ${journeyDetails[10]}',
+                                          style:
+                                              TextStyle(fontSize: h * 0.025))),
+                                  Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0.0, 0.0, 0.0, 0),
+                                      child: Text('${journeyDetails[11]}',
+                                          style:
+                                              TextStyle(fontSize: h * 0.025))),
+                                ]))),
+                      ),
+                      ElevatedButton(
+                          child: Text(buttonValue,
+                              style: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  fontSize: w * 0.06,
+                                  color: MyColorScheme.baseColor)),
+                          style: ButtonStyle(
+                              elevation: MaterialStateProperty.all(15),
+                              backgroundColor: MaterialStateProperty.all(
+                                  MyColorScheme.darkColor),
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                      side: BorderSide(
+                                          color: MyColorScheme.darkColor)))),
+                          onPressed: () => sendRequest())
                     ]),
+                    Visibility(
+                      // visible: hasCompletedJourney && !hasSubmittedFeedback,
+                      visible: true,
+                      child: TextButton(
+                          onPressed: () =>
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => AlertDialog(
+                                  title: const Text('Feedback'),
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      RatingBar.builder(
+                                        initialRating: _rating,
+                                        minRating: 0,
+                                        direction: Axis.horizontal,
+                                        allowHalfRating: true,
+                                        itemCount: 5,
+                                        itemSize: 40.0,
+                                        itemBuilder: (context, _) => const Icon(
+                                          Icons.star,
+                                          color: Colors.amber,
+                                        ),
+                                        onRatingUpdate: (rating) {
+                                          setState(() {
+                                            _rating = rating;
+                                          });
+                                        },
+                                      ),
+                                      TextField(
+                                        controller: feedbackController,
+                                        decoration: const InputDecoration(
+                                            hintText:
+                                                "How was your travel experience?"),
+                                      )
+                                    ],
+                                  ),
+                                  actions: <Widget>[
+                                    ElevatedButton(
+                                      child: const Text('CANCEL',
+                                          style: TextStyle(
+                                              fontFamily: 'Montserrat')),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                    ElevatedButton(
+                                      child: const Text('SUBMIT',
+                                          style: TextStyle(
+                                              fontFamily: 'Montserrat')),
+                                      onPressed: () async {
+                                        if (feedbackController.text != '') {
+                                          await FirebaseFirestore.instance
+                                              .collection('Feedback')
+                                              .doc(utilities
+                                                  .add91(journeyDetails[13]))
+                                              .collection(widget.journeyID)
+                                              .doc(userID)
+                                              .set({
+                                            "Rating": _rating,
+                                            "Feedback": feedbackController.text
+                                          });
+                                          var feedbackDoc =
+                                              await FirebaseFirestore.instance
+                                                  .collection('Feedback')
+                                                  .doc(utilities.add91(
+                                                      journeyDetails[13]))
+                                                  .get();
+                                          double newRating = 0;
+                                          int totalFeedbacks = 0;
+                                          print(feedbackDoc.data());
+                                          if (feedbackDoc.data() != null &&
+                                              feedbackDoc.data()!.containsKey(
+                                                  'AverageRating') &&
+                                              feedbackDoc.data()!.containsKey(
+                                                  'TotalNumberOfFeedbacks')) {
+                                            print('hi');
+                                            totalFeedbacks = feedbackDoc[
+                                                'TotalNumberOfFeedbacks'];
+                                            newRating =
+                                                (feedbackDoc['AverageRating'] +
+                                                        _rating) /
+                                                    (totalFeedbacks + 1);
+                                            await FirebaseFirestore.instance
+                                                .collection('Feedback')
+                                                .doc(utilities
+                                                    .add91(journeyDetails[13]))
+                                                .update({
+                                              'AverageRating': newRating,
+                                              'TotalNumberOfFeedbacks':
+                                                  totalFeedbacks + 1
+                                            });
+                                          } else {
+                                            newRating = _rating;
+                                            await FirebaseFirestore.instance
+                                                .collection('Feedback')
+                                                .doc(utilities
+                                                    .add91(journeyDetails[13]))
+                                                .set({
+                                              'AverageRating': newRating,
+                                              'TotalNumberOfFeedbacks':
+                                                  totalFeedbacks + 1
+                                            });
+                                          }
+                                          Navigator.pop(context);
+                                          setState(() {
+                                            hasSubmittedFeedback = true;
+                                          });
+                                        } else {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      AlertDialog(
+                                                          title: const Text(
+                                                              'Invalid input'),
+                                                          content: const Text(
+                                                              'Please fill your feedback!'),
+                                                          actions: <Widget>[
+                                                            ElevatedButton(
+                                                              child: const Text(
+                                                                  'Ok'),
+                                                              onPressed: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                            ),
+                                                          ])));
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              )),
+                          child: const Text('Give Feedback')),
+                    ),
                     Visibility(
                       visible: pendingVisibility,
                       child: Column(children: <Widget>[
                         Text('Pending Requests',
-                            style: TextStyle(fontSize: h * 0.035)),
+                            style: TextStyle(fontSize: w * 0.045)),
                         SizedBox(
-                            width: w,
+                            width: width * 0.9,
                             child: ListView.builder(
                                 primary: false,
                                 shrinkWrap: true,
@@ -315,24 +462,29 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
                                                           '${pendingRequests[index][1]}',
                                                           style: TextStyle(
                                                               fontSize:
-                                                                  h * 0.03)),
+                                                                  w * 0.04)),
                                                       Text(
                                                           '${pendingRequests[index][0]}',
                                                           style: TextStyle(
                                                               fontSize:
-                                                                  h * 0.026)),
+                                                                  w * 0.036)),
+                                                      Text(
+                                                          '${pendingRequests[index][3]} to ${pendingRequests[index][4]}',
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                                  w * 0.036))
                                                     ])
                                               ])));
                                 }))
                       ]),
                     ),
                     Visibility(
-                      visible: acceptedVisibility,
+                      visible: true,
                       child: Column(children: <Widget>[
                         Text('Accepted Requests',
-                            style: TextStyle(fontSize: h * 0.035)),
+                            style: TextStyle(fontSize: w * 0.045)),
                         SizedBox(
-                            width: w,
+                            width: width * 0.9,
                             child: ListView.builder(
                                 primary: false,
                                 shrinkWrap: true,
@@ -356,16 +508,84 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
                                                           '${acceptedRequests[index][1]}',
                                                           style: TextStyle(
                                                               fontSize:
-                                                                  h * 0.03)),
+                                                                  w * 0.04)),
                                                       Text(
                                                           '${acceptedRequests[index][0]}',
                                                           style: TextStyle(
                                                               fontSize:
-                                                                  h * 0.026)),
+                                                                  w * 0.036)),
+                                                      Text(
+                                                          '${acceptedRequests[index][3]} to ${acceptedRequests[index][4]}',
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                                  w * 0.036))
                                                     ])
                                               ])));
                                 }))
                       ]),
+                    ),
+                    Visibility(
+                      visible: hasStarted,
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(h * 0.03, 0, 0, 0),
+                        child: Column(
+                          children: [
+                            Text('Passengers yet to join',
+                                style: TextStyle(fontSize: w * 0.045)),
+                            toStart.isNotEmpty
+                                ? SizedBox(
+                                    width: w,
+                                    child: ListView.builder(
+                                        primary: false,
+                                        shrinkWrap: true,
+                                        itemCount: toStart.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return Card(
+                                              child: Padding(
+                                                  padding: EdgeInsets.fromLTRB(
+                                                      w * 0.05,
+                                                      h * 0.02,
+                                                      w * 0.05,
+                                                      h * 0.02),
+                                                  child: Text(
+                                                      '${toStart[index][0]}',
+                                                      style: TextStyle(
+                                                          fontSize:
+                                                              w * 0.04))));
+                                        }))
+                                : Text("All passengers' journey has started",
+                                    style: TextStyle(fontSize: w * 0.04)),
+                            SizedBox(height: h * 0.03),
+                            Text('Passengers Onboard',
+                                style: TextStyle(fontSize: w * 0.045)),
+                            toComplete.isNotEmpty
+                                ? SizedBox(
+                                    width: w,
+                                    child: ListView.builder(
+                                        primary: false,
+                                        shrinkWrap: true,
+                                        itemCount: toComplete.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return Card(
+                                              child: Padding(
+                                                  padding: EdgeInsets.fromLTRB(
+                                                      w * 0.05,
+                                                      h * 0.02,
+                                                      w * 0.05,
+                                                      h * 0.02),
+                                                  child: Text(
+                                                      '${toComplete[index][0]}',
+                                                      style: TextStyle(
+                                                          fontSize:
+                                                              w * 0.04))));
+                                        }))
+                                : Text("All passengers' journey has completed",
+                                    style: TextStyle(fontSize: w * 0.04))
+                          ],
+                        ),
+                      ),
                     )
                   ]));
                 } else {
@@ -378,43 +598,20 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
   }
 
   void sendRequest() async {
-    var userID = sharedPreferences.getString("phoneNumber");
-    var userName = sharedPreferences.getString("userName");
-    DateTime datetime = DateTime.now();
     var data = await FirebaseFirestore.instance
         .collection('TransporterList')
         .doc(widget.journeyID)
         .get();
-    if (buttonValue == 'Join') {
+    if (buttonValue == 'LEAVE') {
       await FirebaseFirestore.instance
           .collection('TransporterList')
           .doc(widget.journeyID)
-          .collection('ActiveRequests')
-          .doc(userID)
-          .set({
-        'PhoneNumber': userID,
-        'FullName': userName,
-        'TimeStamp': utilities.padCharacters(datetime.day.toString(), "0", 2) +
-            utilities.padCharacters(datetime.month.toString(), "0", 2) +
-            utilities.padCharacters(datetime.year.toString(), "0", 4) +
-            utilities.padCharacters(datetime.hour.toString(), "0", 2) +
-            utilities.padCharacters(datetime.minute.toString(), "0", 2) +
-            utilities.padCharacters(datetime.second.toString(), "0", 2)
-      });
-      await FirebaseFirestore.instance
-          .collection('TransporterList')
-          .doc(widget.journeyID)
-          .update({'PendingRequestsCount': data['PendingRequestsCount'] + 1});
-    } else if (buttonValue == 'Leave') {
-      await FirebaseFirestore.instance
-          .collection('TransporterList')
-          .doc(widget.journeyID)
-          .collection('AcceptedRequests')
+          .collection('Requests')
           .doc(userID)
           .delete();
       RealTimeDatabase rdb = RealTimeDatabase();
       await rdb.deleteDataIntoRTDB(
-          "Chat/" + widget.journeyID + "/Members/" + userID!);
+          "Chat/" + widget.journeyID + "/Members/" + userID);
       await FirebaseFirestore.instance
           .collection('TransporterList')
           .doc(widget.journeyID)
@@ -425,10 +622,6 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
   }
 
   Future<List> fetchJourneyDetails() async {
-    var journeyData = await FirebaseFirestore.instance
-        .collection('TransporterList')
-        .doc(widget.journeyID)
-        .get();
     String transporterPhoneNumber = widget.journeyID.substring(0, 10);
     var transporterDetails = await FirebaseFirestore.instance
         .collection('UserInformation')
@@ -452,54 +645,89 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
     journeyDetails.add(transporterDetails['LastName']);
     journeyDetails.add(transporterDetails['OrganizationEmailID']);
     journeyDetails.add(journeyData['NumberPlate']);
-    var activeRequests = await FirebaseFirestore.instance
+    journeyDetails.add(journeyData['TransporterID']);
+    var requests = await FirebaseFirestore.instance
         .collection('TransporterList')
         .doc(widget.journeyID)
-        .collection('ActiveRequests')
+        .collection('Requests')
         .get();
     pendingRequests = [];
-    for (var request in activeRequests.docs) {
-      var email = await FirebaseFirestore.instance
-          .collection('Mapping')
-          .doc('Permanent')
-          .collection('PhonetoMail')
-          .doc(request['PhoneNumber'])
-          .get();
-      if (email['Email'] == userEmail) buttonValue = "Pending";
-      pendingRequests
-          .add([email['Email'], request['FullName'], request['PhoneNumber']]);
-    }
-    var accRequests = await FirebaseFirestore.instance
-        .collection('TransporterList')
-        .doc(widget.journeyID)
-        .collection('AcceptedRequests')
-        .get();
     acceptedRequests = [];
-    for (var request in accRequests.docs) {
+    for (var request in requests.docs) {
       var email = await FirebaseFirestore.instance
           .collection('Mapping')
           .doc('Permanent')
           .collection('PhonetoMail')
           .doc(request['PhoneNumber'])
           .get();
-      if (email['Email'] == userEmail) buttonValue = "Leave";
-      acceptedRequests
-          .add([email['Email'], request['FullName'], request['PhoneNumber']]);
+      if (request['Status'] == 'Pending') {
+        if (email['Email'] == userEmail) buttonValue = "PENDING";
+        pendingRequests.add([
+          email['Email'],
+          request['FullName'],
+          request['PhoneNumber'],
+          request['StartLocation'],
+          request['DestinationLocation']
+        ]);
+      } else {
+        if (email['Email'] == userEmail) buttonValue = "LEAVE";
+        acceptedRequests.add([
+          email['Email'],
+          request['FullName'],
+          request['PhoneNumber'],
+          request['StartLocation'],
+          request['DestinationLocation']
+        ]);
+      }
+    }
+    toStart = [];
+    toComplete = [];
+    if (journeyData.data()!.containsKey('StartTime')) {
+      hasStarted = true;
+      for (var request in requests.docs) {
+        if (!request.data().containsKey('CompleteTime')) {
+          if (request.data().containsKey('StartTime')) {
+            toComplete.add([
+              request['FullName'],
+              request['PhoneNumber'],
+              request['StartLocation'],
+              request['DestinationLocation']
+            ]);
+          } else {
+            toStart.add([
+              request['FullName'],
+              request['PhoneNumber'],
+              request['StartLocation'],
+              request['DestinationLocation']
+            ]);
+          }
+          // update hasCompletedJourney and hasSubmittedFeedback
+        } else {
+          if (request['PhoneNumber'] == userID) {
+            hasCompletedJourney = true;
+          }
+        }
+      }
     }
     int year = int.parse(journeyDetails[0].substring(0, 2)),
         month = int.parse(journeyDetails[0].substring(3, 5)),
         date = int.parse(journeyDetails[0].substring(6));
     if (mounted) {
       setState(() {
-        if (pendingRequests.isNotEmpty) {
-          pendingVisibility = true;
-        } else {
-          pendingVisibility = false;
-        }
-        if (acceptedRequests.isNotEmpty) {
-          acceptedVisibility = true;
-        } else {
+        if (hasStarted) {
           acceptedVisibility = false;
+          pendingVisibility = false;
+        } else {
+          if (pendingRequests.isNotEmpty) {
+            pendingVisibility = true;
+          } else {
+            pendingVisibility = false;
+          }
+          if (acceptedRequests.isNotEmpty) {
+            acceptedVisibility = true;
+          } else {
+            acceptedVisibility = false;
+          }
         }
         journeyDate =
             date.toString() + "/" + month.toString() + "/" + year.toString();
@@ -540,5 +768,20 @@ class _JoinedJourneyDetailsState extends State<JoinedJourneyDetails> {
   Future<void> initial() async {
     sharedPreferences = await SharedPreferences.getInstance();
     userEmail = sharedPreferences.getString('email')!;
+    userID = sharedPreferences.getString("phoneNumber")!;
+    journeyData = await FirebaseFirestore.instance
+        .collection('TransporterList')
+        .doc(widget.journeyID)
+        .get();
+    var feedbackStatus = await FirebaseFirestore.instance
+        .collection('Feedback')
+        .doc(utilities.add91(journeyData['TransporterID']))
+        .collection(widget.journeyID)
+        .doc(userID)
+        .get();
+    if (feedbackStatus.exists) hasSubmittedFeedback = true;
+    if (mounted) {
+      setState(() {});
+    }
   }
 }

@@ -4,6 +4,7 @@ import 'package:local_st/Chat/chat.dart';
 import 'package:local_st/Chat/chat_room_design.dart';
 import 'package:local_st/Data-Services/utilities.dart';
 import 'package:local_st/Reusable/bottom_navigation_bar.dart';
+import 'package:local_st/Reusable/size_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Reusable/colors.dart';
@@ -29,6 +30,8 @@ class _ChatRoomsState extends State<ChatRooms> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig sizeConfig = SizeConfig(context);
+    double h = sizeConfig.screenHeight;
     // TODO: Optimize the journey data fetched in this widget
     return Scaffold(
         appBar: AppBar(
@@ -92,45 +95,53 @@ class _ChatRoomsState extends State<ChatRooms> {
                         padding: const EdgeInsets.only(top: 16),
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
-                          return FilledButton(
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.resolveWith<Color?>(
-                                (Set<MaterialState> states) {
-                                  if (states.contains(MaterialState.pressed)) {
-                                    return Theme.of(context)
-                                        .colorScheme
-                                        .primary
-                                        .withGreen(228)
-                                        .withBlue(221)
-                                        .withRed(233);
-                                  }
-                                  return Theme.of(context)
-                                      .colorScheme
-                                      .primary
-                                      .withOpacity(0);
+                          return Container(
+                            margin: EdgeInsets.fromLTRB(0, 0, 0, h * 0.02),
+                            child: Material(
+                              elevation: 1,
+                              child: FilledButton(
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.resolveWith<Color?>(
+                                    (Set<MaterialState> states) {
+                                      if (states
+                                          .contains(MaterialState.pressed)) {
+                                        return Theme.of(context)
+                                            .colorScheme
+                                            .primary
+                                            .withGreen(228)
+                                            .withBlue(221)
+                                            .withRed(233);
+                                      }
+                                      return Theme.of(context)
+                                          .colorScheme
+                                          .primary
+                                          .withOpacity(0);
+                                    },
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ChatUI(
+                                              userJourneyChats[index]
+                                                  ['journeyID'],
+                                              userJourneyChats[index]['data']
+                                                  ['GroupName'])));
                                 },
+                                child: ChatRoomDesign(
+                                  name: userJourneyChats[index]['data']
+                                      ['GroupName'],
+                                  messageText: userJourneyChats[index]['data']
+                                      ['LastMessage']['Message'],
+                                  time: userJourneyChats[index]['data']
+                                      ['LastMessage']['Time'],
+                                  isMessageRead: userJourneyChats[index]['data']
+                                          ['Members'][userID]['Unread'] >
+                                      0,
+                                ),
                               ),
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ChatUI(
-                                          userJourneyChats[index]['journeyID'],
-                                          userJourneyChats[index]['data']
-                                              ['GroupName'])));
-                            },
-                            child: ChatRoomDesign(
-                              name: userJourneyChats[index]['data']
-                                  ['GroupName'],
-                              messageText: userJourneyChats[index]['data']
-                                  ['LastMessage']['Message'],
-                              time: userJourneyChats[index]['data']
-                                  ['LastMessage']['Time'],
-                              isMessageRead: userJourneyChats[index]['data']
-                                      ['Members'][userID]['Unread'] >
-                                  0,
                             ),
                           );
                         },

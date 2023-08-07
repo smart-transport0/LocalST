@@ -29,6 +29,7 @@ class _ChatUIState extends State<ChatUI> {
 
   @override
   Widget build(BuildContext context) {
+    double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
@@ -91,49 +92,100 @@ class _ChatUIState extends State<ChatUI> {
                               String content =
                                   snapshot.data.snapshot.value['Messages']
                                       [snapshotKeys[index]]['content'];
-                              return Container(
-                                  padding: const EdgeInsets.only(
-                                      left: 14, right: 14, top: 10, bottom: 10),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: Align(
-                                    alignment: userName == sender
-                                        ? Alignment.centerRight
-                                        : Alignment.centerLeft,
-                                    child: Container(
-                                      width: w * 0.6,
+                              String dateOfMessage =
+                                  snapshot.data.snapshot.value['Messages']
+                                      [snapshotKeys[index]]['date'];
+                              String seperatorText = dateOfMessage;
+                              if (index == 0 ||
+                                  dateOfMessage !=
+                                      snapshot.data.snapshot.value['Messages']
+                                          [snapshotKeys[index - 1]]['date']) {
+                                DateTime today = DateTime.now();
+                                int day = today.day;
+                                int month = today.month;
+                                int year = today.year;
+                                int dayOfMessage =
+                                    int.parse(dateOfMessage.substring(8, 10));
+                                int monthOfMessage =
+                                    int.parse(dateOfMessage.substring(5, 7));
+                                int yearOfMessage =
+                                    int.parse(dateOfMessage.substring(0, 4));
+                                if (year == yearOfMessage &&
+                                    month == monthOfMessage) {
+                                  if (day == dayOfMessage) {
+                                    seperatorText = 'Today';
+                                  } else if (day == dayOfMessage + 1) {
+                                    seperatorText = 'Yesterday';
+                                  }
+                                }
+                              }
+                              return Column(
+                                children: [
+                                  Container(
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
-                                        color: (userName == sender
-                                            ? Colors.grey.shade200
-                                            : Colors.blue[200]),
-                                      ),
-                                      padding: const EdgeInsets.all(16),
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: <Widget>[
-                                                Text(sender,
-                                                    style: const TextStyle(
-                                                        color:
-                                                            Colors.blueAccent)),
-                                                Text(time,
-                                                    style: const TextStyle(
-                                                        fontSize: 12,
-                                                        color: Colors.grey)),
-                                              ]),
-                                          Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(content,
-                                                  style: const TextStyle(
-                                                      fontSize: 15)))
-                                        ],
-                                      ),
-                                    ),
-                                  ));
+                                          color: Colors.black,
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      padding: EdgeInsets.fromLTRB(w * 0.02,
+                                          h * 0.01, w * 0.02, h * 0.01),
+                                      child: Text(
+                                        seperatorText,
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold),
+                                      )),
+                                  Container(
+                                      padding: const EdgeInsets.only(
+                                          left: 14,
+                                          right: 14,
+                                          top: 10,
+                                          bottom: 10),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      child: Align(
+                                        alignment: userName == sender
+                                            ? Alignment.centerRight
+                                            : Alignment.centerLeft,
+                                        child: Container(
+                                          width: w * 0.6,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            color: (userName == sender
+                                                ? Colors.grey.shade200
+                                                : Colors.blue[200]),
+                                          ),
+                                          padding: const EdgeInsets.all(16),
+                                          child: Column(
+                                            children: [
+                                              Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: <Widget>[
+                                                    Text(sender,
+                                                        style: const TextStyle(
+                                                            color: Colors
+                                                                .blueAccent)),
+                                                    Text(time,
+                                                        style: const TextStyle(
+                                                            fontSize: 12,
+                                                            color:
+                                                                Colors.grey)),
+                                                  ]),
+                                              Align(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(content,
+                                                      style: const TextStyle(
+                                                          fontSize: 15)))
+                                            ],
+                                          ),
+                                        ),
+                                      ))
+                                ],
+                              );
                             },
                           );
                         } else {
@@ -202,6 +254,13 @@ class _ChatUIState extends State<ChatUI> {
                             utilities.padCharacters(
                                 datetime.second.toString(), "0", 2);
                         messageID += userID;
+                        String date = datetime.year.toString() +
+                            "/" +
+                            utilities.padCharacters(
+                                datetime.month.toString(), "0", 2) +
+                            "/" +
+                            utilities.padCharacters(
+                                datetime.day.toString(), "0", 2);
                         String time = utilities.padCharacters(
                                 datetime.hour.toString(), "0", 2) +
                             ':' +
@@ -216,7 +275,8 @@ class _ChatUIState extends State<ChatUI> {
                               // TODO: Find a solution to show full datetime or just time and date some other way
                               "content": messageController.text.trim(),
                               "time": time,
-                              "sender": userID
+                              "sender": userID,
+                              "date": date
                             });
                         messageController.text = "";
                       }

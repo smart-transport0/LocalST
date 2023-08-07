@@ -16,7 +16,8 @@ class ManageUsers {
       String dateOfBirth,
       String emergencyContactNo,
       String organizationEmailID,
-      String rollNumber) async {
+      String rollNumber,
+      String role) async {
     await FirebaseFirestore.instance
         .collection('VerifyUserInformation')
         .doc(utilities.add91(phoneNumber))
@@ -30,7 +31,8 @@ class ManageUsers {
       'EmergencyContactNumber': utilities.add91(emergencyContactNo),
       'OrganizationEmailID': organizationEmailID,
       'OrganizationName': 'Pandit Deendayal Energy University',
-      'RollNumber': rollNumber
+      'RollNumber': rollNumber,
+      'Role': role
     });
     return;
   }

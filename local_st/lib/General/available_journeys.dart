@@ -7,6 +7,8 @@ import 'package:local_st/Reusable/bottom_navigation_bar.dart';
 import 'package:local_st/Reusable/loading.dart';
 import 'package:local_st/Reusable/navigation_bar.dart';
 
+import '../Reusable/size_config.dart';
+
 class AvailableJourneys extends StatefulWidget {
   final String userID;
   const AvailableJourneys({Key? key, required this.userID}) : super(key: key);
@@ -18,8 +20,9 @@ class _AvailableJourneysState extends State<AvailableJourneys> {
   Utilities utilities = Utilities();
   @override
   Widget build(BuildContext context) {
-    double h = MediaQuery.of(context).size.height;
-    double w = MediaQuery.of(context).size.width;
+    SizeConfig sizeConfig = SizeConfig(context);
+    double h = sizeConfig.screenHeight;
+    double w = sizeConfig.screenWidth;
     return Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -68,96 +71,111 @@ class _AvailableJourneysState extends State<AvailableJourneys> {
                                   title: Padding(
                                     padding: EdgeInsets.fromLTRB(
                                         0.0, h * 0.03, 0.0, h * 0.03),
-                                    child: Column(children: <Widget>[
-                                      Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: <Widget>[
-                                            Text(
-                                                'Date ${snapshot.data?.docs[index]['JourneyDate']}',
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w900,
-                                                    color: Colors
-                                                        .blue.shade900)),
-                                            Row(
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      EdgeInsets.fromLTRB(
-                                                          0, 0, w * 0.03, 0),
-                                                  child: Container(
-                                                      width: 25,
-                                                      height: 25,
-                                                      decoration:
-                                                          const BoxDecoration(
-                                                        shape:
-                                                            BoxShape.circle,
-                                                        color: Colors.red,
-                                                      ),
-                                                      child: Center(
-                                                          child: Text(
-                                                        '${snapshot.data?.docs[index]['PendingRequestsCount']}',
-                                                        style: const TextStyle(
-                                                            color:
-                                                                Colors.white,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w900),
-                                                      ))),
-                                                ),
-                                                Container(
-                                                    width: 25,
-                                                    height: 25,
-                                                    decoration: const BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      color: Colors.green,
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: <Widget>[
+                                                Text(
+                                                    'Date ${snapshot.data?.docs[index]['JourneyDate']}',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w900,
+                                                        color: Colors
+                                                            .blue.shade900)),
+                                                Row(
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsets.fromLTRB(0,
+                                                              0, w * 0.03, 0),
+                                                      child: Container(
+                                                          width: 25,
+                                                          height: 25,
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            shape:
+                                                                BoxShape.circle,
+                                                            color: Colors.red,
+                                                          ),
+                                                          child: Center(
+                                                              child: Text(
+                                                            '${snapshot.data?.docs[index]['PendingRequestsCount']}',
+                                                            style: const TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w900),
+                                                          ))),
                                                     ),
-                                                    child: Center(
-                                                        child: Text(
-                                                      '${snapshot.data?.docs[index]['AcceptedRequestsCount']}',
-                                                      style: const TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight
-                                                                  .w900),
-                                                    ))),
-                                              ],
-                                            ),
-                                          ]),
-                                      SizedBox(height: h * 0.01),
-                                      Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: <Widget>[
-                                            const Text('Source Place'),
-                                            Text(
-                                              '${snapshot.data?.docs[index]['SourcePlace']}',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w900,
-                                                  color:
-                                                      Colors.blue.shade900),
-                                            ),
-                                            SizedBox(height: h * 0.01),
-                                            const Text('Destination Place'),
-                                            Text(
-                                              '${snapshot.data?.docs[index]['DestinationPlace']}',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w900,
-                                                  color:
-                                                      Colors.blue.shade900),
-                                            ),
-                                            SizedBox(height: h * 0.01),
-                                            const Text('Transporter Phone Number'),
-                                            Text(
-                                              '${snapshot.data?.docs[index]['TransporterID']}',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w900,
-                                                  color:
-                                                      Colors.blue.shade900),
-                                            )
-                                          ])
-                                    ]),
+                                                    Container(
+                                                        width: 25,
+                                                        height: 25,
+                                                        decoration:
+                                                            const BoxDecoration(
+                                                          shape:
+                                                              BoxShape.circle,
+                                                          color: Colors.green,
+                                                        ),
+                                                        child: Center(
+                                                            child: Text(
+                                                          '${snapshot.data?.docs[index]['AcceptedRequestsCount']}',
+                                                          style: const TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w900),
+                                                        ))),
+                                                  ],
+                                                ),
+                                              ]),
+                                          SizedBox(height: h * 0.01),
+                                          Padding(
+                                            padding: EdgeInsets.fromLTRB(
+                                                w * 0.11, 0, 0, 0),
+                                            child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: <Widget>[
+                                                  const Text('Source Place'),
+                                                  Text(
+                                                    '${snapshot.data?.docs[index]['SourcePlace']}',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w900,
+                                                        color: Colors
+                                                            .blue.shade900),
+                                                  ),
+                                                  SizedBox(height: h * 0.01),
+                                                  const Text(
+                                                      'Destination Place'),
+                                                  Text(
+                                                    '${snapshot.data?.docs[index]['DestinationPlace']}',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w900,
+                                                        color: Colors
+                                                            .blue.shade900),
+                                                  ),
+                                                  SizedBox(height: h * 0.01),
+                                                  const Text(
+                                                      'Transporter Phone Number'),
+                                                  Text(
+                                                    '${snapshot.data?.docs[index]['TransporterID']}',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w900,
+                                                        color: Colors
+                                                            .blue.shade900),
+                                                  )
+                                                ]),
+                                          )
+                                        ]),
                                   ))));
                     });
               }

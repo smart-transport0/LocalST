@@ -6,6 +6,7 @@ import 'package:local_st/Admin/manage_users.dart';
 import 'package:local_st/Data-Services/utilities.dart';
 import 'package:local_st/Data-Services/validators.dart';
 import 'package:local_st/Reusable/colors.dart';
+import 'package:local_st/Reusable/size_config.dart';
 import 'login.dart';
 import 'package:intl/intl.dart';
 import 'package:file_picker/file_picker.dart';
@@ -40,6 +41,8 @@ class _MyWidgetState extends State<Register> {
   TextEditingController confirmPasswordController = TextEditingController();
   FilePickerResult? idCardPicker;
   FilePickerResult? profilePhotoPicker;
+  List<String> roles = ['Student', 'Faculty', 'Other'];
+  String roleValue = 'Student';
 
   //Visiblity Switcher Variable
   int outerVisibility = 1;
@@ -60,8 +63,9 @@ class _MyWidgetState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     //height and width of screen
-    double h = MediaQuery.of(context).size.height;
-    double w = MediaQuery.of(context).size.width;
+    SizeConfig sizeConfig = SizeConfig(context);
+    double h = sizeConfig.screenHeight;
+    double w = sizeConfig.screenWidth;
 
     return Stack(children: <Widget>[
       SafeArea(
@@ -344,7 +348,7 @@ class _MyWidgetState extends State<Register> {
                                       child: Padding(
                                           padding: EdgeInsets.fromLTRB(w * 0.05,
                                               h * 0.005, w * 0.05, h * 0.005),
-                                          child: Text('Next', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: MyColorScheme.baseColor)))),
+                                          child: Text('NEXT', style: TextStyle(fontFamily: 'Montserrat', fontSize: w * 0.06, color: MyColorScheme.baseColor)))),
                                   TextButton(
                                       onPressed: () => {
                                             Navigator.pushReplacement(
@@ -381,7 +385,7 @@ class _MyWidgetState extends State<Register> {
                                             dateOfBirthController, //editing controller of this TextField
                                         decoration: InputDecoration(
                                             fillColor: MyColorScheme.baseColor,
-                                            prefixIcon: Icon(Icons.date_range,
+                                            prefixIcon: Icon(Icons.cake,
                                                 color: MyColorScheme.darkColor),
                                             labelText: "Date of Birth",
                                             labelStyle: TextStyle(
@@ -467,8 +471,7 @@ class _MyWidgetState extends State<Register> {
                                               filled: true,
                                               fillColor:
                                                   MyColorScheme.baseColor,
-                                              prefixIcon: Icon(
-                                                  Icons.perm_identity,
+                                              prefixIcon: Icon(Icons.pin,
                                                   color:
                                                       MyColorScheme.darkColor),
                                               labelText: "Roll Number",
@@ -477,6 +480,7 @@ class _MyWidgetState extends State<Register> {
                                                 fontWeight: FontWeight.w600,
                                                 fontSize: h * 0.020,
                                               ),
+                                              hintText: "e.g. 12BCH123",
                                               focusedBorder: OutlineInputBorder(
                                                   borderSide: BorderSide(
                                                       color: MyColorScheme
@@ -495,6 +499,64 @@ class _MyWidgetState extends State<Register> {
                                                           30)))),
                                     ),
                                   ),
+                                  Padding(
+                                      padding: EdgeInsets.fromLTRB(
+                                          0, 0, 0, h * 0.05),
+                                      child: Material(
+                                        borderRadius: BorderRadius.circular(30),
+                                        elevation: 15,
+                                        color: MyColorScheme.baseColor,
+                                        child: Row(
+                                          children: [
+                                            Padding(
+                                                padding: EdgeInsets.fromLTRB(
+                                                    0.03 * w, 0, 0, 0),
+                                                child: const Icon(Icons.person)),
+                                            DropdownButton(
+                                                iconSize: 0,
+                                                focusColor:
+                                                    MyColorScheme.bgColor,
+                                                hint: Padding(
+                                                  padding: EdgeInsets.fromLTRB(
+                                                      w * 0.03, 0, 0, 0),
+                                                  child: Text('Role',
+                                                      style: TextStyle(
+                                                          fontSize: h * 0.020,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: MyColorScheme
+                                                              .darkColor)),
+                                                ),
+                                                value: roleValue,
+                                                onChanged: (newValue) {
+                                                  setState(() {
+                                                    roleValue =
+                                                        newValue!.toString();
+                                                  });
+                                                },
+                                                items: roles.map((options) {
+                                                  return DropdownMenuItem(
+                                                      child: Padding(
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                w * 0.05,
+                                                                0,
+                                                                w * 0.05,
+                                                                0),
+                                                        child: Text(options,
+                                                            style: const TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                      ),
+                                                      value: options);
+                                                }).toList(),
+                                                style: TextStyle(
+                                                    color: MyColorScheme
+                                                        .darkColor)),
+                                          ],
+                                        ),
+                                      )),
                                   Container(
                                     padding:
                                         EdgeInsets.fromLTRB(0, 0, 0, h * 0.05),
@@ -510,12 +572,13 @@ class _MyWidgetState extends State<Register> {
                                                         RoundedRectangleBorder>(
                                                     RoundedRectangleBorder(
                                                         borderRadius:
-                                                            BorderRadius.circular(
-                                                                30))),
+                                                            BorderRadius
+                                                                .circular(30))),
                                                 backgroundColor:
-                                                    MaterialStateProperty.resolveWith<Color?>(
-                                                        (Set<MaterialState>
-                                                            states) {
+                                                    MaterialStateProperty
+                                                        .resolveWith<Color?>(
+                                                            (Set<MaterialState>
+                                                                states) {
                                                   if (states.contains(
                                                       MaterialState.pressed)) {
                                                     return Theme.of(context)
@@ -537,134 +600,151 @@ class _MyWidgetState extends State<Register> {
                                                   .pickFiles(
                                                       type: FileType.image);
                                             },
-                                            child: Text('ID Card Photo',
-                                                style: TextStyle(
-                                                    color: MyColorScheme.darkColor,
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: h * 0.020))),
+                                            child: Row(
+                                              children: [
+                                                Padding(
+                                                    padding:
+                                                        EdgeInsets.fromLTRB(
+                                                            w * 0.01,
+                                                            0,
+                                                            w * 0.05,
+                                                            0),
+                                                    child: Icon(
+                                                        Icons.remember_me,
+                                                        color: MyColorScheme
+                                                            .darkColor)),
+                                                Text('ID Card Photo',
+                                                    style: TextStyle(
+                                                        color: MyColorScheme
+                                                            .darkColor,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontSize: h * 0.020)),
+                                              ],
+                                            )),
                                       ),
                                     ),
                                   ),
-                                  Container(
-                                      padding: EdgeInsets.fromLTRB(
-                                          0, 0, 0, h * 0.05),
-                                      child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            ElevatedButton(
-                                                onPressed: () => {
-                                                      setState(() {
-                                                        outerVisibility = 1;
-                                                      })
-                                                    },
-                                                style: ButtonStyle(
-                                                    elevation: MaterialStateProperty.all(
-                                                        15),
-                                                    backgroundColor:
-                                                        MaterialStateProperty.all(
-                                                            MyColorScheme
-                                                                .darkColor),
-                                                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                                                        borderRadius: BorderRadius.circular(
+                                  Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                    ElevatedButton(
+                                        onPressed: () => {
+                                              setState(() {
+                                                outerVisibility = 1;
+                                              })
+                                            },
+                                        style: ButtonStyle(
+                                            elevation: MaterialStateProperty.all(
+                                                15),
+                                            backgroundColor: MaterialStateProperty.all(
+                                                MyColorScheme.darkColor),
+                                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
                                                             18.0),
-                                                        side: BorderSide(
-                                                            color: MyColorScheme
-                                                                .darkColor)))),
-                                                child: Padding(
-                                                    padding: EdgeInsets.fromLTRB(w * 0.05, h * 0.005, w * 0.05, h * 0.005),
-                                                    child: Text('Back', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: MyColorScheme.baseColor)))),
-                                            ElevatedButton(
-                                                onPressed: () => {
-                                                      if (validators
-                                                              .checkNotEmpty(
+                                                    side: BorderSide(
+                                                        color: MyColorScheme
+                                                            .darkColor)))),
+                                        child: Padding(
+                                            padding:
+                                                EdgeInsets.fromLTRB(w * 0.05, h * 0.005, w * 0.05, h * 0.005),
+                                            child: Text('BACK', style: TextStyle(fontFamily: 'Montserrat', fontSize: w * 0.06, color: MyColorScheme.baseColor)))),
+                                    ElevatedButton(
+                                        onPressed: () => {
+                                              if (validators
+                                                      .checkNotEmpty(
+                                                          dateOfBirthController
+                                                              .text)
+                                                      .isEmpty &&
+                                                  validators
+                                                      .validateRollNumber(
+                                                          rollNumberController
+                                                              .text)
+                                                      .isEmpty &&
+                                                  idCardPicker != null &&
+                                                  idCardPicker?.files !=
+                                                      null)
+                                                {
+                                                  setState(() {
+                                                    outerVisibility = 3;
+                                                  })
+                                                }
+                                              else
+                                                {
+                                                  setState(() {
+                                                    errorMessage = '';
+                                                    if (validators
+                                                        .checkNotEmpty(
+                                                            dateOfBirthController
+                                                                .text)
+                                                        .isNotEmpty) {
+                                                      errorMessage +=
+                                                          'Date of Birth ' +
+                                                              validators.checkNotEmpty(
                                                                   dateOfBirthController
-                                                                      .text)
-                                                              .isEmpty &&
-                                                          validators
-                                                              .validateRollNumber(
-                                                                  rollNumberController
-                                                                      .text)
-                                                              .isEmpty &&
-                                                          idCardPicker !=
-                                                              null &&
-                                                          idCardPicker?.files !=
-                                                              null)
-                                                        {
-                                                          setState(() {
-                                                            outerVisibility = 3;
-                                                          })
-                                                        }
-                                                      else
-                                                        {
-                                                          setState(() {
-                                                            errorMessage = '';
-                                                            if (validators
-                                                                .checkNotEmpty(
-                                                                    dateOfBirthController
-                                                                        .text)
-                                                                .isNotEmpty) {
-                                                              errorMessage +=
-                                                                  'Date of Birth ' +
-                                                                      validators
-                                                                          .checkNotEmpty(
-                                                                              dateOfBirthController.text);
-                                                            }
-                                                            errorMessage += validators
-                                                                .validateRollNumber(
-                                                                    rollNumberController
-                                                                        .text);
-                                                            if (idCardPicker ==
-                                                                null) {
-                                                              errorMessage +=
-                                                                  'IDCard not added!\n';
-                                                            }
-                                                          }),
-                                                          Navigator.of(context).push(
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          AlertDialog(
-                                                                            title:
-                                                                                const Text('Invalid input'),
-                                                                            content:
-                                                                                Text(errorMessage),
-                                                                            actions: <Widget>[
-                                                                              TextButton(
-                                                                                onPressed: () => Navigator.pop(context, 'OK'),
-                                                                                child: const Text('OK'),
-                                                                              ),
-                                                                            ],
-                                                                          )))
-                                                        }
-                                                    },
-                                                style: ButtonStyle(
-                                                    elevation: MaterialStateProperty.all(
-                                                        15),
-                                                    backgroundColor: MaterialStateProperty.all(
-                                                        MyColorScheme
-                                                            .darkColor),
-                                                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                                        RoundedRectangleBorder(
-                                                            borderRadius: BorderRadius.circular(
-                                                                18.0),
-                                                            side: BorderSide(
-                                                              color:
-                                                                  MyColorScheme
-                                                                      .darkColor,
-                                                            )))),
-                                                child: Padding(
-                                                    padding: EdgeInsets.fromLTRB(
-                                                        w * 0.05,
-                                                        h * 0.005,
-                                                        w * 0.05,
-                                                        h * 0.005),
-                                                    child: Text('Next',
-                                                        style: TextStyle(
-                                                            fontFamily: 'comic',
-                                                            fontSize: w * 0.08,
-                                                            color: MyColorScheme.baseColor))))
-                                          ]))
+                                                                      .text);
+                                                    }
+                                                    errorMessage += validators
+                                                        .validateRollNumber(
+                                                            rollNumberController
+                                                                .text);
+                                                    if (idCardPicker ==
+                                                        null) {
+                                                      errorMessage +=
+                                                          'IDCard not added!\n';
+                                                    }
+                                                  }),
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder:
+                                                              (context) =>
+                                                                  AlertDialog(
+                                                                    title: const Text(
+                                                                        'Invalid input'),
+                                                                    content:
+                                                                        Text(errorMessage),
+                                                                    actions: <
+                                                                        Widget>[
+                                                                      TextButton(
+                                                                        onPressed: () =>
+                                                                            Navigator.pop(context, 'OK'),
+                                                                        child:
+                                                                            const Text('OK'),
+                                                                      ),
+                                                                    ],
+                                                                  )))
+                                                }
+                                            },
+                                        style: ButtonStyle(
+                                            elevation:
+                                                MaterialStateProperty.all(
+                                                    15),
+                                            backgroundColor: MaterialStateProperty.all(
+                                                MyColorScheme.darkColor),
+                                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            18.0),
+                                                    side: BorderSide(
+                                                      color: MyColorScheme
+                                                          .darkColor,
+                                                    )))),
+                                        child: Padding(
+                                            padding: EdgeInsets.fromLTRB(
+                                                w * 0.05,
+                                                h * 0.005,
+                                                w * 0.05,
+                                                h * 0.005),
+                                            child: Text('NEXT',
+                                                style: TextStyle(
+                                                    fontFamily: 'Montserrat',
+                                                    fontSize: w * 0.06,
+                                                    color: MyColorScheme.baseColor))))
+                                  ])
                                 ])),
                             //Part 3 of visiblity
                             Visibility(
@@ -674,113 +754,6 @@ class _MyWidgetState extends State<Register> {
                                   Visibility(
                                     visible: (phoneNumberVisibility == 1),
                                     child: Column(children: [
-                                      Container(
-                                        padding: EdgeInsets.fromLTRB(
-                                            0, 0, 0, h * 0.05),
-                                        child: Material(
-                                          borderRadius:
-                                              BorderRadius.circular(30),
-                                          elevation: 15,
-                                          child: SizedBox(
-                                            height: h * 0.08,
-                                            width: w,
-                                            child: TextButton(
-                                                style: ButtonStyle(
-                                                    shape: MaterialStateProperty.all<
-                                                            RoundedRectangleBorder>(
-                                                        RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius.circular(
-                                                                    30))),
-                                                    backgroundColor:
-                                                        MaterialStateProperty.resolveWith<Color?>(
-                                                            (Set<MaterialState>
-                                                                states) {
-                                                      if (states.contains(
-                                                          MaterialState
-                                                              .pressed)) {
-                                                        return Theme.of(context)
-                                                            .colorScheme
-                                                            .primary
-                                                            .withOpacity(0.5);
-                                                      }
-                                                      return Theme.of(context)
-                                                          .colorScheme
-                                                          .primary
-                                                          .withRed(249)
-                                                          .withGreen(245)
-                                                          .withBlue(
-                                                              242); // Use the component's default.
-                                                    })),
-                                                onPressed: () async {
-                                                  profilePhotoPicker =
-                                                      await FilePicker.platform
-                                                          .pickFiles(
-                                                              type: FileType
-                                                                  .image);
-                                                },
-                                                child: Text('Profile Photo',
-                                                    style: TextStyle(
-                                                        color: MyColorScheme.darkColor,
-                                                        fontWeight: FontWeight.w600,
-                                                        fontSize: h * 0.020))),
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.fromLTRB(
-                                            0, 0, 0, h * 0.05),
-                                        child: Material(
-                                          borderRadius:
-                                              BorderRadius.circular(30),
-                                          elevation: 15,
-                                          child: TextField(
-                                              controller:
-                                                  emergencyContactNumberController,
-                                              cursorColor: MyColorScheme
-                                                  .darkColor,
-                                              keyboardType: TextInputType.phone,
-                                              style: TextStyle(
-                                                  color: MyColorScheme
-                                                      .darkColor),
-                                              decoration: InputDecoration(
-                                                  filled: true,
-                                                  fillColor: MyColorScheme
-                                                      .baseColor,
-                                                  prefixIcon: Icon(Icons.phone,
-                                                      color: MyColorScheme
-                                                          .darkColor),
-                                                  labelText:
-                                                      "Emergency Contact Number",
-                                                  labelStyle: TextStyle(
-                                                    color:
-                                                        MyColorScheme.darkColor,
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: h * 0.020,
-                                                  ),
-                                                  focusedBorder:
-                                                      OutlineInputBorder(
-                                                          // ignore: prefer_const_constructors
-                                                          borderSide: BorderSide(
-                                                              color:
-                                                                  MyColorScheme
-                                                                      .darkColor,
-                                                              width: 2.0),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      30)),
-                                                  enabledBorder: OutlineInputBorder(
-                                                      borderSide:
-                                                          const BorderSide(
-                                                              width: 2.0,
-                                                              color: Colors
-                                                                  .transparent),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              30)))),
-                                        ),
-                                      ),
                                       Container(
                                         padding: EdgeInsets.fromLTRB(
                                             0, 0, 0, h * 0.05),
@@ -833,6 +806,135 @@ class _MyWidgetState extends State<Register> {
                                                               30)))),
                                         ),
                                       ),
+                                      Container(
+                                        padding: EdgeInsets.fromLTRB(
+                                            0, 0, 0, h * 0.05),
+                                        child: Material(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          elevation: 15,
+                                          child: TextField(
+                                              controller:
+                                                  emergencyContactNumberController,
+                                              cursorColor: MyColorScheme
+                                                  .darkColor,
+                                              keyboardType: TextInputType.phone,
+                                              style: TextStyle(
+                                                  color: MyColorScheme
+                                                      .darkColor),
+                                              decoration: InputDecoration(
+                                                  filled: true,
+                                                  fillColor: MyColorScheme
+                                                      .baseColor,
+                                                  prefixIcon: Icon(
+                                                      Icons.add_call,
+                                                      color: MyColorScheme
+                                                          .darkColor),
+                                                  labelText:
+                                                      "Emergency Contact Number",
+                                                  labelStyle: TextStyle(
+                                                    color:
+                                                        MyColorScheme.darkColor,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: h * 0.020,
+                                                  ),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                          // ignore: prefer_const_constructors
+                                                          borderSide: BorderSide(
+                                                              color:
+                                                                  MyColorScheme
+                                                                      .darkColor,
+                                                              width: 2.0),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      30)),
+                                                  enabledBorder: OutlineInputBorder(
+                                                      borderSide:
+                                                          const BorderSide(
+                                                              width: 2.0,
+                                                              color: Colors
+                                                                  .transparent),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              30)))),
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.fromLTRB(
+                                            0, 0, 0, h * 0.05),
+                                        child: Material(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          elevation: 15,
+                                          child: SizedBox(
+                                            height: h * 0.08,
+                                            width: w,
+                                            child: TextButton(
+                                                style: ButtonStyle(
+                                                    shape: MaterialStateProperty.all<
+                                                            RoundedRectangleBorder>(
+                                                        RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        30))),
+                                                    backgroundColor:
+                                                        MaterialStateProperty
+                                                            .resolveWith<
+                                                                Color?>((Set<
+                                                                    MaterialState>
+                                                                states) {
+                                                      if (states.contains(
+                                                          MaterialState
+                                                              .pressed)) {
+                                                        return Theme.of(context)
+                                                            .colorScheme
+                                                            .primary
+                                                            .withOpacity(0.5);
+                                                      }
+                                                      return Theme.of(context)
+                                                          .colorScheme
+                                                          .primary
+                                                          .withRed(249)
+                                                          .withGreen(245)
+                                                          .withBlue(
+                                                              242); // Use the component's default.
+                                                    })),
+                                                onPressed: () async {
+                                                  profilePhotoPicker =
+                                                      await FilePicker.platform
+                                                          .pickFiles(
+                                                              type: FileType
+                                                                  .image);
+                                                },
+                                                child: Row(
+                                                  children: [
+                                                    Padding(
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                w * 0.01,
+                                                                0,
+                                                                w * 0.05,
+                                                                0),
+                                                        child: Icon(
+                                                            Icons.person_pin,
+                                                            color: MyColorScheme
+                                                                .darkColor)),
+                                                    Text('Profile Photo',
+                                                        style: TextStyle(
+                                                            color: MyColorScheme
+                                                                .darkColor,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontSize:
+                                                                h * 0.020)),
+                                                  ],
+                                                )),
+                                          ),
+                                        ),
+                                      ),
                                       Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
@@ -858,7 +960,7 @@ class _MyWidgetState extends State<Register> {
                                                                 .darkColor)))),
                                                 child: Padding(
                                                     padding: EdgeInsets.fromLTRB(w * 0.02, h * 0.005, w * 0.02, h * 0.005),
-                                                    child: Text('Back', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: MyColorScheme.baseColor)))),
+                                                    child: Text('BACK', style: TextStyle(fontFamily: 'Montserrat', fontSize: w * 0.06, color: MyColorScheme.baseColor)))),
                                             ElevatedButton(
                                                 onPressed: (() {
                                                   errorMessage = '';
@@ -940,7 +1042,7 @@ class _MyWidgetState extends State<Register> {
                                                                 .darkColor)))),
                                                 child: Padding(
                                                     padding: EdgeInsets.fromLTRB(w * 0.02, h * 0.005, w * 0.02, h * 0.005),
-                                                    child: Text('Send OTP', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: MyColorScheme.baseColor))))
+                                                    child: Text('SEND OTP', style: TextStyle(fontFamily: 'Montserrat', fontSize: w * 0.06, color: MyColorScheme.baseColor))))
                                           ])
                                     ]),
                                   ),
@@ -1024,7 +1126,7 @@ class _MyWidgetState extends State<Register> {
                                                               .darkColor)))),
                                           child: Padding(
                                               padding: EdgeInsets.fromLTRB(w * 0.05, h * 0.005, w * 0.05, h * 0.005),
-                                              child: Text('Verify', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: MyColorScheme.baseColor))))
+                                              child: Text('VERIFY', style: TextStyle(fontFamily: 'Montserrat', fontSize: w * 0.06, color: MyColorScheme.baseColor))))
                                     ]),
                                   )
                                 ])),
@@ -1326,7 +1428,7 @@ class _MyWidgetState extends State<Register> {
                                       child: Padding(
                                           padding: EdgeInsets.fromLTRB(w * 0.05,
                                               h * 0.005, w * 0.05, h * 0.005),
-                                          child: Text('Verify', style: TextStyle(fontFamily: 'comic', fontSize: w * 0.08, color: MyColorScheme.baseColor))))
+                                          child: Text('VERIFY', style: TextStyle(fontFamily: 'Montserrat', fontSize: w * 0.06, color: MyColorScheme.baseColor))))
                                 ]))
                           ]))),
                 ))
@@ -1450,7 +1552,8 @@ class _MyWidgetState extends State<Register> {
           dateOfBirthController.text,
           emergencyContactNumberController.text,
           organizationEMailIDController.text,
-          rollNumberController.text);
+          rollNumberController.text,
+          roleValue);
       await FirebaseFirestore.instance
           .collection('Mapping/Admin/PhonetoMail')
           .doc(utilities.add91(phoneNumberController.text))

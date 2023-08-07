@@ -7,6 +7,8 @@ import 'package:local_st/Reusable/loading.dart';
 import 'package:local_st/Reusable/navigation_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Reusable/size_config.dart';
+
 class JoinedJourneys extends StatefulWidget {
   const JoinedJourneys({Key? key}) : super(key: key);
 
@@ -24,11 +26,11 @@ class _JoinedJourneysState extends State<JoinedJourneys> {
   late SharedPreferences sharedPreferences;
   String userID = "";
   Utilities utilities = Utilities();
-  // List joinedJourneys = [];
   @override
   Widget build(BuildContext context) {
-    double h = MediaQuery.of(context).size.height;
-    double w = MediaQuery.of(context).size.width;
+    SizeConfig sizeConfig = SizeConfig(context);
+    double h = sizeConfig.screenHeight;
+    double w = sizeConfig.screenWidth;
     return Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -78,89 +80,115 @@ class _JoinedJourneysState extends State<JoinedJourneys> {
                                   title: Padding(
                                     padding: EdgeInsets.fromLTRB(
                                         0.0, h * 0.03, 0.0, h * 0.03),
-                                    child: Column(children: <Widget>[
-                                      Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: <Widget>[
-                                            Text(
-                                                'Date ${snapshot.data?[index][0]}',
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w900,
-                                                    color:
-                                                        Colors.blue.shade900)),
-                                            Row(
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      0, 0, w * 0.03, 0),
-                                                  child: Container(
-                                                      width: 25,
-                                                      height: 25,
-                                                      decoration:
-                                                          const BoxDecoration(
-                                                        shape: BoxShape.circle,
-                                                        color: Colors.red,
-                                                      ),
-                                                      child: Center(
-                                                          child: Text(
-                                                        '${snapshot.data?[index][5]}',
-                                                        style: const TextStyle(
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w900),
-                                                      ))),
-                                                ),
-                                                Container(
-                                                    width: 25,
-                                                    height: 25,
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      color: Colors.green,
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: <Widget>[
+                                                Text(
+                                                    'Date ${snapshot.data?[index][0]}',
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w900,
+                                                      color:
+                                                          Colors.blue.shade900,
+                                                    )),
+                                                Row(
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsets.fromLTRB(0,
+                                                              0, w * 0.03, 0),
+                                                      child: Container(
+                                                          width: 25,
+                                                          height: 25,
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            shape:
+                                                                BoxShape.circle,
+                                                            color: Colors.red,
+                                                          ),
+                                                          child: Center(
+                                                              child: Text(
+                                                            '${snapshot.data?[index][5]}',
+                                                            style: const TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w900),
+                                                          ))),
                                                     ),
-                                                    child: Center(
-                                                        child: Text(
-                                                      '${snapshot.data?[index][4]}',
-                                                      style: const TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.w900),
-                                                    ))),
-                                              ],
-                                            ),
-                                          ]),
-                                      SizedBox(height: h * 0.01),
-                                      Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: <Widget>[
-                                            const Text('Source Place'),
-                                            Text(
-                                              '${snapshot.data?[index][1]}',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w900,
-                                                  color: Colors.blue.shade900),
-                                            ),
-                                            SizedBox(height: h * 0.01),
-                                            const Text('Destination Place'),
-                                            Text(
-                                              '${snapshot.data?[index][2]}',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w900,
-                                                  color: Colors.blue.shade900),
-                                            ),
-                                            SizedBox(height: h * 0.01),
-                                            const Text('Transporter Name'),
-                                            Text(
-                                              '${snapshot.data?[index][6]}',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w900,
-                                                  color: Colors.blue.shade900),
-                                            )
-                                          ])
-                                    ]),
+                                                    Container(
+                                                        width: 25,
+                                                        height: 25,
+                                                        decoration:
+                                                            const BoxDecoration(
+                                                          shape:
+                                                              BoxShape.circle,
+                                                          color: Colors.green,
+                                                        ),
+                                                        child: Center(
+                                                            child: Text(
+                                                          '${snapshot.data?[index][4]}',
+                                                          style: const TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w900),
+                                                        ))),
+                                                  ],
+                                                ),
+                                              ]),
+                                          SizedBox(height: h * 0.01),
+                                          Padding(
+                                            padding: EdgeInsets.fromLTRB(
+                                                w * 0.11, 0, 0, 0),
+                                            child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: <Widget>[
+                                                  const Text('Source Place'),
+                                                  Text(
+                                                    '${snapshot.data?[index][1]}',
+                                                    textAlign: TextAlign.left,
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w900,
+                                                        color: Colors
+                                                            .blue.shade900),
+                                                  ),
+                                                  SizedBox(height: h * 0.01),
+                                                  const Text(
+                                                      'Destination Place'),
+                                                  Text(
+                                                    '${snapshot.data?[index][2]}',
+                                                    textAlign: TextAlign.left,
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w900,
+                                                        color: Colors
+                                                            .blue.shade900),
+                                                  ),
+                                                  SizedBox(height: h * 0.01),
+                                                  const Text(
+                                                      'Transporter Name'),
+                                                  Text(
+                                                    '${snapshot.data?[index][6]}',
+                                                    textAlign: TextAlign.left,
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w900,
+                                                        color: Colors
+                                                            .blue.shade900),
+                                                  )
+                                                ]),
+                                          )
+                                        ]),
                                   ))));
                     });
               } else if (snapshot.hasError) {
@@ -197,7 +225,7 @@ class _JoinedJourneysState extends State<JoinedJourneys> {
       if (temp != userID) {
         var acceptedReqs = await collectionObject
             .doc(res.id)
-            .collection('AcceptedRequests')
+            .collection('Requests')
             .doc(utilities.add91(userID))
             .get();
 

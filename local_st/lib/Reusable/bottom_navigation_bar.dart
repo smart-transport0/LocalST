@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:local_st/Data-Services/utilities.dart';
 import 'package:local_st/General/available_journeys.dart';
 import 'package:local_st/General/start_new_journey.dart';
+import 'package:local_st/Reusable/size_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Chat/chat_rooms.dart';
 import '../General/home.dart';
@@ -45,8 +46,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => const Home()));
       } else if (index == 4) {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const ChatRooms()));
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const ChatRooms()));
       }
       selectedIndex = index;
     });
@@ -54,9 +55,13 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    double h = MediaQuery.of(context).size.height;
+    SizeConfig sizeConfig = SizeConfig(context);
+    double h = sizeConfig.safeBlockVertical;
+    if (h <= 2000) {
+      h *= 1.2;
+    }
     return SizedBox(
-      height: h * 0.12,
+      height: h * 0.1,
       child: ClipRRect(
         borderRadius: const BorderRadius.only(
           topRight: Radius.circular(30),
@@ -66,7 +71,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
           type: BottomNavigationBarType.fixed,
           unselectedItemColor: const Color.fromARGB(255, 22, 23, 23),
           backgroundColor: const Color.fromARGB(255, 254, 254, 255),
-          iconSize: 25.0,
+          iconSize: h * 0.03,
           items: const [
             BottomNavigationBarItem(
                 icon: FaIcon(FontAwesomeIcons.locationDot), label: "Create"),

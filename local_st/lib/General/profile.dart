@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:local_st/Reusable/bottom_navigation_bar.dart';
 import 'package:local_st/Reusable/colors.dart';
+import 'package:local_st/Reusable/loading.dart';
 import 'package:local_st/Reusable/navigation_bar.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:local_st/Reusable/size_config.dart';
 
 class Profile extends StatefulWidget {
   final String userID;
@@ -21,7 +24,9 @@ class _ProfileState extends State<Profile> {
     [20, 12],
     [22, 6]
   ];
+  double averageRating = 0;
   String userName = "", phoneNumber = "", email = "";
+  String profileUrl = '';
   @override
   void initState() {
     super.initState();
@@ -30,8 +35,9 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    double h = MediaQuery.of(context).size.height;
-    double w = MediaQuery.of(context).size.width;
+    SizeConfig sizeConfig = SizeConfig(context);
+    double h = sizeConfig.screenHeight;
+    double w = sizeConfig.screenWidth;
     return Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -62,16 +68,19 @@ class _ProfileState extends State<Profile> {
                                       fontWeight: FontWeight.w700)),
                               Text('Points',
                                   style: TextStyle(fontSize: h * 0.025)),
-                              Text('#Rank\nFeedback',
+                              Text('#Rank\n Average Rating: ${averageRating}',
                                   style: TextStyle(fontSize: h * 0.025))
                             ]),
-                            ClipOval(
-                                child: Image(
-                                    height: h * 0.1,
-                                    width: h * 0.1,
-                                    fit: BoxFit.cover,
-                                    image: const AssetImage(
-                                        'assets/images/panda.jpg')))
+                            ClipOval(child:
+                                FutureBuilder(builder: (context, snapshot) {
+                              if (profileUrl == "") {
+                                return const Loading();
+                              }
+                              return Image.network(profileUrl.toString(),
+                                  height: h * 0.1,
+                                  width: h * 0.1,
+                                  fit: BoxFit.cover);
+                            }))
                           ])),
                   Container(
                       height: h * 0.3,
@@ -310,10 +319,20 @@ class _ProfileState extends State<Profile> {
         .collection('UserInformation')
         .doc(widget.userID)
         .get();
-    setState(() {
-      userName = userData['FirstName'] + ' ' + userData['LastName'];
-      phoneNumber = widget.userID;
-      email = userData['OrganizationEmailID'];
-    });
+    FirebaseStorage storage = FirebaseStorage.instance;
+    Reference ref = storage.ref().child('Admin/ProfilePhoto/${widget.userID}');
+    profileUrl = await ref.getDownloadURL();
+    userName = userData['FirstName'] + ' ' + userData['LastName'];
+    phoneNumber = widget.userID;
+    email = userData['OrganizationEmailID'];
+    var feedbackDoc = await FirebaseFirestore.instance
+        .collection('Feedback')
+        .doc(phoneNumber)
+        .get();
+    if (feedbackDoc.data() != null &&
+        feedbackDoc.data()!.containsKey('AverageRating')) {
+      averageRating = feedbackDoc['AverageRating'];
+    }
+    setState(() {});
   }
 }

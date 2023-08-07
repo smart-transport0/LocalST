@@ -1,0 +1,19 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "TransporterList",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "IsJourneyAvailable",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "TransporterID",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

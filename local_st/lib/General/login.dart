@@ -9,9 +9,9 @@ import 'package:local_st/General/forgot_password.dart';
 import 'package:local_st/General/home.dart';
 import 'package:local_st/General/register.dart';
 import 'package:local_st/Reusable/colors.dart';
+import 'package:local_st/Reusable/size_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../Data-Services/realtimeDatabaseOperations.dart';
+import 'dart:math';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -44,8 +44,9 @@ class _MyWidgetState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     //height and width of screen
-    double h = MediaQuery.of(context).size.height;
-    double w = MediaQuery.of(context).size.width;
+    SizeConfig sizeConfig = SizeConfig(context);
+    double h = sizeConfig.screenHeight;
+    double w = sizeConfig.screenWidth;
     return Stack(children: <Widget>[
       SafeArea(
           child: Scaffold(
@@ -66,20 +67,26 @@ class _MyWidgetState extends State<Login> {
             Expanded(
                 flex: 5,
                 child: Padding(
-                  padding: EdgeInsets.fromLTRB(0, h * 0.05, 0, 0),
-                  child: Text('Smart Transportation',
-                      style: TextStyle(
-                          fontSize: h * 0.045,
-                          letterSpacing: 2,
-                          fontFamily: 'comic',
-                          fontWeight: FontWeight.w900,
-                          color: MyColorScheme.baseColor)),
+                  padding: EdgeInsets.fromLTRB(
+                      w * 0.02, h * 0.05, w * 0.02, h * 0.15),
+                  child: FittedBox(
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(w * 0.02, 0, w * 0.02, 0),
+                      child: Text('Smart Transportation',
+                          style: TextStyle(
+                              fontSize: max(w, h) * 0.045,
+                              letterSpacing: 2,
+                              fontFamily: 'comic',
+                              fontWeight: FontWeight.w900,
+                              color: MyColorScheme.baseColor)),
+                    ),
+                  ),
                 )),
             Expanded(
                 flex: 11,
                 child: SingleChildScrollView(
                     child: Container(
-                        height: h * 0.73,
+                        height: h,
                         decoration: BoxDecoration(
                             color: MyColorScheme.baseColor,
                             borderRadius: const BorderRadius.only(
@@ -109,7 +116,7 @@ class _MyWidgetState extends State<Login> {
                                             labelStyle: TextStyle(
                                               color: MyColorScheme.darkColor,
                                               fontWeight: FontWeight.w800,
-                                              fontSize: h * 0.020,
+                                              fontSize: max(w, h) * 0.020,
                                             ),
                                             focusedBorder: OutlineInputBorder(
                                                 // ignore: prefer_const_constructors
@@ -154,7 +161,7 @@ class _MyWidgetState extends State<Login> {
                                                     color:
                                                         MyColorScheme.darkColor,
                                                     fontWeight: FontWeight.w800,
-                                                    fontSize: h * 0.020,
+                                                    fontSize: max(w, h) * 0.020,
                                                   ),
                                                   focusedBorder:
                                                       OutlineInputBorder(
@@ -193,7 +200,8 @@ class _MyWidgetState extends State<Login> {
                                                     },
                                                 child: Text("Forgot Password?",
                                                     style: TextStyle(
-                                                        fontSize: h * 0.02,
+                                                        fontSize:
+                                                            max(w, h) * 0.02,
                                                         color: MyColorScheme
                                                             .darkColor,
                                                         fontWeight:
@@ -211,7 +219,8 @@ class _MyWidgetState extends State<Login> {
                                                     },
                                                 child: Text("Register",
                                                     style: TextStyle(
-                                                        fontSize: h * 0.02,
+                                                        fontSize:
+                                                            max(w, h) * 0.02,
                                                         color: MyColorScheme
                                                             .darkColor,
                                                         fontWeight:
@@ -228,16 +237,17 @@ class _MyWidgetState extends State<Login> {
                                           backgroundColor:
                                               MaterialStateProperty.all(
                                                   MyColorScheme.darkColor),
-                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(18.0),
-                                              side: BorderSide(
-                                                  color: MyColorScheme
-                                                      .darkColor)))),
+                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                              RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0),
+                                                  side: BorderSide(
+                                                      color: MyColorScheme
+                                                          .darkColor)))),
                                       child: Padding(
-                                          padding: EdgeInsets.fromLTRB(w * 0.05,
-                                              h * 0.005, w * 0.05, h * 0.005),
-                                          child: Text('Login', style: TextStyle(fontFamily: 'Montserrat', fontSize: w * 0.08, color: MyColorScheme.baseColor))))
+                                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                                          child: Text('LOGIN', style: TextStyle(fontFamily: 'Montserrat', fontSize: min(w, h) * 0.06, color: MyColorScheme.baseColor))))
                                 ]),
                               ),
                               Visibility(
@@ -272,7 +282,8 @@ class _MyWidgetState extends State<Login> {
                                                           .darkColor,
                                                       fontWeight:
                                                           FontWeight.w800,
-                                                      fontSize: h * 0.020,
+                                                      fontSize:
+                                                          max(w, h) * 0.020,
                                                     ),
                                                     focusedBorder:
                                                         OutlineInputBorder(
@@ -315,7 +326,7 @@ class _MyWidgetState extends State<Login> {
                                                 h * 0.005,
                                                 w * 0.05,
                                                 h * 0.005),
-                                            child: Text('Login', style: TextStyle(fontFamily: 'Montserrat', fontSize: w * 0.08, color: MyColorScheme.baseColor))))
+                                            child: Text('Login', style: TextStyle(fontFamily: 'Montserrat', fontSize: min(w, h) * 0.08, color: MyColorScheme.baseColor))))
                                   ],
                                 ),
                               )

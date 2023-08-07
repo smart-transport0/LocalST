@@ -6,6 +6,7 @@ import 'package:local_st/General/home.dart';
 import 'package:local_st/Reusable/bottom_navigation_bar.dart';
 import 'package:local_st/Reusable/colors.dart';
 import 'package:local_st/Reusable/navigation_bar.dart';
+import 'package:local_st/Reusable/size_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'package:local_st/Data-Services/realtimeDatabaseOperations.dart';
@@ -43,8 +44,9 @@ class _StartNewJourneyState extends State<StartNewJourney> {
   int visibility = 1;
   @override
   Widget build(BuildContext context) {
-    double w = MediaQuery.of(context).size.width;
-    double h = MediaQuery.of(context).size.height;
+    SizeConfig sizeConfig = SizeConfig(context);
+    double h = sizeConfig.screenHeight;
+    double w = sizeConfig.screenWidth;
     return Stack(children: <Widget>[
       Container(
         color: MyColorScheme.baseColor,
@@ -275,74 +277,81 @@ class _StartNewJourneyState extends State<StartNewJourney> {
                           Padding(
                               padding: EdgeInsets.fromLTRB(
                                   w * 0.04, h * 0.015, w * 0.04, h * 0.015),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  IconButton(
-                                      icon: const Icon(Icons.remove),
-                                      onPressed: () => {
-                                            if (int.parse(
-                                                    availableSeatsController
-                                                        .text) >
-                                                1)
-                                              {
-                                                availableSeatsController
-                                                    .text = (int.parse(
-                                                            availableSeatsController
-                                                                .text) -
-                                                        1)
-                                                    .toString()
-                                              }
-                                          }),
-                                  Expanded(
-                                    child: TextField(
-                                        controller: availableSeatsController,
-                                        readOnly: true,
-                                        cursorColor: MyColorScheme.bgColor,
-                                        keyboardType: TextInputType.number,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: MyColorScheme.darkColor),
-                                        decoration: InputDecoration(
-                                            filled: true,
-                                            fillColor: MyColorScheme.bgColor,
-                                            labelText: "Available Seats",
-                                            labelStyle: TextStyle(
-                                                color: MyColorScheme.darkColor,
-                                                fontWeight: FontWeight.bold),
-                                            focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color:
-                                                        MyColorScheme.darkColor,
-                                                    width: 2.0),
-                                                borderRadius:
-                                                    BorderRadius.circular(30)),
-                                            enabledBorder: OutlineInputBorder(
-                                                borderSide: const BorderSide(
-                                                    width: 2.0,
-                                                    color: Colors.transparent),
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        30)))),
-                                  ),
-                                  IconButton(
-                                      icon: const Icon(Icons.add),
-                                      onPressed: () => {
-                                            if (int.parse(
-                                                    availableSeatsController
-                                                        .text) <
-                                                10)
-                                              {
-                                                availableSeatsController
-                                                    .text = (int.parse(
-                                                            availableSeatsController
-                                                                .text) +
-                                                        1)
-                                                    .toString()
-                                              }
-                                          }),
-                                ],
+                              child: Material(
+                                color: MyColorScheme.bgColor,
+                                borderRadius: BorderRadius.circular(30),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    IconButton(
+                                        icon: const Icon(Icons.remove),
+                                        onPressed: () => {
+                                              if (int.parse(
+                                                      availableSeatsController
+                                                          .text) >
+                                                  1)
+                                                {
+                                                  availableSeatsController
+                                                      .text = (int.parse(
+                                                              availableSeatsController
+                                                                  .text) -
+                                                          1)
+                                                      .toString()
+                                                }
+                                            }),
+                                    Expanded(
+                                      child: TextField(
+                                          controller: availableSeatsController,
+                                          readOnly: true,
+                                          cursorColor: MyColorScheme.bgColor,
+                                          keyboardType: TextInputType.number,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: MyColorScheme.darkColor),
+                                          decoration: InputDecoration(
+                                              filled: true,
+                                              fillColor: MyColorScheme.bgColor,
+                                              labelText: "Available Seats",
+                                              labelStyle: TextStyle(
+                                                  color:
+                                                      MyColorScheme.darkColor,
+                                                  fontWeight: FontWeight.bold),
+                                              focusedBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: MyColorScheme
+                                                          .darkColor,
+                                                      width: 2.0),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          30)),
+                                              enabledBorder: OutlineInputBorder(
+                                                  borderSide: const BorderSide(
+                                                      width: 2.0,
+                                                      color:
+                                                          Colors.transparent),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          30)))),
+                                    ),
+                                    IconButton(
+                                        icon: const Icon(Icons.add),
+                                        onPressed: () => {
+                                              if (int.parse(
+                                                      availableSeatsController
+                                                          .text) <
+                                                  10)
+                                                {
+                                                  availableSeatsController
+                                                      .text = (int.parse(
+                                                              availableSeatsController
+                                                                  .text) +
+                                                          1)
+                                                      .toString()
+                                                }
+                                            }),
+                                  ],
+                                ),
                               )),
                           ElevatedButton(
                               onPressed: () => {
@@ -387,8 +396,9 @@ class _StartNewJourneyState extends State<StartNewJourney> {
                               child: Padding(
                                   padding: EdgeInsets.fromLTRB(
                                       w * 0.05, h * 0.008, w * 0.05, h * 0.005),
-                                  child: Text('Next',
+                                  child: Text('NEXT',
                                       style: TextStyle(
+                                          fontFamily: 'Montserrat',
                                           fontSize: w * 0.06,
                                           color: MyColorScheme.baseColor))))
                         ]))),
@@ -537,21 +547,21 @@ class _StartNewJourneyState extends State<StartNewJourney> {
                                           })
                                         },
                                     style: ButtonStyle(
-                                        elevation:
-                                            MaterialStateProperty.all(15),
-                                        backgroundColor: MaterialStateProperty.all(
-                                            MyColorScheme.darkColor),
-                                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(18.0),
-                                                side: BorderSide(
-                                                    color: MyColorScheme
-                                                        .darkColor)))),
+                                        elevation: MaterialStateProperty.all(0),
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                MyColorScheme.baseColor),
+                                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(18.0)))),
                                     child: Padding(
                                         padding: EdgeInsets.fromLTRB(w * 0.05,
                                             h * 0.008, w * 0.05, h * 0.005),
-                                        child: Text('Back', style: TextStyle(fontSize: w * 0.06, color: MyColorScheme.baseColor)))),
+                                        child: Text('BACK',
+                                            style: TextStyle(
+                                                fontFamily: 'Montserrat',
+                                                fontSize: w * 0.06,
+                                                color: MyColorScheme.darkColor)))),
                                 ElevatedButton(
                                     onPressed: () => {
                                           setState(() {
@@ -597,7 +607,7 @@ class _StartNewJourneyState extends State<StartNewJourney> {
                                     child: Padding(
                                         padding: EdgeInsets.fromLTRB(w * 0.05,
                                             h * 0.008, w * 0.05, h * 0.005),
-                                        child: Text('Next', style: TextStyle(fontSize: w * 0.06, color: MyColorScheme.baseColor))))
+                                        child: Text('NEXT', style: TextStyle(fontFamily: 'Montserrat', fontSize: w * 0.06, color: MyColorScheme.baseColor))))
                               ])
                         ]))),
                     Visibility(
@@ -694,31 +704,31 @@ class _StartNewJourneyState extends State<StartNewJourney> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Container(
-                                  margin: EdgeInsets.fromLTRB(
-                                      w * 0.05, h * 0.015, w * 0.05, h * 0.015),
-                                  child: ElevatedButton(
-                                      onPressed: () => {
-                                            setState(() {
-                                              visibility = 2;
-                                            })
-                                          },
-                                      style: ButtonStyle(
-                                          elevation:
-                                              MaterialStateProperty.all(15),
-                                          backgroundColor:
-                                              MaterialStateProperty.all(
-                                                  MyColorScheme.darkColor),
-                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(18.0),
-                                              side: BorderSide(
-                                                  color: MyColorScheme
-                                                      .darkColor)))),
-                                      child: Padding(
-                                          padding: EdgeInsets.fromLTRB(w * 0.05,
-                                              h * 0.008, w * 0.05, h * 0.005),
-                                          child: Text('Back', style: TextStyle(fontSize: w * 0.06, color: MyColorScheme.baseColor)))),
-                                ),
+                                    margin: EdgeInsets.fromLTRB(w * 0.05,
+                                        h * 0.015, w * 0.05, h * 0.015),
+                                    child: ElevatedButton(
+                                        onPressed: () => {
+                                              setState(() {
+                                                visibility = 2;
+                                              })
+                                            },
+                                        style: ButtonStyle(
+                                            elevation:
+                                                MaterialStateProperty.all(0),
+                                            backgroundColor: MaterialStateProperty.all(
+                                                MyColorScheme.baseColor),
+                                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            18.0)))),
+                                        child: Padding(
+                                            padding: EdgeInsets.fromLTRB(
+                                                w * 0.05,
+                                                h * 0.008,
+                                                w * 0.05,
+                                                h * 0.005),
+                                            child: Text('BACK', style: TextStyle(fontFamily: 'Montserrat', fontSize: w * 0.06, color: MyColorScheme.darkColor))))),
                                 Container(
                                   margin: EdgeInsets.fromLTRB(
                                       w * 0.05, h * 0.015, w * 0.05, h * 0.015),
@@ -749,7 +759,7 @@ class _StartNewJourneyState extends State<StartNewJourney> {
                                       child: Padding(
                                           padding: EdgeInsets.fromLTRB(w * 0.05,
                                               h * 0.008, w * 0.05, h * 0.005),
-                                          child: Text('Create', style: TextStyle(fontSize: w * 0.06, color: MyColorScheme.baseColor)))),
+                                          child: Text('CREATE', style: TextStyle(fontFamily: 'Montserrat', fontSize: w * 0.06, color: MyColorScheme.baseColor)))),
                                 )
                               ])
                         ])))

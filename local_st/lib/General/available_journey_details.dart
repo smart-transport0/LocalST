@@ -7,6 +7,8 @@ import 'package:local_st/Reusable/colors.dart';
 import 'package:local_st/Reusable/loading.dart';
 import 'package:local_st/Reusable/navigation_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../Reusable/size_config.dart';
+import 'dart:math';
 
 class AvailableJourneyDetails extends StatefulWidget {
   final String journeyID;
@@ -24,7 +26,7 @@ class _AvailableJourneyDetailsState extends State<AvailableJourneyDetails> {
   String journeyDate = "";
   String journeyDay = "";
   String journeyLeaveTime = "";
-  String buttonValue = "Join";
+  String buttonValue = "JOIN";
   List journeyDetails = [];
   List acceptedRequests = [];
   List pendingRequests = [];
@@ -40,8 +42,11 @@ class _AvailableJourneyDetailsState extends State<AvailableJourneyDetails> {
 
   @override
   Widget build(BuildContext context) {
-    double h = MediaQuery.of(context).size.height;
-    double w = MediaQuery.of(context).size.width;
+    SizeConfig sizeConfig = SizeConfig(context);
+    double height = sizeConfig.screenHeight;
+    double width = sizeConfig.screenWidth;
+    double h = max(height, width);
+    double w = min(height, width);
     return Scaffold(
         appBar: AppBar(
             title: Text('$journeyDate $journeyLeaveTime'),
@@ -81,7 +86,7 @@ class _AvailableJourneyDetailsState extends State<AvailableJourneyDetails> {
                                         child: Text(
                                             '${journeyDetails[0]} $journeyDay',
                                             style: TextStyle(
-                                                fontSize: h * 0.034))),
+                                                fontSize: h * 0.025))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.005),
@@ -95,7 +100,7 @@ class _AvailableJourneyDetailsState extends State<AvailableJourneyDetails> {
                                             0.0, 0.0, 0.0, h * 0.02),
                                         child: Text('${journeyDetails[1]}',
                                             style: TextStyle(
-                                                fontSize: h * 0.034))),
+                                                fontSize: h * 0.025))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.005),
@@ -109,7 +114,7 @@ class _AvailableJourneyDetailsState extends State<AvailableJourneyDetails> {
                                             0.0, 0.0, 0.0, h * 0.02),
                                         child: Text('${journeyDetails[2]}',
                                             style: TextStyle(
-                                                fontSize: h * 0.034))),
+                                                fontSize: h * 0.025))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.005),
@@ -123,7 +128,7 @@ class _AvailableJourneyDetailsState extends State<AvailableJourneyDetails> {
                                             0.0, 0.0, 0.0, h * 0.02),
                                         child: Text('${journeyDetails[3]}',
                                             style: TextStyle(
-                                                fontSize: h * 0.034))),
+                                                fontSize: h * 0.025))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.005),
@@ -137,7 +142,7 @@ class _AvailableJourneyDetailsState extends State<AvailableJourneyDetails> {
                                             0.0, 0.0, 0.0, h * 0.02),
                                         child: Text('${journeyDetails[12]}',
                                             style: TextStyle(
-                                                fontSize: h * 0.034))),
+                                                fontSize: h * 0.025))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.005),
@@ -151,7 +156,7 @@ class _AvailableJourneyDetailsState extends State<AvailableJourneyDetails> {
                                             0.0, 0.0, 0.0, h * 0.02),
                                         child: Text('${journeyDetails[4]}',
                                             style: TextStyle(
-                                                fontSize: h * 0.034))),
+                                                fontSize: h * 0.025))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.005),
@@ -165,7 +170,7 @@ class _AvailableJourneyDetailsState extends State<AvailableJourneyDetails> {
                                             0.0, 0.0, 0.0, h * 0.02),
                                         child: Text('${journeyDetails[5]}',
                                             style: TextStyle(
-                                                fontSize: h * 0.034))),
+                                                fontSize: h * 0.025))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.005),
@@ -179,7 +184,7 @@ class _AvailableJourneyDetailsState extends State<AvailableJourneyDetails> {
                                             0.0, 0.0, 0.0, h * 0.02),
                                         child: Text('${journeyDetails[6]}',
                                             style: TextStyle(
-                                                fontSize: h * 0.034))),
+                                                fontSize: h * 0.025))),
                                     Padding(
                                         padding: EdgeInsets.fromLTRB(
                                             0.0, 0.0, 0.0, h * 0.005),
@@ -193,7 +198,7 @@ class _AvailableJourneyDetailsState extends State<AvailableJourneyDetails> {
                                             0.0, 0.0, 0.0, h * 0.02),
                                         child: Text('${journeyDetails[7]}',
                                             style: TextStyle(
-                                                fontSize: h * 0.034))),
+                                                fontSize: h * 0.025))),
                                     Visibility(
                                         visible: journeyDetails[8] != "",
                                         child: Column(children: [
@@ -222,47 +227,48 @@ class _AvailableJourneyDetailsState extends State<AvailableJourneyDetails> {
                                   child: Column(children: <Widget>[
                                     IconButton(
                                         onPressed: () {},
-                                        icon: const FaIcon(
-                                            Icons.notifications_off)),
-                                    IconButton(
-                                        onPressed: () {},
-                                        icon: const FaIcon(Icons.chat)),
-                                    IconButton(
-                                        onPressed: () {},
-                                        icon: const FaIcon(Icons.check_box))
+                                        icon: const FaIcon(Icons.chat))
                                   ])))
                         ])),
                     Column(children: [
-                      Card(
-                          child: Padding(
-                              padding: EdgeInsets.fromLTRB(
-                                  w * 0.05, h * 0.02, w * 0.05, h * 0.02),
-                              child: Column(children: [
-                                Padding(
-                                    padding: EdgeInsets.fromLTRB(
-                                        0.0, 0.0, 0.0, 0.02 * h),
-                                    child: Text('TRANSPORTER DETAILS',
-                                        style: TextStyle(
-                                            fontSize: h * 0.02,
-                                            color: Colors.grey[700],
-                                            fontWeight: FontWeight.bold))),
-                                Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        0.0, 0.0, 0.0, 0),
-                                    child: Text(
-                                        '${journeyDetails[9]} ${journeyDetails[10]}',
-                                        style: TextStyle(fontSize: h * 0.03))),
-                                Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        0.0, 0.0, 0.0, 0),
-                                    child: Text('${journeyDetails[11]}',
-                                        style: TextStyle(fontSize: h * 0.03))),
-                              ]))),
+                      SizedBox(
+                        width: width * 0.9,
+                        child: Card(
+                            margin:
+                                EdgeInsets.fromLTRB(0, h * 0.05, 0, h * 0.03),
+                            child: Padding(
+                                padding: EdgeInsets.fromLTRB(
+                                    w * 0.05, h * 0.02, w * 0.05, h * 0.02),
+                                child: Column(children: [
+                                  Padding(
+                                      padding: EdgeInsets.fromLTRB(
+                                          0.0, 0.0, 0.0, 0.02 * h),
+                                      child: Text('TRANSPORTER DETAILS',
+                                          style: TextStyle(
+                                              fontSize: h * 0.02,
+                                              color: Colors.grey[700],
+                                              fontWeight: FontWeight.bold))),
+                                  Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0.0, 0.0, 0.0, 0),
+                                      child: Text(
+                                          '${journeyDetails[9]} ${journeyDetails[10]}',
+                                          style:
+                                              TextStyle(fontSize: h * 0.025))),
+                                  Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0.0, 0.0, 0.0, 0),
+                                      child: Text('${journeyDetails[11]}',
+                                          style:
+                                              TextStyle(fontSize: h * 0.025))),
+                                ]))),
+                      ),
                       Padding(
                         padding: EdgeInsets.fromLTRB(0, h * 0.01, 0, 0),
                         child: ElevatedButton(
                             child: Text(buttonValue,
                                 style: TextStyle(
+                                    fontFamily: 'Montserrat',
                                     fontSize: w * 0.06,
                                     color: MyColorScheme.baseColor)),
                             style: ButtonStyle(
@@ -277,25 +283,26 @@ class _AvailableJourneyDetailsState extends State<AvailableJourneyDetails> {
                                         side: BorderSide(
                                             color: MyColorScheme.darkColor)))),
                             onPressed: () => {
-                                  buttonValue == 'Join'
+                                  buttonValue == 'JOIN'
                                       ? Navigator.of(context)
                                           .push(MaterialPageRoute(
                                           builder: (context) => AlertDialog(
-                                            title: Text('Passenger Details'),
+                                            title:
+                                                const Text('Passenger Details'),
                                             content: Column(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
                                                 TextField(
                                                   controller:
                                                       startLocationController,
-                                                  decoration: InputDecoration(
+                                                  decoration: const InputDecoration(
                                                       hintText:
                                                           "Precise location where you will join transporter"),
                                                 ),
                                                 TextField(
                                                   controller:
                                                       destinationLocationController,
-                                                  decoration: InputDecoration(
+                                                  decoration: const InputDecoration(
                                                       hintText:
                                                           "Precise location where you will drop off"),
                                                 ),
@@ -309,7 +316,8 @@ class _AvailableJourneyDetailsState extends State<AvailableJourneyDetails> {
                                                 },
                                               ),
                                               ElevatedButton(
-                                                child: const Text('OK'),
+                                                child:
+                                                    const Text('Send Request'),
                                                 onPressed: () {
                                                   if (startLocationController
                                                               .text !=
@@ -323,12 +331,12 @@ class _AvailableJourneyDetailsState extends State<AvailableJourneyDetails> {
                                                         MaterialPageRoute(
                                                             builder: (context) =>
                                                                 AlertDialog(
-                                                                    title: Text(
+                                                                    title: const Text(
                                                                         'Invalid Input'),
                                                                     content: Column(
                                                                         mainAxisSize:
                                                                             MainAxisSize.min,
-                                                                        children: [
+                                                                        children: const [
                                                                           Text(
                                                                               'Please enter valid start location and destination location!')
                                                                         ]),
@@ -358,9 +366,9 @@ class _AvailableJourneyDetailsState extends State<AvailableJourneyDetails> {
                       visible: pendingVisibility,
                       child: Column(children: <Widget>[
                         Text('Pending Requests',
-                            style: TextStyle(fontSize: h * 0.035)),
+                            style: TextStyle(fontSize: w * 0.045)),
                         SizedBox(
-                            width: w,
+                            width: width * 0.9,
                             child: ListView.builder(
                                 primary: false,
                                 shrinkWrap: true,
@@ -384,12 +392,12 @@ class _AvailableJourneyDetailsState extends State<AvailableJourneyDetails> {
                                                           '${pendingRequests[index][1]}',
                                                           style: TextStyle(
                                                               fontSize:
-                                                                  h * 0.03)),
+                                                                  w * 0.04)),
                                                       Text(
                                                           '${pendingRequests[index][0]}',
                                                           style: TextStyle(
                                                               fontSize:
-                                                                  h * 0.026)),
+                                                                  w * 0.036)),
                                                     ])
                                               ])));
                                 }))
@@ -399,9 +407,9 @@ class _AvailableJourneyDetailsState extends State<AvailableJourneyDetails> {
                       visible: acceptedVisibility,
                       child: Column(children: <Widget>[
                         Text('Accepted Requests',
-                            style: TextStyle(fontSize: h * 0.035)),
+                            style: TextStyle(fontSize: w * 0.045)),
                         SizedBox(
-                            width: w,
+                            width: width * 0.9,
                             child: ListView.builder(
                                 primary: false,
                                 shrinkWrap: true,
@@ -425,12 +433,12 @@ class _AvailableJourneyDetailsState extends State<AvailableJourneyDetails> {
                                                           '${acceptedRequests[index][1]}',
                                                           style: TextStyle(
                                                               fontSize:
-                                                                  h * 0.03)),
+                                                                  w * 0.04)),
                                                       Text(
                                                           '${acceptedRequests[index][0]}',
                                                           style: TextStyle(
                                                               fontSize:
-                                                                  h * 0.026)),
+                                                                  w * 0.036)),
                                                     ])
                                               ])));
                                 }))
@@ -454,38 +462,41 @@ class _AvailableJourneyDetailsState extends State<AvailableJourneyDetails> {
         .collection('TransporterList')
         .doc(widget.journeyID)
         .get();
-    if (buttonValue == 'Join') {
-      // Refactor Accepted and Active to only requests
+    if (buttonValue == 'JOIN') {
       await FirebaseFirestore.instance
           .collection('TransporterList')
           .doc(widget.journeyID)
-          .collection('ActiveRequests')
+          .collection('Requests')
           .doc(userID)
           .set({
         'PhoneNumber': userID,
         'FullName': userName,
-        'TimeStamp': utilities.padCharacters(datetime.day.toString(), "0", 2) +
-            utilities.padCharacters(datetime.month.toString(), "0", 2) +
-            utilities.padCharacters(datetime.year.toString(), "0", 4) +
-            utilities.padCharacters(datetime.hour.toString(), "0", 2) +
-            utilities.padCharacters(datetime.minute.toString(), "0", 2) +
-            utilities.padCharacters(datetime.second.toString(), "0", 2)
+        'TimeStamp': utilities.getFormattedDateTime(datetime),
+        'StartLocation': startLocationController.text,
+        'DestinationLocation': destinationLocationController.text,
+        'Status': 'Pending'
       });
       await FirebaseFirestore.instance
           .collection('TransporterList')
           .doc(widget.journeyID)
           .update({'PendingRequestsCount': data['PendingRequestsCount'] + 1});
-    } else if (buttonValue == 'Leave') {
+      setState(() {
+        buttonValue = 'PENDING';
+      });
+    } else if (buttonValue == 'LEAVE') {
       await FirebaseFirestore.instance
           .collection('TransporterList')
           .doc(widget.journeyID)
-          .collection('AcceptedRequests')
+          .collection('Requests')
           .doc(userID)
           .delete();
       await FirebaseFirestore.instance
           .collection('TransporterList')
           .doc(widget.journeyID)
           .update({'AcceptedRequestsCount': data['AcceptedRequestsCount'] - 1});
+      setState(() {
+        buttonValue = 'JOIN';
+      });
     }
     Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (context) => AvailableJourneyDetails(widget.journeyID)));
@@ -514,40 +525,31 @@ class _AvailableJourneyDetailsState extends State<AvailableJourneyDetails> {
     journeyDetails.add(transporterDetails['LastName']);
     journeyDetails.add(transporterDetails['OrganizationEmailID']);
     journeyDetails.add(journeyData['NumberPlate']);
-    var activeRequests = await FirebaseFirestore.instance
+    var requests = await FirebaseFirestore.instance
         .collection('TransporterList')
         .doc(widget.journeyID)
-        .collection('ActiveRequests')
+        .collection('Requests')
         .get();
     pendingRequests = [];
-    for (var request in activeRequests.docs) {
-      var email = await FirebaseFirestore.instance
-          .collection('Mapping')
-          .doc('Permanent')
-          .collection('PhonetoMail')
-          .doc(request['PhoneNumber'])
-          .get();
-      if (email['Email'] == userEmail) buttonValue = "Pending";
-      pendingRequests
-          .add([email['Email'], request['FullName'], request['PhoneNumber']]);
-    }
-    var accRequests = await FirebaseFirestore.instance
-        .collection('TransporterList')
-        .doc(widget.journeyID)
-        .collection('AcceptedRequests')
-        .get();
     acceptedRequests = [];
-    for (var request in accRequests.docs) {
+    for (var request in requests.docs) {
       var email = await FirebaseFirestore.instance
           .collection('Mapping')
           .doc('Permanent')
           .collection('PhonetoMail')
           .doc(request['PhoneNumber'])
           .get();
-      if (email['Email'] == userEmail) buttonValue = "Leave";
-      acceptedRequests
-          .add([email['Email'], request['FullName'], request['PhoneNumber']]);
+      if (request['Status'] == 'Pending') {
+        if (email['Email'] == userEmail) buttonValue = "PENDING";
+        pendingRequests
+            .add([email['Email'], request['FullName'], request['PhoneNumber']]);
+      } else {
+        if (email['Email'] == userEmail) buttonValue = "LEAVE";
+        acceptedRequests
+            .add([email['Email'], request['FullName'], request['PhoneNumber']]);
+      }
     }
+
     int year = int.parse(journeyDetails[0].substring(0, 2)),
         month = int.parse(journeyDetails[0].substring(3, 5)),
         date = int.parse(journeyDetails[0].substring(6));

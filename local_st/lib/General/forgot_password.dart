@@ -7,6 +7,7 @@ import 'package:local_st/Data-Services/validators.dart';
 import 'package:local_st/General/login.dart';
 import 'package:local_st/General/register.dart';
 import 'package:local_st/Reusable/colors.dart';
+import 'package:local_st/Reusable/size_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ForgotPassword extends StatefulWidget {
@@ -43,8 +44,9 @@ class _MyWidgetState extends State<ForgotPassword> {
   @override
   Widget build(BuildContext context) {
     //height and width of screen
-    double h = MediaQuery.of(context).size.height;
-    double w = MediaQuery.of(context).size.width;
+    SizeConfig sizeConfig = SizeConfig(context);
+    double h = sizeConfig.screenHeight;
+    double w = sizeConfig.screenWidth;
     return Stack(children: <Widget>[
       SafeArea(
           child: Scaffold(
@@ -101,7 +103,7 @@ class _MyWidgetState extends State<ForgotPassword> {
                                             color: MyColorScheme.darkColor),
                                         decoration: InputDecoration(
                                             fillColor: MyColorScheme.baseColor,
-                                            prefixIcon: Icon(Icons.person,
+                                            prefixIcon: Icon(Icons.phone,
                                                 color: MyColorScheme.darkColor),
                                             labelText: "Phone Number",
                                             labelStyle: TextStyle(
@@ -186,7 +188,7 @@ class _MyWidgetState extends State<ForgotPassword> {
                                       child: Padding(
                                           padding: EdgeInsets.fromLTRB(w * 0.05,
                                               h * 0.005, w * 0.05, h * 0.005),
-                                          child: Text('Send OTP', style: TextStyle(fontFamily: 'Montserrat', fontSize: w * 0.08, color: MyColorScheme.baseColor))))
+                                          child: Text('SEND OTP', style: TextStyle(fontFamily: 'Montserrat', fontSize: w * 0.06, color: MyColorScheme.baseColor))))
                                 ]),
                               ),
                               Visibility(
